@@ -1,11 +1,18 @@
-const express = require("express");
+import express from "express";
 const app = express();
-const port = 5000;
-require("dotenv").config();
-const connectDb = require("./config/db");
-const errorHandler = require("./middleware/errorMiddleware").errorHandler;
+const port = process.env.PORT || 5000;
+import dotenv from "dotenv";
+import connectDb from "./config/db.js";
+import { errorHandler } from "./middlewares/errorMiddleware.js";
 
+app.use(express.json());
+
+dotenv.config();
 connectDb();
+
+import userRoutes from "./routes/userRoutes.js";
+
+app.use("/api/users", userRoutes);
 
 app.use(errorHandler);
 

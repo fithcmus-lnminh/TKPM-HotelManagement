@@ -1,8 +1,8 @@
-const bcryptjs = require("bcryptjs");
-const User = require("../models/userModel.js");
-const generateToken = require("../utils/generateToken.js");
+import bcrypt from "bcryptjs";
+import User from "../models/userModel.js";
+import generateToken from "../utils/generateToken.js";
 
-exports.authUser = async (req, res, next) => {
+export async function authUser(req, res, next) {
   const { email, password } = req.body;
 
   try {
@@ -24,9 +24,9 @@ exports.authUser = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+}
 
-exports.registerUser = async (req, res, next) => {
+export async function registerUser(req, res, next) {
   const { name, email, password } = req.body;
 
   try {
@@ -37,8 +37,8 @@ exports.registerUser = async (req, res, next) => {
       throw new Error("User already exists");
     }
 
-    const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(password, salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
     const user = await User.create({ name, email, password: hashedPassword });
 
     if (user) {
@@ -56,4 +56,4 @@ exports.registerUser = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+}
