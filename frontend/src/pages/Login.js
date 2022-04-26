@@ -3,11 +3,19 @@ import { Link } from "react-router-dom";
 import { Form, Button, Row, Col, Card } from "react-bootstrap";
 import Navbar from "../components/HomeNavbar";
 import FormContainer from "../components/FormContainer";
+import { login } from "../redux/actions/userAction";
+import { useDispatch, useSelector } from "react-redux";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);
+
+  const { isLoading, errorMessage } = useSelector(
+    (state) => state.userLoginReducer
+  );
+
+  const dispatch = useDispatch();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -15,7 +23,7 @@ const Login = () => {
     if (email === "") setMessage("Vui lòng nhập email");
     else if (password === "") setMessage("Vui lòng nhập mật khẩu");
     else {
-      // dispatch(login(email, password, redirect));
+      dispatch(login(email, password));
     }
   };
 
@@ -29,6 +37,9 @@ const Login = () => {
           <FormContainer>
             <h1 className="mt-5 text-center">ĐĂNG NHẬP</h1>
             {message && <p className="text-center text-danger">{message}</p>}
+            {errorMessage && (
+              <p className="text-center text-danger">{errorMessage}</p>
+            )}
             <Form onSubmit={submitHandler} className="mt-4">
               <Form.Group controlId="email" className="mt-3">
                 <Form.Label>Email</Form.Label>

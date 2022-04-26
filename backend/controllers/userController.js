@@ -13,12 +13,12 @@ export async function authUser(req, res, next) {
         _id: user._id,
         name: user.name,
         email: user.email,
-        isAdmin: user.isAdmin,
+        role: user.role,
         token: generateToken(user._id),
       });
     } else {
       res.status(401);
-      throw new Error("Invalid email or password");
+      throw new Error("Nhập sai email hoặc mật khẩu");
       //res.status(401).send({ message: "Invalid email or password" });
     }
   } catch (err) {
@@ -46,7 +46,7 @@ export async function registerUser(req, res, next) {
         _id: user._id,
         name: user.name,
         email: user.email,
-        isAdmin: user.isAdmin,
+        role: user.role,
         token: generateToken(user._id),
       });
     } else {

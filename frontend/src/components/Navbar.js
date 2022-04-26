@@ -1,8 +1,11 @@
 import React from "react";
 import { Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
+  const { userInfo } = useSelector((state) => state.userLoginReducer);
+
   return (
     <div className="px-5 py-3 w-100 bg-dark">
       <nav className="d-flex justify-content-between align-items-center">
@@ -47,17 +50,25 @@ const Navbar = () => {
             </NavLink>
           </div>
         </div>
-        <div className="d-flex align-items-center">
-          <Link to="/login" className="px-3 text-gray">
-            Đăng nhập
-          </Link>
-          <div className="w-0.5 h-6 bg-gray-300 opacity-50"></div>
-          <Button variant="primary">
-            <Link to="/register" className="text-white">
-              Đăng ký
+        {userInfo ? (
+          <div className="d-flex align-items-center">
+            <p className="text-white m-0">
+              Xin chào, <strong>{userInfo.name}</strong>
+            </p>
+          </div>
+        ) : (
+          <div className="d-flex align-items-center">
+            <Link to="/login" className="px-3 text-gray">
+              Đăng nhập
             </Link>
-          </Button>
-        </div>
+            <div className="w-0.5 h-6 bg-gray-300 opacity-50"></div>
+            <Button variant="primary">
+              <Link to="/register" className="text-white">
+                Đăng ký
+              </Link>
+            </Button>
+          </div>
+        )}
       </nav>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, NavLink } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const HomeNavbar = () => {
@@ -7,6 +8,8 @@ const HomeNavbar = () => {
     bg: "bg-transparent",
     text: "text-gray",
   });
+
+  const { userInfo } = useSelector((state) => state.userLoginReducer);
 
   const listenScrollEvent = (e) => {
     if (window.scrollY > 200) {
@@ -51,17 +54,25 @@ const HomeNavbar = () => {
             </Link>
           </div>
         </div>
-        <div className="d-flex align-items-center">
-          <Link to="/login" className={`px-3 ${color.text}`}>
-            Đăng nhập
-          </Link>
-          <div className="w-0.5 h-6 bg-gray-300 opacity-50"></div>
-          <Button variant="primary">
-            <Link to="/register" className="text-white">
-              Đăng ký
+        {userInfo ? (
+          <div className="d-flex align-items-center">
+            <p className="text-white m-0">
+              Xin chào, <strong>{userInfo.name}</strong>
+            </p>
+          </div>
+        ) : (
+          <div className="d-flex align-items-center">
+            <Link to="/login" className={`px-3 ${color.text}`}>
+              Đăng nhập
             </Link>
-          </Button>
-        </div>
+            <div className="w-0.5 h-6 bg-gray-300 opacity-50"></div>
+            <Button variant="primary">
+              <Link to="/register" className="text-white">
+                Đăng ký
+              </Link>
+            </Button>
+          </div>
+        )}
       </nav>
     </div>
   );
