@@ -12,8 +12,8 @@ import { decode } from "js-base64";
 const initialState = {
   isLoading: false,
   userInfo:
-    localStorage.getItem("userInfo") &&
-    decode(JSON.parse(localStorage.getItem("userInfo"))),
+    sessionStorage.getItem("userInfo") &&
+    JSON.parse(decode(sessionStorage.getItem("userInfo"))),
 };
 
 export const userLoginReducer = (state = initialState, action) => {

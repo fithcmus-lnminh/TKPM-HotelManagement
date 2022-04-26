@@ -32,7 +32,7 @@ export const login =
       const navigate = getState().navigateReducer.navigate;
       redirect ? navigate(`/${redirect}`) : navigate("/");
 
-      localStorage.setItem("userInfo", encode(JSON.stringify(data)));
+      sessionStorage.setItem("userInfo", encode(JSON.stringify(data)));
     } catch (err) {
       dispatch({
         type: USER_LOGIN_FAIL,
@@ -66,7 +66,7 @@ export const register =
 
       const navigate = getState().navigateReducer.navigate;
       navigate("/");
-      localStorage.setItem("userInfo", encode(JSON.stringify(data)));
+      sessionStorage.setItem("userInfo", JSON.stringify(encode(data)));
     } catch (err) {
       dispatch({
         type: USER_REGISTER_FAIL,
@@ -79,7 +79,7 @@ export const register =
   };
 
 export const logout = () => async (dispatch, getState) => {
-  localStorage.removeItem("userInfo");
+  sessionStorage.removeItem("userInfo");
 
   dispatch({ type: USER_LOGOUT });
   //   dispatch({ type: GET_USER_DETAILS_RESET });

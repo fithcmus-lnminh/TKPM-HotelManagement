@@ -17,6 +17,10 @@ a:hover {
     color: #fff;
 }
 
+.nav-link {
+    color: #fff !important;
+}
+
 .content-link:hover {
     color: #0e294d;
     font-weight: bold;

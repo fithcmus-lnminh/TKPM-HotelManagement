@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, NavLink } from "react-bootstrap";
+import { Button, NavDropdown, NavLink } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -56,9 +56,17 @@ const HomeNavbar = () => {
         </div>
         {userInfo ? (
           <div className="d-flex align-items-center">
-            <p className="text-white m-0">
-              Xin chào, <strong>{userInfo.name}</strong>
-            </p>
+            <NavDropdown title={`Xin chào, ${userInfo.name}`} className="me-2">
+              <Link to="/profile">
+                <NavDropdown.Item>
+                  <i className="fas fa-user me-2"></i>Profile
+                </NavDropdown.Item>
+              </Link>
+              <NavDropdown.Item>
+                <i className="fas fa-arrow-right-from-bracket me-2"></i>
+                Logout
+              </NavDropdown.Item>
+            </NavDropdown>
           </div>
         ) : (
           <div className="d-flex align-items-center">
