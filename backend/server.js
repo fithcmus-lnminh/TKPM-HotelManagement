@@ -1,6 +1,13 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 5000;
+require("dotenv").config();
+const connectDb = require("./config/db");
+const User = require("./model/userModel");
+const bcrypt = require("bcryptjs");
 
-app.get("/", (req, res) => res.send("Hello World!"));
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+connectDb();
+
+app.listen(port, () =>
+  console.log(`Hotel management app listening on port ${port}!`)
+);
