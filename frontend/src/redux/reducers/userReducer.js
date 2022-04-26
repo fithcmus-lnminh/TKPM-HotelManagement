@@ -30,8 +30,6 @@ export const userLoginReducer = (state = initialState, action) => {
       return { ...state, isLoading: false, errorMessage: action.message };
     case USER_LOGOUT:
       return {};
-    // case CHANGE_USER_LOGIN_NAME:
-    //   return { ...state, userInfo: { ...state.userInfo, name: action.name } };
     default:
       return state;
   }

@@ -38,22 +38,72 @@ const Navbar = () => {
             >
               Xem phòng
             </NavLink>
-            <NavLink
-              to="/room-booking"
-              className={(nav) =>
-                nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
-              }
-            >
-              Đặt phòng
-            </NavLink>
-            <NavLink
-              to="/contact"
-              className={(nav) =>
-                nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
-              }
-            >
-              Liên hệ
-            </NavLink>
+            {userInfo?.role === "Admin" ? (
+              <>
+                <NavLink
+                  to="/room-management"
+                  className={(nav) =>
+                    nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
+                  }
+                >
+                  Quản lý phòng
+                </NavLink>
+                <NavLink
+                  to="/admin/account-management"
+                  className={(nav) =>
+                    nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
+                  }
+                >
+                  Quản lý tài khoản
+                </NavLink>
+                <NavLink
+                  to="/report"
+                  className={(nav) =>
+                    nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
+                  }
+                >
+                  Xem báo cáo
+                </NavLink>
+              </>
+            ) : userInfo?.role === "Manager" ? (
+              <>
+                <NavLink
+                  to="/room-management"
+                  className={(nav) =>
+                    nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
+                  }
+                >
+                  Quản lý phòng
+                </NavLink>
+                <NavLink
+                  to="/report"
+                  className={(nav) =>
+                    nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
+                  }
+                >
+                  Xem báo cáo
+                </NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink
+                  to="/room-booking"
+                  className={(nav) =>
+                    nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
+                  }
+                >
+                  Đặt phòng
+                </NavLink>
+                <NavLink
+                  to="/contact"
+                  className={(nav) =>
+                    nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
+                  }
+                >
+                  Liên hệ
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
         {userInfo ? (

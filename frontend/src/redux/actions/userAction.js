@@ -7,7 +7,6 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
-  GET_USER_DETAILS_RESET,
 } from "../../constants/userConsts";
 import { encode } from "js-base64";
 

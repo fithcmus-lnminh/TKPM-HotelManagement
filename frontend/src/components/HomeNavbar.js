@@ -52,12 +52,40 @@ const HomeNavbar = () => {
             <Link to="/rooms" className={`px-3 ${color.text}`}>
               Xem phòng
             </Link>
-            <Link to="/room-booking" className={`px-3 ${color.text}`}>
-              Đặt phòng
-            </Link>
-            <Link to="/contact" className={`px-3 ${color.text}`}>
-              Liên hệ
-            </Link>
+            {userInfo?.role === "Admin" ? (
+              <>
+                <Link to="/room-management" className={`px-3 ${color.text}`}>
+                  Quản lý phòng
+                </Link>
+                <Link
+                  to="/admin/account-management"
+                  className={`px-3 ${color.text}`}
+                >
+                  Quản lý tài khoản
+                </Link>
+                <Link to="/report" className={`px-3 ${color.text}`}>
+                  Xem báo cáo
+                </Link>
+              </>
+            ) : userInfo?.role === "Manager" ? (
+              <>
+                <Link to="/room-management" className={`px-3 ${color.text}`}>
+                  Quản lý phòng
+                </Link>
+                <Link to="/report" className={`px-3 ${color.text}`}>
+                  Xem báo cáo
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/room-booking" className={`px-3 ${color.text}`}>
+                  Đặt phòng
+                </Link>
+                <Link to="/contact" className={`px-3 ${color.text}`}>
+                  Liên hệ
+                </Link>
+              </>
+            )}
           </div>
         </div>
         {userInfo ? (
