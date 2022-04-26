@@ -1,63 +1,59 @@
-import React, { useEffect, useState } from "react";
-import { Button, NavLink } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Button } from "react-bootstrap";
+import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
-  const [color, setColor] = useState({
-    bg: "bg-transparent",
-    text: "text-gray",
-  });
-
-  const listenScrollEvent = (e) => {
-    if (window.scrollY > 200) {
-      setColor({ bg: "bg-dark", text: "text-white" });
-    } else {
-      setColor({ bg: "bg-transparent", text: "text-gray" });
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", listenScrollEvent);
-  }, []);
-
   return (
-    <div className={`px-5 py-3 position-fixed w-100 ${color.bg}`}>
+    <div className="px-5 py-3 w-100 bg-dark">
       <nav className="d-flex justify-content-between align-items-center">
         <div className="fw-bold fs-4">
-          <Link
-            to="/"
-            className={
-              color.text === "text-gray"
-                ? "text-white logo"
-                : `${color.text} logo`
-            }
-          >
+          <Link to="/" className="logo text-white">
             TKPM HOTEL
           </Link>
         </div>
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center h-100">
           <div>
-            <Link to="/" className={`px-3 ${color.text}`}>
+            <NavLink
+              to="/"
+              className={(nav) =>
+                nav.isActive ? "px-3 text-primary" : "px-3 text-gray"
+              }
+            >
               Trang chủ
-            </Link>
-            <Link to="/li" className={`px-3 ${color.text}`}>
+            </NavLink>
+            <NavLink
+              to="/rooms"
+              className={(nav) =>
+                nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
+              }
+            >
+              Xem phòng
+            </NavLink>
+            <NavLink
+              to="/room-booking"
+              className={(nav) =>
+                nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
+              }
+            >
               Đặt phòng
-            </Link>
-            <Link to="#" className={`px-3 ${color.text}`}>
+            </NavLink>
+            <NavLink
+              to="/contact"
+              className={(nav) =>
+                nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
+              }
+            >
               Liên hệ
-            </Link>
-            <Link to="#" className={`px-3 ${color.text}`}>
-              Xem thêm
-            </Link>
+            </NavLink>
           </div>
         </div>
         <div className="d-flex align-items-center">
-          <Link to="#" className={`px-3 ${color.text}`}>
+          <Link to="/login" className="px-3 text-gray">
             Đăng nhập
           </Link>
           <div className="w-0.5 h-6 bg-gray-300 opacity-50"></div>
           <Button variant="primary">
-            <Link to="#" className="text-white">
+            <Link to="/register" className="text-white">
               Đăng ký
             </Link>
           </Button>

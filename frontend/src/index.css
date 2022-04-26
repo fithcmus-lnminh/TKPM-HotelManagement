@@ -4,9 +4,22 @@ body {
     sans-serif;
 }
 
+.bg-dark {
+    background-color: #0e294d !important;
+}
+
 a {
     text-decoration: none;
     color: black
+}
+
+a:hover {
+    color: #fff;
+}
+
+.content-link:hover {
+    color: #0e294d;
+    font-weight: bold;
 }
 
 .bg-home {
@@ -27,7 +40,7 @@ a {
 }
 
 .text-gray {
-    color: #dadada;
+    color: #f3f3f3;
 }
 
 .nav-display {
@@ -43,4 +56,19 @@ a {
 
 .logo:hover {
     color: black
+}
+
+.login-section {
+    min-height: 100vh;
+    background-image: url("https://www.teahub.io/photos/full/1-14085_beach-hotel-background-hd.jpg");
+    background-size: cover;
+}
+.register-section {
+    min-height: 100vh;
+    background-image: url("https://www.teahub.io/photos/full/17-172357_water-hotel-fresh-new-hd-wallpapers-beach-house.jpg");
+    background-size: cover;
+}
+
+.text-danger {
+    color: rgb(255, 36, 36) !important; 
 }
