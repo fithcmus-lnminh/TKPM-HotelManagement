@@ -1,0 +1,46 @@
+body {
+    box-sizing: border-box;
+    font-family: 'Poppins',
+    sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: black
+}
+
+.bg-home {
+    min-height: 110vh;
+    background-image: url("assets/images/background.jpg"); 
+    background-size: cover;
+}
+
+.header {
+    min-height: 100vh;
+}
+
+.header-item  {
+    height: 18rem;
+    width: 35rem;
+    background-color: rgba(0,0,0, 0.5);
+    color: white;
+}
+
+.text-gray {
+    color: #dadada;
+}
+
+.nav-display {
+    position: absolute;
+    z-index: 1000
+}
+
+.logo {
+    font-family: 'Major Mono Display',
+    monospace;
+    font-size: 1.75rem;
+}
+
+.logo:hover {
+    color: black
+}
