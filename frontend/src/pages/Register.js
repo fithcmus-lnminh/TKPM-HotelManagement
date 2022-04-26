@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { Form, Button, Row, Col, Card } from "react-bootstrap";
 import Navbar from "../components/HomeNavbar";
 import FormContainer from "../components/FormContainer";
+import { register } from "../redux/actions/userAction";
+import ReactLoading from "react-loading";
+import { useDispatch, useSelector } from "react-redux";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -10,6 +13,12 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
+
+  const { isLoading, errorMessage } = useSelector(
+    (state) => state.userRegisterReducer
+  );
+
+  const dispatch = useDispatch();
 
   const submitHandler = (e) => {
     console.log(email, password);
@@ -23,7 +32,7 @@ const Register = () => {
     else if (password !== confirmPassword) {
       setMessage("Mật khẩu không khớp");
     } else {
-      //dispatch(register(name, email, password));
+      dispatch(register(name, email, password));
     }
   };
 
@@ -41,6 +50,9 @@ const Register = () => {
           <FormContainer>
             <h1 className="mt-4 text-center text-white">ĐĂNG KÝ</h1>
             {message && <p className="text-center text-danger">{message}</p>}
+            {errorMessage && (
+              <p className="text-center text-danger">{errorMessage}</p>
+            )}
             <Form onSubmit={submitHandler}>
               <Form.Group controlId="name" className="mt-3">
                 <Form.Label className="text-white">Họ và tên</Form.Label>
@@ -80,15 +92,20 @@ const Register = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 ></Form.Control>
               </Form.Group>
-              {/* {isLoading ? (
-              <Spinner animation="border" className="mt-4 ms-4">
-                <span className="sr-only">Loading...</span>
-              </Spinner>
-            ) : ( */}
               <div className="text-center">
-                <Button type="submit" className="my-4 px-3 py-2">
-                  ĐĂNG KÝ
-                </Button>
+                {isLoading ? (
+                  <div className="d-flex justify-content-center">
+                    <ReactLoading
+                      color="white"
+                      type="cylon"
+                      height="74px"
+                    ></ReactLoading>
+                  </div>
+                ) : (
+                  <Button type="submit" className="my-3 px-3 py-2">
+                    ĐĂNG KÝ
+                  </Button>
+                )}
               </div>
 
               {/* )} */}

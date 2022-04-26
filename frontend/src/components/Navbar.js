@@ -1,10 +1,16 @@
 import React from "react";
 import { Button, NavDropdown } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
+import { logout } from "../redux/actions/userAction";
 
 const Navbar = () => {
   const { userInfo } = useSelector((state) => state.userLoginReducer);
+  const dispatch = useDispatch();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
 
   return (
     <div className="px-5 py-3 w-100 bg-dark">
@@ -55,12 +61,12 @@ const Navbar = () => {
             <NavDropdown title={`Xin chào, ${userInfo.name}`} className="me-2">
               <Link to="/profile">
                 <NavDropdown.Item>
-                  <i className="fas fa-user me-2"></i>Profile
+                  <i className="fas fa-user me-2"></i>Hồ sơ cá nhân
                 </NavDropdown.Item>
               </Link>
-              <NavDropdown.Item>
+              <NavDropdown.Item onClick={logoutHandler}>
                 <i className="fas fa-arrow-right-from-bracket me-2"></i>
-                Logout
+                Đăng xuất
               </NavDropdown.Item>
             </NavDropdown>
           </div>

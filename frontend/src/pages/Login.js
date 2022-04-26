@@ -5,6 +5,7 @@ import Navbar from "../components/HomeNavbar";
 import FormContainer from "../components/FormContainer";
 import { login } from "../redux/actions/userAction";
 import { useDispatch, useSelector } from "react-redux";
+import ReactLoading from "react-loading";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -58,15 +59,21 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 ></Form.Control>
-                {/* {isLoading ? (
-              <Spinner animation="border" className="mt-4 ms-4">
-                <span className="sr-only">Loading...</span>
-              </Spinner>
-            ) : ( */}
+
                 <div className="text-center">
-                  <Button type="submit" className="mt-3 px-3 py-2">
-                    Đăng nhập
-                  </Button>
+                  {isLoading ? (
+                    <div className="d-flex justify-content-center">
+                      <ReactLoading
+                        color="black"
+                        type="cylon"
+                        height="57px"
+                      ></ReactLoading>
+                    </div>
+                  ) : (
+                    <Button type="submit" className="mt-3 px-3 py-2">
+                      Đăng nhập
+                    </Button>
+                  )}
                 </div>
 
                 {/* )} */}

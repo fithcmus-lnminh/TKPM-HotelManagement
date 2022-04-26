@@ -34,7 +34,7 @@ export async function registerUser(req, res, next) {
 
     if (userExists) {
       res.status(400);
-      throw new Error("User already exists");
+      throw new Error("Email đã tồn tại");
     }
 
     const salt = await bcrypt.genSalt(10);

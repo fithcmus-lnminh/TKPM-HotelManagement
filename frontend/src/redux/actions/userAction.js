@@ -66,7 +66,7 @@ export const register =
 
       const navigate = getState().navigateReducer.navigate;
       navigate("/");
-      sessionStorage.setItem("userInfo", JSON.stringify(encode(data)));
+      sessionStorage.setItem("userInfo", encode(JSON.stringify(data)));
     } catch (err) {
       dispatch({
         type: USER_REGISTER_FAIL,
