@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, NavDropdown, NavLink } from "react-bootstrap";
+import { Button, Image, NavDropdown, NavLink } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../redux/actions/userAction";
@@ -30,7 +30,7 @@ const HomeNavbar = () => {
   };
 
   return (
-    <div className={`px-5 py-3 position-fixed w-100 ${color.bg}`}>
+    <div className={`px-5 py-2 position-fixed w-100 ${color.bg}`}>
       <nav className="d-flex justify-content-between align-items-center">
         <div className="fw-bold fs-4">
           <Link
@@ -89,8 +89,18 @@ const HomeNavbar = () => {
           </div>
         </div>
         {userInfo ? (
-          <div className="d-flex align-items-center">
-            <NavDropdown title={`Xin chào, ${userInfo.name}`} className="me-2">
+          <div className="d-flex align-items-center justify-content-end">
+            <NavDropdown
+              title={
+                <>
+                  <p style={{ display: "inline" }} className="me-2">
+                    {userInfo.name}
+                  </p>
+                  <Image src={userInfo.avatar} width="36px" />
+                </>
+              }
+              className="me-2"
+            >
               <Link to="/profile">
                 <NavDropdown.Item>
                   <i className="fas fa-user me-2"></i>Hồ sơ cá nhân

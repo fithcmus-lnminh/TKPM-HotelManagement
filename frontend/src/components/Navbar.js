@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, NavDropdown } from "react-bootstrap";
+import { Button, Image, NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import { logout } from "../redux/actions/userAction";
@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="px-5 py-3 w-100 bg-dark">
+    <div className="px-5 py-2 w-100 bg-dark">
       <nav className="d-flex justify-content-between align-items-center">
         <div className="fw-bold fs-4">
           <Link to="/" className="logo text-white">
@@ -108,7 +108,17 @@ const Navbar = () => {
         </div>
         {userInfo ? (
           <div className="d-flex align-items-center">
-            <NavDropdown title={`Xin chào, ${userInfo.name}`} className="me-2">
+            <NavDropdown
+              title={
+                <>
+                  <p style={{ display: "inline" }} className="me-2">
+                    {userInfo.name}
+                  </p>
+                  <Image src={userInfo.avatar} width="36px" />
+                </>
+              }
+              className="me-2"
+            >
               <Link to="/profile">
                 <NavDropdown.Item>
                   <i className="fas fa-user me-2"></i>Hồ sơ cá nhân

@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.userLoginReducer);
@@ -30,9 +31,11 @@ const Header = () => {
               </p>
               <p className="text-center mb-4">Giá chỉ từ $100</p>
               <div className="text-center">
-                <button type="button" className="btn btn-info text-center">
-                  Đặt phòng ngay
-                </button>
+                <Link to="/room-booking">
+                  <button type="button" className="btn btn-info text-center">
+                    ĐẶT PHÒNG NGAY
+                  </button>
+                </Link>
               </div>
             </>
           )}
