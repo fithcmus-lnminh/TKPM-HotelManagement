@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Form, Button, Row, Col, Card } from "react-bootstrap";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Form, Button, Card } from "react-bootstrap";
 import Navbar from "../components/HomeNavbar";
 import FormContainer from "../components/FormContainer";
 import { register } from "../redux/actions/userAction";
 import ReactLoading from "react-loading";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -14,9 +15,22 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
 
-  const { isLoading, errorMessage } = useSelector(
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect")
+    ? searchParams.get("redirect")
+    : "";
+
+  const { isLoading, errorMessage, userInfo } = useSelector(
     (state) => state.userRegisterReducer
   );
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(`/${redirect}`);
+    }
+  }, [navigate, userInfo, redirect]);
 
   const dispatch = useDispatch();
 

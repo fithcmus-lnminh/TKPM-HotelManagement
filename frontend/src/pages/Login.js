@@ -1,22 +1,35 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Form, Button, Row, Col, Card } from "react-bootstrap";
 import Navbar from "../components/HomeNavbar";
 import FormContainer from "../components/FormContainer";
 import { login } from "../redux/actions/userAction";
 import { useDispatch, useSelector } from "react-redux";
 import ReactLoading from "react-loading";
+import { useEffect } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);
 
-  const { isLoading, errorMessage } = useSelector(
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect")
+    ? searchParams.get("redirect")
+    : "";
+
+  const { isLoading, errorMessage, userInfo } = useSelector(
     (state) => state.userLoginReducer
   );
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(`/${redirect}`);
+    }
+  }, [navigate, userInfo, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -84,9 +97,8 @@ const Login = () => {
               <Col className="text-center">
                 Do not have an account?{" "}
                 <Link
-                  to="/register"
+                  to={redirect ? `/register?redirect=${redirect}` : "/register"}
                   className="content-link"
-                  //   to={redirect ? `/register?redirect=${redirect}` : "/register"}
                 >
                   Create Now
                 </Link>
