@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import Rooms from "./pages/Rooms";
 import AccountManagement from "./pages/Admin/accountManagement";
 import { addNavigate } from "./redux/actions/sysAction";
+import UserProfile from "./pages/UserProfile";
 
 const App = () => {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const App = () => {
       <Route path="/room-management" element={<RoomManagement />} />
       <Route path="/report" element={<Report />} />
       <Route path="/admin/account-management" element={<AccountManagement />} />
+      <Route path="/profile" element={<UserProfile />} />
     </Routes>
   );
 };

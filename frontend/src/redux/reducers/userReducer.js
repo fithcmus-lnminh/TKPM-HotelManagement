@@ -1,4 +1,8 @@
 import {
+  GET_USER_DETAILS_FAIL,
+  GET_USER_DETAILS_REQUEST,
+  GET_USER_DETAILS_RESET,
+  GET_USER_DETAILS_SUCCESS,
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
@@ -47,6 +51,21 @@ export const userRegisterReducer = (state = {}, action) => {
       };
     case USER_REGISTER_FAIL:
       return { ...state, isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const getUserProfileReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_USER_DETAILS_REQUEST:
+      return { ...state, isLoading: true };
+    case GET_USER_DETAILS_SUCCESS:
+      return { isLoading: false, userProfile: action.data };
+    case GET_USER_DETAILS_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    case GET_USER_DETAILS_RESET:
+      return {};
     default:
       return state;
   }

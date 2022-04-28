@@ -74,7 +74,7 @@ export const getUserProfile = async (req, res, next) => {
       });
     } else {
       res.status(404);
-      throw new Error("User not found.");
+      throw new Error("Không tìm thấy người dùng.");
     }
   } catch (err) {
     next(err);

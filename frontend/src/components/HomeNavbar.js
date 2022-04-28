@@ -102,7 +102,7 @@ const HomeNavbar = () => {
               className="me-2"
             >
               <Link to="/profile">
-                <NavDropdown.Item>
+                <NavDropdown.Item as="div">
                   <i className="fas fa-user me-2"></i>Hồ sơ cá nhân
                 </NavDropdown.Item>
               </Link>
