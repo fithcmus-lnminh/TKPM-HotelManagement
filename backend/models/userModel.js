@@ -32,6 +32,15 @@ const userSchema = mongoose.Schema(
       required: true,
       default: "User",
     },
+    //if role = "User"
+    customerType: {
+      type: String,
+      default: "Domestic",
+      enum: ["Domestic", "Foreigner"],
+    },
+    address: {
+      type: String,
+    },
   },
   {
     timestamps: true,
