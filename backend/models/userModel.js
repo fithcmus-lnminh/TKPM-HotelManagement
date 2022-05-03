@@ -16,6 +16,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    identity_card: {
+      type: Number,
+      required: true,
+    },
     avatar: {
       type: String,
       default:
