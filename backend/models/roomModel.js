@@ -12,6 +12,10 @@ const roomSchema = mongoose.Schema(
       default: "Single",
       enum: ["Single", "Double", "Triple", "Quad"],
     },
+    image: {
+      type: String,
+      required: true,
+    },
     price: {
       type: Number,
       required: true,
