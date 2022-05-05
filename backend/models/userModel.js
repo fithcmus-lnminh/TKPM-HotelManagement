@@ -20,11 +20,6 @@ const userSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    avatar: {
-      type: String,
-      default:
-        "https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png",
-    },
     dob: {
       type: Date,
     },

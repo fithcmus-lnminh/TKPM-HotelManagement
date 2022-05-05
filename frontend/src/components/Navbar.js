@@ -108,17 +108,7 @@ const Navbar = () => {
         </div>
         {userInfo ? (
           <div className="d-flex align-items-center">
-            <NavDropdown
-              title={
-                <>
-                  <p style={{ display: "inline" }} className="me-2">
-                    {userInfo.name}
-                  </p>
-                  <Image src={userInfo.avatar} width="36px" />
-                </>
-              }
-              className="me-2"
-            >
+            <NavDropdown title={`Xin chào, ${userInfo.name}`} className="me-2">
               <Link to="/profile">
                 <NavDropdown.Item>
                   <i className="fas fa-user me-2"></i>Hồ sơ cá nhân

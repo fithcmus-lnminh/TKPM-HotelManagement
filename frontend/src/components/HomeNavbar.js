@@ -91,14 +91,7 @@ const HomeNavbar = () => {
         {userInfo ? (
           <div className="d-flex align-items-center justify-content-end">
             <NavDropdown
-              title={
-                <>
-                  <p style={{ display: "inline" }} className="me-2">
-                    {userInfo.name}
-                  </p>
-                  <Image src={userInfo.avatar} width="36px" />
-                </>
-              }
+              title={`Xin chào, ${userInfo.name}`}
               className="me-2"
             >
               <Link to="/profile">
