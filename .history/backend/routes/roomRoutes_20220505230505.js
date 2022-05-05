@@ -6,7 +6,7 @@ import {
   getAllRentalCard,
   getRentalCardById,
   getRoomByType,
-  //postCreateRoom,
+  postCreateRoom,
 } from "../controllers/roomController.js";
 import { isAdminOrManager } from "../middlewares/isAdminOrManager.js";
 

@@ -91,11 +91,31 @@ export const getRentalCardById = async (req, res, next) => {
 export const getRoomByType = async (req, res, next) => {
   try {
     let type = req.params.type;
+    console.log("type: ", type);
     const rooms = await Room.find({ type });
 
     if (rooms.length > 0) {
       res.json({
         rooms,
+      });
+    } else {
+      res.status(404);
+      throw new Error("Không có phòng nào.");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const postCreateRoom = async (req, res, next) => {
+  const { number, type, image, price, status, description } = req.body;
+
+  try {
+    const rooms = await Room.find();
+
+    if (rooms.length > 0) {
+      res.json({
+        rooms: rooms,
       });
     } else {
       res.status(404);
