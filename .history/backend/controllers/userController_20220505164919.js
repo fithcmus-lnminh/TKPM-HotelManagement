@@ -68,7 +68,7 @@ export async function registerUser(req, res, next) {
 }
 
 export const getUserProfile = async (req, res, next) => {
-  console.log("===> getUserProfile");
+  console.log("getUserProfile");
 
   try {
     const user = await User.findById(req.user._id);

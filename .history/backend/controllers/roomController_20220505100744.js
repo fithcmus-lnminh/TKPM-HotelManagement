@@ -41,12 +41,7 @@ export async function registerUser(req, res, next) {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      identity_card: 123456789,
-    });
+    const user = await User.create({ name, email, password: hashedPassword });
 
     if (user) {
       res.status(201).json({
@@ -55,7 +50,6 @@ export async function registerUser(req, res, next) {
         email: user.email,
         role: user.role,
         avatar: user.avatar,
-        identity_card: 123456789,
         token: generateToken(user._id),
       });
     } else {
@@ -68,8 +62,6 @@ export async function registerUser(req, res, next) {
 }
 
 export const getUserProfile = async (req, res, next) => {
-  console.log("===> getUserProfile");
-
   try {
     const user = await User.findById(req.user._id);
 
