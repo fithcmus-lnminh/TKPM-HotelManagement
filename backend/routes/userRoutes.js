@@ -11,7 +11,7 @@ const router = express.Router();
 // POST API /api/login
 router.post("/login", authUser);
 router.post("/register", registerUser);
-router.get("/profile", isAuth, isAdminOrManager, getUserProfile);
+router.get("/:id", isAuth, getUserProfile);
 //router.put;
 //router.delete
 

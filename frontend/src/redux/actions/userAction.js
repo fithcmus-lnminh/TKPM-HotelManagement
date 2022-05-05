@@ -10,6 +10,7 @@ import {
   GET_USER_DETAILS_REQUEST,
   GET_USER_DETAILS_SUCCESS,
   GET_USER_DETAILS_FAIL,
+  GET_USER_DETAILS_RESET,
 } from "../../constants/userConsts";
 import { encode } from "js-base64";
 
@@ -84,7 +85,7 @@ export const logout = () => async (dispatch, getState) => {
   sessionStorage.removeItem("userInfo");
 
   dispatch({ type: USER_LOGOUT });
-  //   dispatch({ type: GET_USER_DETAILS_RESET });
+  dispatch({ type: GET_USER_DETAILS_RESET });
   const navigate = getState().navigateReducer.navigate;
   navigate("/");
 };

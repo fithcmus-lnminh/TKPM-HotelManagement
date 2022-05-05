@@ -9,7 +9,8 @@ export async function authUser(req, res, next) {
     const user = await User.findOne({ email });
 
     if (user && (await user.comparePassword(password))) {
-      res.json({ //res.send
+      res.json({
+        //res.send
         _id: user._id,
         name: user.name,
         email: user.email,
@@ -67,6 +68,10 @@ export const getUserProfile = async (req, res, next) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        identity_card: user.identity_card,
+        dob: user.dob.toISOString().split("T")[0],
+        phoneNumber: user.phoneNumber,
+        address: user.address,
         role: user.role,
       });
     } else {

@@ -110,7 +110,7 @@ const Navbar = () => {
           <div className="d-flex align-items-center">
             <NavDropdown title={`Xin chào, ${userInfo.name}`} className="me-2">
               <Link to="/profile">
-                <NavDropdown.Item>
+                <NavDropdown.Item as="div">
                   <i className="fas fa-user me-2"></i>Hồ sơ cá nhân
                 </NavDropdown.Item>
               </Link>
