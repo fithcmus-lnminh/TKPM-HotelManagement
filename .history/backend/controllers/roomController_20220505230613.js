@@ -110,27 +110,15 @@ export const postCreateRoom = async (req, res, next) => {
   const { number, type, image, price, status, description } = req.body;
 
   try {
-    const room = await Room.create({
-      number,
-      type,
-      image,
-      price,
-      status,
-      description,
-    });
+    const rooms = await Room.find();
 
-    if (room) {
-      res.status(201).json({
-        number,
-        type,
-        image,
-        price,
-        status,
-        description,
+    if (rooms.length > 0) {
+      res.json({
+        rooms: rooms,
       });
     } else {
       res.status(404);
-      throw new Error("Không đặt được phòng.");
+      throw new Error("Không có phòng nào.");
     }
   } catch (err) {
     next(err);

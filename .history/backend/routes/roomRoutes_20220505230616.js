@@ -16,7 +16,7 @@ router.get("/all-rooms", getAllRooms);
 router.get("/rental-card", getAllRentalCard);
 router.get("/rental-card/:userId", getRentalCardById);
 router.get("/get-rooms-by-type/:type", getRoomByType);
-router.post("/create-room", isAuth, isAdminOrManager, postCreateRoom);
+router.post("/create-room", postCreateRoom);
 router.get("/:id", getRoomById);
 
 export default router;
