@@ -14,7 +14,6 @@ const router = express.Router();
 router.get("/all-rooms", getAllRooms);
 router.get("/rental-card", getAllRentalCard);
 router.get("/rental-card/:userId", getRentalCardById);
-router.get("/get-rooms-by-type", getRoomByType);
 router.get("/:id", getRoomById);
 
 export default router;

@@ -90,6 +90,7 @@ export const getRentalCardById = async (req, res, next) => {
 
 export const getRoomByType = async (req, res, next) => {
   try {
+    console.log("req.query: ", req.query);
     if (!req.query.type) {
       res.status(404);
       throw new Error("Truy vấn không hợp lệ.");
@@ -97,7 +98,7 @@ export const getRoomByType = async (req, res, next) => {
 
     let type = req.query.type;
     const rooms = await Room.find({ type });
-
+    console.log("rooms: ", rooms);
     if (rooms.length > 0) {
       res.json({
         rooms,
