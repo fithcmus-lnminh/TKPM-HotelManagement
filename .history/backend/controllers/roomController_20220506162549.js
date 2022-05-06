@@ -93,7 +93,7 @@ export const getRentalCardById = async (req, res, next) => {
 
 export const getRoomByType = async (req, res, next) => {
   try {
-    const type = req.params.type;
+    let type = req.params.type;
     const rooms = await Room.find({ type });
 
     if (rooms.length > 0) {
@@ -174,29 +174,6 @@ export const postCreateRentalCard = async (req, res, next) => {
     } else {
       res.status(404);
       throw new Error("Không đặt được phòng.");
-    }
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const deleteRoom = async (req, res, next) => {
-  try {
-    const roomId = req.params.roomId;
-    const rooms = await Room.find();
-
-    const flag = rooms.findIndex((room) => {
-      return room._id.toString() === roomId;
-    });
-
-    if (flag === -1) {
-      res.status(404);
-      throw new Error("Không tìm thấy phòng.");
-    } else {
-      await Room.deleteOne({ _id: roomId });
-      res.status(201).json({
-        success: true,
-      });
     }
   } catch (err) {
     next(err);

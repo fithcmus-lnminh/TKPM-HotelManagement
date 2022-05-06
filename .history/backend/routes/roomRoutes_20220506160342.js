@@ -8,7 +8,7 @@ import {
   getRoomByType,
   postCreateRoom,
   postCreateRentalCard,
-  // updateRoom,
+  updateRoom,
   deleteRoom,
 } from "../controllers/roomController.js";
 import { isAdminOrManager } from "../middlewares/isAdminOrManager.js";
@@ -22,7 +22,7 @@ router.get("/rental-card/:userId", getRentalCardById);
 router.get("/get-rooms-by-type/:type", getRoomByType);
 router.post("/create-room", isAuth, isAdminOrManager, postCreateRoom);
 router.post("/create-rental-card", postCreateRentalCard);
-// router.put("/update-room/:roomId", updateRoom);
+router.put("/update-room/:roomId", updateRoom);
 router.delete("/delete-room/:roomId", deleteRoom);
 router.get("/:id", getRoomById);
 

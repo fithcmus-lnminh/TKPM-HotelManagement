@@ -183,20 +183,15 @@ export const postCreateRentalCard = async (req, res, next) => {
 export const deleteRoom = async (req, res, next) => {
   try {
     const roomId = req.params.roomId;
-    const rooms = await Room.find();
+    const room = await Room.findOne({ _id: roomId });
 
-    const flag = rooms.findIndex((room) => {
-      return room._id.toString() === roomId;
-    });
-
-    if (flag === -1) {
+    if (room) {
+      res.json({
+        room,
+      });
+    } else {
       res.status(404);
       throw new Error("Không tìm thấy phòng.");
-    } else {
-      await Room.deleteOne({ _id: roomId });
-      res.status(201).json({
-        success: true,
-      });
     }
   } catch (err) {
     next(err);

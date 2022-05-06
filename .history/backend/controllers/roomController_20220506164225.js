@@ -183,11 +183,14 @@ export const postCreateRentalCard = async (req, res, next) => {
 export const deleteRoom = async (req, res, next) => {
   try {
     const roomId = req.params.roomId;
+    console.log("roomId: ", roomId);
     const rooms = await Room.find();
+    console.log("rooms: ", rooms);
 
     const flag = rooms.findIndex((room) => {
       return room._id.toString() === roomId;
     });
+    console.log("flag: ", flag);
 
     if (flag === -1) {
       res.status(404);
