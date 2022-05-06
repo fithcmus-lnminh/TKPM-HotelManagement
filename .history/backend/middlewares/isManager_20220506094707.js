@@ -1,5 +1,5 @@
-export const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === "Admin") {
+export const isManager = (req, res, next) => {
+  if (req.user && req.user.role === "Manager") {
     next();
   } else {
     res.status(401);
