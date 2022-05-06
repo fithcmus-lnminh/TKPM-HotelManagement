@@ -34,7 +34,6 @@ const userSchema = mongoose.Schema(
     //if role = "User"
     customerType: {
       type: String,
-      default: "Domestic",
       enum: ["Domestic", "Foreigner"],
     },
     address: {

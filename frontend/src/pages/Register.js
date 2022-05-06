@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Form, Button, Card } from "react-bootstrap";
+import { Form, Button, Card, Row, Col } from "react-bootstrap";
 import Navbar from "../components/HomeNavbar";
 import FormContainer from "../components/FormContainer";
 import { register } from "../redux/actions/userAction";
@@ -11,6 +11,8 @@ import { useEffect } from "react";
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [type, setType] = useState("Domestic");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
@@ -35,18 +37,20 @@ const Register = () => {
   const dispatch = useDispatch();
 
   const submitHandler = (e) => {
+    console.log(name, email, password, idNumber, type);
     console.log(email, password);
     e.preventDefault();
     setMessage(null);
     if (name === "") setMessage("Vui lòng nhập họ tên");
     else if (email === "") setMessage("Vui lòng nhập email");
+    else if (!idNumber) setMessage("Vui lòng nhập CMND/CCCD");
     else if (password === "") setMessage("Vui lòng nhập mật khẩu");
     else if (confirmPassword === "")
       setMessage("Vui lòng nhập mật khẩu xác nhận");
     else if (password !== confirmPassword) {
       setMessage("Mật khẩu không khớp");
     } else {
-      dispatch(register(name, email, password));
+      dispatch(register(name, email, password, idNumber, type));
     }
   };
 
@@ -77,6 +81,32 @@ const Register = () => {
                   onChange={(e) => setName(e.target.value)}
                 ></Form.Control>
               </Form.Group>
+              <Row>
+                <Col>
+                  <Form.Group controlId="identity_card" className="mt-3">
+                    <Form.Label className="text-white">CMND/CCCD</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Nhập CMND/CCCD"
+                      value={idNumber}
+                      onChange={(e) => setIdNumber(e.target.value)}
+                    ></Form.Control>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="customerType" className="mt-3">
+                    <Form.Label className="text-white">Bạn là</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={type}
+                      onChange={(e) => setType(e.target.value)}
+                    >
+                      <option value="Domestic">Người Việt Nam</option>
+                      <option value="Foreigner">Người nước ngoài</option>
+                    </Form.Control>
+                  </Form.Group>
+                </Col>
+              </Row>
               <Form.Group controlId="email" className="mt-3">
                 <Form.Label className="text-white">Email</Form.Label>
                 <Form.Control
@@ -106,6 +136,7 @@ const Register = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 ></Form.Control>
               </Form.Group>
+
               <div className="text-center">
                 {isLoading ? (
                   <div className="d-flex justify-content-center">

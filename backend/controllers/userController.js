@@ -28,7 +28,7 @@ export async function authUser(req, res, next) {
 }
 
 export async function registerUser(req, res, next) {
-  const { name, email, password } = req.body;
+  const { name, email, password, identity_card, customerType } = req.body;
 
   try {
     const userExists = await User.findOne({ email });
@@ -40,7 +40,13 @@ export async function registerUser(req, res, next) {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const user = await User.create({ name, email, password: hashedPassword });
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      identity_card,
+      customerType,
+    });
 
     if (user) {
       res.status(201).json({
@@ -48,6 +54,8 @@ export async function registerUser(req, res, next) {
         name: user.name,
         email: user.email,
         role: user.role,
+        identity_card: user.identity_card,
+        customerType: user.customerType,
         token: generateToken(user._id),
       });
     } else {
@@ -69,7 +77,8 @@ export const getUserProfile = async (req, res, next) => {
         name: user.name,
         email: user.email,
         identity_card: user.identity_card,
-        dob: user.dob.toISOString().split("T")[0],
+        dob: user.dob?.toISOString().split("T")[0],
+        customerType: user.customerType,
         phoneNumber: user.phoneNumber,
         address: user.address,
         role: user.role,
@@ -77,6 +86,40 @@ export const getUserProfile = async (req, res, next) => {
     } else {
       res.status(404);
       throw new Error("Không tìm thấy người dùng.");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateProfile = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const { name, email, identity_card, dob, phone, address } = req.body;
+
+    if (user) {
+      user.name = name || user.name;
+      user.email = email || user.email;
+      user.identity_card = identity_card || user.identity_card;
+      user.dob = dob || user.dob;
+      user.phoneNumber = phone || user.phoneNumber;
+      user.address = address || user.address;
+
+      const updatedUser = await user.save();
+
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        identity_card: updatedUser.identity_card,
+        dob: updatedUser.dob,
+        phoneNumber: updatedUser.phoneNumber,
+        address: updatedUser.address,
+        role: updatedUser.role,
+        token: generateToken(updatedUser._id),
+      });
+    } else {
+      throw new Error("Không có user", 404);
     }
   } catch (err) {
     next(err);

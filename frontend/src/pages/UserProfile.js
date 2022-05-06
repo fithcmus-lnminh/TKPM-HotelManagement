@@ -11,6 +11,7 @@ const UserProfile = () => {
   const [email, setEmail] = useState("");
   const [idNumber, setIdNumber] = useState(0);
   const [dob, setDob] = useState("");
+  const [customerType, setCustomerType] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [message, setMessage] = useState(null);
@@ -39,17 +40,25 @@ const UserProfile = () => {
         setName(userProfile.name);
         setEmail(userProfile.email);
         setIdNumber(userProfile.identity_card);
-        setDob(userProfile.dob);
+        userProfile.dob && setDob(userProfile.dob);
+        userProfile.customerType && setCustomerType(userProfile.customerType);
       }
     }
   }, [userInfo, userProfile, dispatch, navigate]);
+
+  console.log(userProfile);
 
   const submitHandler = (e) => {
     e.preventDefault();
     setMessage(null);
     if (name === "") setMessage("Name is required");
+    else if (idNumber === "") setMessage("Email is required");
+    else if (dob === "") setMessage("Dob is required");
     else if (email === "") setMessage("Email is required");
+    else if (phone === "") setMessage("Phone is required");
+    else if (address === "") setMessage("Address is required");
     else {
+      setIsEdit(false);
       // dispatch(
       //   updateUserDetails({ _id: userProfile._id, name, email, password })
       // );
@@ -57,7 +66,7 @@ const UserProfile = () => {
   };
 
   const editController = () => {
-    setIsEdit(!isEdit);
+    setIsEdit(true);
   };
 
   return (
@@ -100,7 +109,7 @@ const UserProfile = () => {
                   disabled={isEdit ? false : true}
                 ></Form.Control>
               </Form.Group>
-              <Form.Group controlId="idNumber" className="mt-3">
+              <Form.Group controlId="identity_card" className="mt-3">
                 <Form.Label>Số CMND/CCCD</Form.Label>
                 <Form.Control
                   type="number"
@@ -110,16 +119,37 @@ const UserProfile = () => {
                   disabled={isEdit ? false : true}
                 ></Form.Control>
               </Form.Group>
-              <Form.Group controlId="dob" className="mt-3">
-                <Form.Label>Ngày sinh</Form.Label>
-                <Form.Control
-                  type="date"
-                  placeholder="Chưa có ngày sinh"
-                  value={dob}
-                  onChange={(e) => setDob(e.target.value)}
-                  disabled={isEdit ? false : true}
-                ></Form.Control>
-              </Form.Group>
+              <Row>
+                <Col>
+                  <Form.Group controlId="dob" className="mt-3">
+                    <Form.Label>Ngày sinh</Form.Label>
+                    <Form.Control
+                      type="date"
+                      placeholder="Chưa có ngày sinh"
+                      value={dob}
+                      onChange={(e) => setDob(e.target.value)}
+                      disabled={isEdit ? false : true}
+                    ></Form.Control>
+                  </Form.Group>
+                </Col>
+                {customerType !== "" && (
+                  <Col>
+                    <Form.Group controlId="customerType" className="mt-3">
+                      <Form.Label>Loại khách</Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={customerType}
+                        onChange={(e) => setCustomerType(e.target.value)}
+                        disabled={isEdit ? false : true}
+                      >
+                        <option value="Domestic">Khách nội địa</option>
+                        <option value="Foreigner">Khách nước ngoài</option>
+                      </Form.Control>
+                    </Form.Group>
+                  </Col>
+                )}
+              </Row>
+
               <Form.Group controlId="phone" className="mt-3">
                 <Form.Label>Số điện thoại</Form.Label>
                 <Form.Control
@@ -142,6 +172,9 @@ const UserProfile = () => {
               </Form.Group>
               {isEdit && (
                 <div className="text-center">
+                  <Button type="submit" className="btn btn-secondary my-3 me-3">
+                    Hủy
+                  </Button>
                   <Button type="submit" className="btn btn-success my-3">
                     Cập nhật thông tin
                   </Button>
