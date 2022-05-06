@@ -58,7 +58,7 @@ export async function registerUser(req, res, next) {
     };
 
     for (let key in info) {
-      if (Boolean(info[key]) === false) {
+      if (info[key] === undefined) {
         delete info[key];
       }
     }
@@ -104,6 +104,7 @@ export async function registerUser(req, res, next) {
 export const getUserProfile = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
+    console.log("user: ", user);
 
     if (user) {
       res.json({

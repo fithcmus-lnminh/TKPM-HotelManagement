@@ -43,15 +43,8 @@ export const getRoomById = async (req, res, next) => {
 export const getAllRentalCard = async (req, res, next) => {
   try {
     const rentalCard = await RentalCard.find()
-      .populate({
-        path: "user",
-        select:
-          "_id name email identity_card avatar dob phoneNumber role customerType address",
-      })
-      .populate({
-        path: "room",
-        select: "_id number type image price status description",
-      });
+      .populate("user")
+      .populate("room");
 
     if (rentalCard.length > 0) {
       res.json({
@@ -81,15 +74,9 @@ export const getRentalCardById = async (req, res, next) => {
     }
 
     const rentalCard = await RentalCard.find({ user: { _id: userId } })
-      .populate({
-        path: "user",
-        select:
-          "_id name email identity_card avatar dob phoneNumber role customerType address",
-      })
-      .populate({
-        path: "room",
-        select: "_id number type image price status description",
-      });
+      .populate("user")
+      .select("-password")
+      .populate("room");
 
     if (rentalCard.length > 0) {
       res.json({
@@ -136,11 +123,11 @@ export const postCreateRoom = async (req, res, next) => {
     };
 
     for (let key in info) {
-      if (Boolean(info[key]) === false) {
+      // if (info[key] === undefined) {
+      if (Boolean(info[key])) {
         delete info[key];
       }
     }
-    console.log("info", info);
 
     const room = await Room.create({
       ...info,
@@ -171,7 +158,8 @@ export const postCreateRentalCard = async (req, res, next) => {
     };
 
     for (let key in info) {
-      if (Boolean(info[key]) === false) {
+      // if (info[key] === undefined) {
+      if (Boolean(info[key])) {
         delete info[key];
       }
     }
@@ -242,7 +230,8 @@ export const updateRoom = async (req, res, next) => {
       };
 
       for (let key in info) {
-        if (Boolean(info[key]) === false) {
+        // if (info[key] === undefined) {
+        if (Boolean(info[key])) {
           delete info[key];
         }
       }

@@ -58,7 +58,7 @@ export async function registerUser(req, res, next) {
     };
 
     for (let key in info) {
-      if (Boolean(info[key]) === false) {
+      if (info[key] === undefined) {
         delete info[key];
       }
     }
@@ -71,11 +71,6 @@ export async function registerUser(req, res, next) {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    // const user = await User.create({
-    //   name,
-    //   email,
-    //   password: hashedPassword,
-    // });
 
     const user = await User.create({
       ...info,
@@ -104,6 +99,7 @@ export async function registerUser(req, res, next) {
 export const getUserProfile = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
+    console.log("user: ", user);
 
     if (user) {
       res.json({

@@ -48,10 +48,10 @@ export const getAllRentalCard = async (req, res, next) => {
         select:
           "_id name email identity_card avatar dob phoneNumber role customerType address",
       })
-      .populate({
-        path: "room",
-        select: "_id number type image price status description",
-      });
+      //.populate("user")
+      .populate({path: "room", select: "_id number type image price status description");
+
+    console.log("Rental card: ", rentalCard);
 
     if (rentalCard.length > 0) {
       res.json({
@@ -81,15 +81,9 @@ export const getRentalCardById = async (req, res, next) => {
     }
 
     const rentalCard = await RentalCard.find({ user: { _id: userId } })
-      .populate({
-        path: "user",
-        select:
-          "_id name email identity_card avatar dob phoneNumber role customerType address",
-      })
-      .populate({
-        path: "room",
-        select: "_id number type image price status description",
-      });
+      .populate("user")
+      .select("-password")
+      .populate("room");
 
     if (rentalCard.length > 0) {
       res.json({

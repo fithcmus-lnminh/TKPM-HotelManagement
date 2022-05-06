@@ -53,6 +53,8 @@ export const getAllRentalCard = async (req, res, next) => {
         select: "_id number type image price status description",
       });
 
+    console.log("Rental card: ", rentalCard);
+
     if (rentalCard.length > 0) {
       res.json({
         rentalCard,
