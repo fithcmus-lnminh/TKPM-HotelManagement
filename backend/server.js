@@ -11,8 +11,10 @@ dotenv.config();
 connectDb();
 
 import userRoutes from "./routes/userRoutes.js";
+import roomRoutes from "./routes/roomRoutes.js"
 
 app.use("/api/users", userRoutes);
+app.use("/api/rooms", userRoutes);
 
 app.use(errorHandler);
 

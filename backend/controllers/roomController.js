@@ -121,10 +121,14 @@ export const getRevenueReport = async (req, res, next) => {
     });
 
     if (bills) {
-      res.status(200).json(bills);
+      let revenue = 0;
+      for await (const bill of bills) {
+        revenue += bill.totalPrice;
+      }
+      res.status(200).json(revenue);
     } else {
       res.status(404);
-      throw new Error("Không có lượt đặt phòng nào trong tháng " + month + ' năm ' + year);
+      throw new Error("Không có doanh thu trong tháng " + month + ' năm ' + year);
     }
   } catch (err) {
     next(err);
@@ -150,7 +154,7 @@ export const getDensityUseReport = async (req, res, next) => {
     });
 
     if (bills) {
-      res.status(200).json(bills);
+      res.status(200).json(bills.length);
     } else {
       res.status(404);
       throw new Error("Không có lượt đặt phòng nào trong tháng " + month + ' năm ' + year);
