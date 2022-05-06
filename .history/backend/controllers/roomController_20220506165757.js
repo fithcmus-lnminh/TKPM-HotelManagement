@@ -195,7 +195,6 @@ export const deleteRoom = async (req, res, next) => {
       await Room.deleteOne({ _id: roomId });
       res.status(201).json({
         success: true,
-        message: "Xóa phòng thành công",
       });
     }
   } catch (err) {
@@ -233,11 +232,18 @@ export const updateRoom = async (req, res, next) => {
         }
       }
 
-      const roomUpdate = await Room.updateOne({ _id: roomId }, info);
+      console.log("info: ", info);
 
-      if (roomUpdate) {
+      // await Room.deleteOne({ _id: roomId });
+      // res.status(201).json({
+      //   success: true,
+      // });
+
+      const room = await Room.updateOne({ _id: roomId }, info);
+      console.log("roomUpdate: ", room);
+      if (room) {
         res.status(201).json({
-          room: roomUpdate,
+          room,
           success: true,
           message: "Cập nhật thông tin phòng thành công",
         });
