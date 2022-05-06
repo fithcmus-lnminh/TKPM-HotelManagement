@@ -29,6 +29,7 @@ export async function authUser(req, res, next) {
 }
 
 export async function registerUser(req, res, next) {
+  console.log("req.body: ", req.body);
   // const { name, email, password } = req.body;
   const {
     name,

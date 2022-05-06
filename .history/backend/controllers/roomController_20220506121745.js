@@ -156,6 +156,7 @@ export const postCreateRentalCard = async (req, res, next) => {
         delete info[key];
       }
     }
+    console.log("info: ", info);
 
     const rentalCard = await RentalCard.create({
       ...info,

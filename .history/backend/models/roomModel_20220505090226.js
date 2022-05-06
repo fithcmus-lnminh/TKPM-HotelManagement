@@ -26,7 +26,7 @@ const roomSchema = mongoose.Schema(
       required: true,
       default: true, //true là còn phòng, false là hết phòng
     },
-    description: {
+    desciption: {
       type: String,
     },
   },

@@ -29,6 +29,7 @@ export async function authUser(req, res, next) {
 }
 
 export async function registerUser(req, res, next) {
+  console.log("req.body: ", req.body);
   // const { name, email, password } = req.body;
   const {
     name,
@@ -104,7 +105,26 @@ export async function registerUser(req, res, next) {
 export const getUserProfile = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
-    console.log("user: ", user);
+    console.log("user: ", _id
+    6267f1930b40a4e6614b5645
+    name
+    "Lê Nhật Minh"
+    email
+    "lenhatminh11a1@gmail.com"
+    password
+    "$2a$10$BAnacw0THl2JpFcGlHkqYewnS82Duq.EgRoih5sH8dbDfP/vg7ka."
+    role
+    "User"
+    createdAt
+    2022-04-26T13:20:19.831+00:00
+    updatedAt
+    2022-04-26T13:20:19.831+00:00
+    __v
+    0
+    identity_card
+    123123124
+    dob
+    2001-01-31T17:00:00.000+00:00);
 
     if (user) {
       res.json({

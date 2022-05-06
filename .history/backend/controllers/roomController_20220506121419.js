@@ -105,6 +105,7 @@ export const getRoomByType = async (req, res, next) => {
 };
 
 export const postCreateRoom = async (req, res, next) => {
+  console.log("req.body: ", req.body);
   const { number, type, image, price, status, description } = req.body;
 
   try {
@@ -122,6 +123,7 @@ export const postCreateRoom = async (req, res, next) => {
         delete info[key];
       }
     }
+    console.log("info: ", info);
 
     const room = await Room.create({
       ...info,

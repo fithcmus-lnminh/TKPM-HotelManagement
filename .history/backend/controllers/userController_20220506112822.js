@@ -29,6 +29,7 @@ export async function authUser(req, res, next) {
 }
 
 export async function registerUser(req, res, next) {
+  console.log("req.body: ", req.body);
   // const { name, email, password } = req.body;
   const {
     name,
@@ -50,20 +51,20 @@ export async function registerUser(req, res, next) {
       password,
       identity_card,
       avatar,
-      dob: new Date(dob),
+      dob,
       phoneNumber,
       role,
       customerType,
       address,
     };
-
     for (let key in info) {
       if (info[key] === undefined) {
         delete info[key];
       }
     }
-
+    console.log("info cuoi cung: ", info);
     const userExists = await User.findOne({ email });
+
     if (userExists) {
       res.status(400);
       throw new Error("Email đã tồn tại");
@@ -102,9 +103,74 @@ export async function registerUser(req, res, next) {
 }
 
 export const getUserProfile = async (req, res, next) => {
+  let object = {
+    name: "longhuynh3",
+    email: "longhuynh3@user.com",
+    password: "123456",
+    // identity_card: 123456789,
+    dob: "2018-12-10T13:45:00.000Z",
+    phoneNumber: 379511234,
+    role: "User",
+    customerType: "Domestic",
+    address: "TPHCM",
+  };
+  console.log("object: ", object);
+  const {
+    name,
+    email,
+    password,
+    identity_card,
+    dob,
+    phoneNumber,
+    role,
+    customerType,
+    address,
+  } = object;
+
+  let date = new Date(dob);
+  console.log(
+    "date: ",
+    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+      .eyJpZCI6IjYyNjdhZTcwZDk0MDQwMzY5NzhjZDI1YiIsImlhdCI6MTY1MTgxMTIyNSwiZXhwIjoxNjUxODE0ODI1fQ
+      ._afvGy3RXfHGOmL7UebPGl4wN9ezWBhUsSQ9GoYkQvE
+  );
+  console.log(
+    name,
+    email,
+    password,
+    identity_card,
+    dob,
+    phoneNumber,
+    role,
+    customerType,
+    address
+  );
+  let object2 = {
+    name,
+    email,
+    password,
+    identity_card,
+    dob,
+    phoneNumber,
+    role,
+    customerType,
+    address,
+  };
+  console.log("object2: ", object2);
+  for (let key in object2) {
+    console.log("key: ", key);
+    if (object2[key] === undefined) {
+      delete object2[key];
+    }
+  }
+  console.log("object2 cuoi cung: ", object2);
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  object2 = { ...object2, password: hashedPassword };
+  console.log("object2 finall: ", object2);
+
   try {
     const user = await User.findById(req.user._id);
-    console.log("user: ", user);
 
     if (user) {
       res.json({

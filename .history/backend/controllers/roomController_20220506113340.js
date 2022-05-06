@@ -97,7 +97,7 @@ export const getRoomByType = async (req, res, next) => {
       });
     } else {
       res.status(404);
-      throw new Error("Không tìm thấy phòng.");
+      throw new Error("Không có phòng nào.");
     }
   } catch (err) {
     next(err);
@@ -108,32 +108,27 @@ export const postCreateRoom = async (req, res, next) => {
   const { number, type, image, price, status, description } = req.body;
 
   try {
-    const info = {
+    const room = await Room.create({
       number,
       type,
       image,
       price,
       status,
       description,
-    };
-
-    for (let key in info) {
-      if (info[key] === undefined) {
-        delete info[key];
-      }
-    }
-
-    const room = await Room.create({
-      ...info,
     });
 
     if (room) {
       res.status(201).json({
-        ...info,
+        number,
+        type,
+        image,
+        price,
+        status,
+        description,
       });
     } else {
       res.status(404);
-      throw new Error("Không tạo được phòng.");
+      throw new Error("Không đặt được phòng.");
     }
   } catch (err) {
     next(err);
@@ -144,27 +139,19 @@ export const postCreateRentalCard = async (req, res, next) => {
   const { user, room, startDate, customerInfo } = req.body;
 
   try {
-    const info = {
+    const room = await Room.create({
       user,
       room,
       startDate,
       customerInfo,
-    };
-
-    for (let key in info) {
-      if (info[key] === undefined) {
-        delete info[key];
-      }
-    }
-
-    const rentalCard = await RentalCard.create({
-      ...info,
     });
 
-    console.log("rentalCard: ", rentalCard);
-    if (rentalCard) {
+    if (room) {
       res.status(201).json({
-        ...info,
+        nuser,
+        room,
+        startDate,
+        customerInfo,
       });
     } else {
       res.status(404);

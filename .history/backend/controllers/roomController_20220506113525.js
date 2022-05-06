@@ -108,28 +108,23 @@ export const postCreateRoom = async (req, res, next) => {
   const { number, type, image, price, status, description } = req.body;
 
   try {
-    const info = {
+    const room = await Room.create({
       number,
       type,
       image,
       price,
       status,
       description,
-    };
-
-    for (let key in info) {
-      if (info[key] === undefined) {
-        delete info[key];
-      }
-    }
-
-    const room = await Room.create({
-      ...info,
     });
 
     if (room) {
       res.status(201).json({
-        ...info,
+        number,
+        type,
+        image,
+        price,
+        status,
+        description,
       });
     } else {
       res.status(404);
@@ -144,27 +139,19 @@ export const postCreateRentalCard = async (req, res, next) => {
   const { user, room, startDate, customerInfo } = req.body;
 
   try {
-    const info = {
+    const rentalCard = await RentalCard.create({
       user,
       room,
       startDate,
       customerInfo,
-    };
-
-    for (let key in info) {
-      if (info[key] === undefined) {
-        delete info[key];
-      }
-    }
-
-    const rentalCard = await RentalCard.create({
-      ...info,
     });
 
-    console.log("rentalCard: ", rentalCard);
     if (rentalCard) {
       res.status(201).json({
-        ...info,
+        user,
+        room,
+        startDate,
+        customerInfo,
       });
     } else {
       res.status(404);

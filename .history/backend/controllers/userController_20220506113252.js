@@ -29,6 +29,7 @@ export async function authUser(req, res, next) {
 }
 
 export async function registerUser(req, res, next) {
+  console.log("req.body: ", req.body);
   // const { name, email, password } = req.body;
   const {
     name,
@@ -104,7 +105,6 @@ export async function registerUser(req, res, next) {
 export const getUserProfile = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
-    console.log("user: ", user);
 
     if (user) {
       res.json({
