@@ -73,9 +73,10 @@ export const getRentalCardById = async (req, res, next) => {
       throw new Error("Người dùng không hợp lệ.");
     }
 
-    const rentalCard = await RentalCard.find({ user: { _id: userId } })
-      .populate("user")
-      .populate("room");
+    const rentalCard = await RentalCard.find({ user: { _id: userId } });
+    // .populate("user")
+    // .populate("room");
+    console.log("rentalCard: ", rentalCard);
 
     if (rentalCard.length > 0) {
       res.json({

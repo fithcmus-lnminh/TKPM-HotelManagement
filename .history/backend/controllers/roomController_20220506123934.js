@@ -42,9 +42,8 @@ export const getRoomById = async (req, res, next) => {
 
 export const getAllRentalCard = async (req, res, next) => {
   try {
-    const rentalCard = await RentalCard.find()
-      .populate("user")
-      .populate("room");
+    const rentalCard = await RentalCard.find().populate("user");
+    console.log("rentalCard: ", rentalCard);
 
     if (rentalCard.length > 0) {
       res.json({
@@ -73,9 +72,7 @@ export const getRentalCardById = async (req, res, next) => {
       throw new Error("Người dùng không hợp lệ.");
     }
 
-    const rentalCard = await RentalCard.find({ user: { _id: userId } })
-      .populate("user")
-      .populate("room");
+    const rentalCard = await RentalCard.find({ user: { _id: userId } });
 
     if (rentalCard.length > 0) {
       res.json({
