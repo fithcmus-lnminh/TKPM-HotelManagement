@@ -36,33 +36,32 @@ export async function registerUser(req, res, next) {
     email,
     password,
     identity_card,
-    avatar,
     dob,
     phoneNumber,
     role,
     customerType,
     address,
   } = req.body;
+  const info = {
+    name,
+    email,
+    password,
+    identity_card,
+    dob,
+    phoneNumber,
+    role,
+    customerType,
+    address,
+  };
+  for (let key in object2) {
+    console.log("key: ", key);
+    if (object2[key] === undefined) {
+      delete object2[key];
+    }
+  }
+  console.log("object2 cuoi cung: ", object2);
 
   try {
-    const info = {
-      name,
-      email,
-      password,
-      identity_card,
-      avatar,
-      dob,
-      phoneNumber,
-      role,
-      customerType,
-      address,
-    };
-    for (let key in info) {
-      if (info[key] === undefined) {
-        delete info[key];
-      }
-    }
-    console.log("info cuoi cung: ", info);
     const userExists = await User.findOne({ email });
 
     if (userExists) {
@@ -79,7 +78,8 @@ export async function registerUser(req, res, next) {
     // });
 
     const user = await User.create({
-      ...info,
+      name,
+      email,
       password: hashedPassword,
     });
 
