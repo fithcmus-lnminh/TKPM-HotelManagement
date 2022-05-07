@@ -145,11 +145,13 @@ export const getAllUsers = async (req, res, next) => {
       "_id name email identity_card avatar role"
     );
 
+    console.log("users: ", user);
+
     if (users.length > 0) {
       res.json(users);
     } else {
       res.status(404);
-      throw new Error("Không tìm thấy người dùng.");
+      throw new Error("Không tìm thấy nhân viên.");
     }
   } catch (err) {
     next(err);

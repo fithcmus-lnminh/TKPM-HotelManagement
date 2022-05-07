@@ -145,6 +145,8 @@ export const getAllUsers = async (req, res, next) => {
       "_id name email identity_card avatar role"
     );
 
+    console.log("users: ", users);
+
     if (users.length > 0) {
       res.json(users);
     } else {
