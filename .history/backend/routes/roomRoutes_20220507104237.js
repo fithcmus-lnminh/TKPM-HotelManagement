@@ -12,6 +12,7 @@ import {
   deleteRoom,
 } from "../controllers/roomController.js";
 import { isAdminOrManager } from "../middlewares/isAdminOrManager.js";
+import { isManager } from "../middlewares/isManager.js";
 
 const router = express.Router();
 
