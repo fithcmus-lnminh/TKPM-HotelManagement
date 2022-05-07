@@ -127,6 +127,7 @@ export const getAllManagers = async (req, res, next) => {
     const managers = await User.find({ role: "Manager" }).select(
       "_id name email identity_card avatar role"
     );
+    console.log("managers: ", managers);
 
     if (managers.length > 0) {
       res.json(managers);

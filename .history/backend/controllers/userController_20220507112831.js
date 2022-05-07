@@ -124,12 +124,12 @@ export const getUserProfile = async (req, res, next) => {
 
 export const getAllManagers = async (req, res, next) => {
   try {
-    const managers = await User.find({ role: "Manager" }).select(
-      "_id name email identity_card avatar role"
-    );
+    const managers = await User.find({ role: "manager" });
 
     if (managers.length > 0) {
-      res.json(managers);
+      res.json({
+        managers,
+      });
     } else {
       res.status(404);
       throw new Error("Không tìm thấy nhân viên.");

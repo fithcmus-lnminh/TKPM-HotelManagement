@@ -4,7 +4,6 @@ import {
   authUser,
   getUserProfile,
   registerUser,
-  getAllManagers,
 } from "../controllers/userController.js";
 import { isAdminOrManager } from "../middlewares/isAdminOrManager.js";
 import { isAdmin } from "../middlewares/isAdmin.js";
@@ -14,8 +13,8 @@ const router = express.Router();
 router.post("/login", authUser);
 router.post("/register", registerUser);
 router.get("/profile", isAuth, isAdminOrManager, getUserProfile);
-router.get("/all-manager", isAuth, isAdmin, getAllManagers);
-// router.get("/all-user", isAuth, isAdmin, getAllUsers);
+router.get("/profile", isAuth, isAdmin, getUserProfile);
+router.get("/profile", isAuth, isAdmin, getUserProfile);
 
 //router.put;
 //router.delete
