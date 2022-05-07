@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
-import { getUserDetails } from "../redux/actions/userAction";
+import { getUserDetails, updateUserProfile } from "../redux/actions/userAction";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Navbar from "../components/Navbar";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 const UserProfile = () => {
   const [name, setName] = useState("");
@@ -40,33 +42,44 @@ const UserProfile = () => {
         setName(userProfile.name);
         setEmail(userProfile.email);
         setIdNumber(userProfile.identity_card);
+        userProfile.phoneNumber && setPhone(userProfile.phoneNumber);
+        userProfile.address && setAddress(userProfile.address);
         userProfile.dob && setDob(userProfile.dob);
         userProfile.customerType && setCustomerType(userProfile.customerType);
       }
     }
   }, [userInfo, userProfile, dispatch, navigate]);
 
-  console.log(userProfile);
-
   const submitHandler = (e) => {
     e.preventDefault();
     setMessage(null);
-    if (name === "") setMessage("Name is required");
-    else if (idNumber === "") setMessage("Email is required");
-    else if (dob === "") setMessage("Dob is required");
-    else if (email === "") setMessage("Email is required");
-    else if (phone === "") setMessage("Phone is required");
-    else if (address === "") setMessage("Address is required");
+    if (name === "") setMessage("Vui lòng nhập tên");
+    else if (idNumber === "") setMessage("Vui lòng nhập CMND/CCCD");
+    else if (dob === "") setMessage("Vui lòng nhập ngày sinh");
+    else if (email === "") setMessage("Vui lòng nhập email");
+    else if (phone === "") setMessage("Vui lòng nhập số điện thoại");
+    else if (address === "") setMessage("Vui lòng nhập địa chỉ");
     else {
       setIsEdit(false);
-      // dispatch(
-      //   updateUserDetails({ _id: userProfile._id, name, email, password })
-      // );
+      dispatch(
+        updateUserProfile({
+          name,
+          email,
+          identity_card: idNumber,
+          dob,
+          phone,
+          address,
+        })
+      );
     }
   };
 
   const editController = () => {
     setIsEdit(true);
+  };
+
+  const cancelHandler = () => {
+    setIsEdit(false);
   };
 
   return (
@@ -152,13 +165,20 @@ const UserProfile = () => {
 
               <Form.Group controlId="phone" className="mt-3">
                 <Form.Label>Số điện thoại</Form.Label>
-                <Form.Control
+                {/* <Form.Control
                   type="text"
                   placeholder="Chưa có số điện thoại"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   disabled={isEdit ? false : true}
-                ></Form.Control>
+                ></Form.Control> */}
+                <PhoneInput
+                  inputClass="w-100"
+                  country={"us"}
+                  value={phone}
+                  onChange={(phone) => setPhone(phone)}
+                  disabled={isEdit ? false : true}
+                />
               </Form.Group>
               <Form.Group controlId="address" className="mt-3">
                 <Form.Label>Địa chỉ</Form.Label>
@@ -172,7 +192,11 @@ const UserProfile = () => {
               </Form.Group>
               {isEdit && (
                 <div className="text-center">
-                  <Button type="submit" className="btn btn-secondary my-3 me-3">
+                  <Button
+                    type="button"
+                    className="btn btn-secondary my-3 me-3"
+                    onClick={cancelHandler}
+                  >
                     Hủy
                   </Button>
                   <Button type="submit" className="btn btn-success my-3">
@@ -184,7 +208,7 @@ const UserProfile = () => {
           </Col>
           <Col md={7}>
             <h1 className="my-4">Danh sách phiếu đặt phòng</h1>
-            <p className="text-danger font-italic">
+            <p className="text-danger text-italic">
               Không có phiếu đặt phòng nào
             </p>
           </Col>

@@ -1,4 +1,5 @@
 import {
+  CHANGE_USER_LOGIN_NAME,
   GET_USER_DETAILS_FAIL,
   GET_USER_DETAILS_REQUEST,
   GET_USER_DETAILS_RESET,
@@ -32,6 +33,8 @@ export const userLoginReducer = (state = initialState, action) => {
       };
     case USER_LOGIN_FAIL:
       return { ...state, isLoading: false, errorMessage: action.message };
+    case CHANGE_USER_LOGIN_NAME:
+      return { ...state, userInfo: { ...state.userInfo, name: action.name } };
     case USER_LOGOUT:
       return {};
     default:

@@ -1,4 +1,5 @@
 import React from "react";
+import "antd/dist/antd.min.css";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
