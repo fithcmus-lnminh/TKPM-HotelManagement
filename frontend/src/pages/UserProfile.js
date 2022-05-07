@@ -79,7 +79,15 @@ const UserProfile = () => {
   };
 
   const cancelHandler = () => {
+    setMessage("");
     setIsEdit(false);
+    setName(userProfile.name);
+    setEmail(userProfile.email);
+    setIdNumber(userProfile.identity_card);
+    userProfile.phoneNumber && setPhone(userProfile.phoneNumber);
+    userProfile.address && setAddress(userProfile.address);
+    userProfile.dob && setDob(userProfile.dob);
+    userProfile.customerType && setCustomerType(userProfile.customerType);
   };
 
   return (
