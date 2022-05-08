@@ -7,7 +7,7 @@ import Message from "../components/Message";
 import Navbar from "../components/Navbar";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-
+import ReactLoading from "react-loading";
 const UserProfile = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,6 +24,10 @@ const UserProfile = () => {
   const { userInfo } = useSelector((state) => state.userLoginReducer);
   const { isLoading, errorMessage, userProfile } = useSelector(
     (state) => state.getUserProfileReducer
+  );
+
+  const { isLoading: updateLoading } = useSelector(
+    (state) => state.updateUserProfileReducer
   );
 
   // const updateProfileReducer = useSelector(
@@ -95,125 +99,143 @@ const UserProfile = () => {
       <Navbar />
       <Container>
         <Row className="d-flex justify-content-between">
-          <Col md={4}>
-            <div className="d-flex justify-content-between align-items-center">
-              <h1 className="my-4">Hồ sơ cá nhân</h1>
-              <Button
-                type="button"
-                className="btn btn-warning h-50"
-                onClick={editController}
-              >
-                <i className="fas fa-user-pen"></i>
-              </Button>
-            </div>
-            {message && <Message variant="danger">{message}</Message>}
-            {errorMessage && <Message variant="danger">{errorMessage}</Message>}
+          {isLoading || updateLoading ? (
+            <Col md={4}>
+              <div className="d-flex justify-content-between align-items-center">
+                <h1 className="my-4">Hồ sơ cá nhân</h1>
+              </div>
+              <div className="d-flex justify-content-center mt-5">
+                <ReactLoading
+                  color="black"
+                  type="bars"
+                  height="57px"
+                ></ReactLoading>
+              </div>
+            </Col>
+          ) : (
+            <Col md={4}>
+              <div className="d-flex justify-content-between align-items-center">
+                <h1 className="my-4">Hồ sơ cá nhân</h1>
+                <Button
+                  type="button"
+                  className="btn btn-warning h-50"
+                  onClick={editController}
+                >
+                  <i className="fas fa-user-pen"></i>
+                </Button>
+              </div>
+              {message && <Message variant="danger">{message}</Message>}
+              {errorMessage && (
+                <Message variant="danger">{errorMessage}</Message>
+              )}
 
-            <Form onSubmit={submitHandler}>
-              <Form.Group controlId="name" className="mt-3">
-                <Form.Label>Họ và tên</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập họ tên"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  disabled={isEdit ? false : true}
-                ></Form.Control>
-              </Form.Group>
-              <Form.Group controlId="email" className="mt-3">
-                <Form.Label>Địa chỉ email</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Nhập email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={isEdit ? false : true}
-                ></Form.Control>
-              </Form.Group>
-              <Form.Group controlId="identity_card" className="mt-3">
-                <Form.Label>Số CMND/CCCD</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Nhập CMND/CCCD"
-                  value={idNumber}
-                  onChange={(e) => setIdNumber(e.target.value)}
-                  disabled={isEdit ? false : true}
-                ></Form.Control>
-              </Form.Group>
-              <Row>
-                <Col>
-                  <Form.Group controlId="dob" className="mt-3">
-                    <Form.Label>Ngày sinh</Form.Label>
-                    <Form.Control
-                      type="date"
-                      placeholder="Chưa có ngày sinh"
-                      value={dob}
-                      onChange={(e) => setDob(e.target.value)}
-                      disabled={isEdit ? false : true}
-                    ></Form.Control>
-                  </Form.Group>
-                </Col>
-                {customerType !== "" && (
+              <Form onSubmit={submitHandler}>
+                <Form.Group controlId="name" className="mt-3">
+                  <Form.Label>Họ và tên</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Nhập họ tên"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={isEdit ? false : true}
+                  ></Form.Control>
+                </Form.Group>
+                <Form.Group controlId="email" className="mt-3">
+                  <Form.Label>Địa chỉ email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Nhập email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isEdit ? false : true}
+                  ></Form.Control>
+                </Form.Group>
+                <Form.Group controlId="identity_card" className="mt-3">
+                  <Form.Label>Số CMND/CCCD</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Nhập CMND/CCCD"
+                    value={idNumber}
+                    onChange={(e) => setIdNumber(e.target.value)}
+                    disabled={isEdit ? false : true}
+                  ></Form.Control>
+                </Form.Group>
+                <Row>
                   <Col>
-                    <Form.Group controlId="customerType" className="mt-3">
-                      <Form.Label>Loại khách</Form.Label>
+                    <Form.Group controlId="dob" className="mt-3">
+                      <Form.Label>Ngày sinh</Form.Label>
                       <Form.Control
-                        as="select"
-                        value={customerType}
-                        onChange={(e) => setCustomerType(e.target.value)}
+                        type="date"
+                        placeholder="Chưa có ngày sinh"
+                        value={dob}
+                        onChange={(e) => setDob(e.target.value)}
                         disabled={isEdit ? false : true}
-                      >
-                        <option value="Domestic">Khách nội địa</option>
-                        <option value="Foreigner">Khách nước ngoài</option>
-                      </Form.Control>
+                      ></Form.Control>
                     </Form.Group>
                   </Col>
-                )}
-              </Row>
+                  {customerType !== "" && (
+                    <Col>
+                      <Form.Group controlId="customerType" className="mt-3">
+                        <Form.Label>Loại khách</Form.Label>
+                        <Form.Control
+                          as="select"
+                          value={customerType}
+                          onChange={(e) => setCustomerType(e.target.value)}
+                          disabled={isEdit ? false : true}
+                        >
+                          <option value="Domestic">Khách nội địa</option>
+                          <option value="Foreigner">Khách nước ngoài</option>
+                        </Form.Control>
+                      </Form.Group>
+                    </Col>
+                  )}
+                </Row>
 
-              <Form.Group controlId="phone" className="mt-3">
-                <Form.Label>Số điện thoại</Form.Label>
-                {/* <Form.Control
+                <Form.Group controlId="phone" className="mt-3">
+                  <Form.Label>Số điện thoại</Form.Label>
+                  {/* <Form.Control
                   type="text"
                   placeholder="Chưa có số điện thoại"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   disabled={isEdit ? false : true}
                 ></Form.Control> */}
-                <PhoneInput
-                  inputClass="w-100"
-                  country={"us"}
-                  value={phone}
-                  onChange={(phone) => setPhone(phone)}
-                  disabled={isEdit ? false : true}
-                />
-              </Form.Group>
-              <Form.Group controlId="address" className="mt-3">
-                <Form.Label>Địa chỉ</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Chưa có địa chỉ"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  disabled={isEdit ? false : true}
-                ></Form.Control>
-              </Form.Group>
-              {isEdit && (
-                <div className="text-center">
-                  <Button
-                    type="button"
-                    className="btn btn-secondary my-3 me-3"
-                    onClick={cancelHandler}
-                  >
-                    Hủy
-                  </Button>
-                  <Button type="submit" className="btn btn-success my-3">
-                    Cập nhật thông tin
-                  </Button>
-                </div>
-              )}
-            </Form>
-          </Col>
+                  <PhoneInput
+                    inputClass="w-100"
+                    country={"us"}
+                    value={phone}
+                    onChange={(phone) => setPhone(phone)}
+                    disabled={isEdit ? false : true}
+                  />
+                </Form.Group>
+                <Form.Group controlId="address" className="mt-3">
+                  <Form.Label>Địa chỉ</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Chưa có địa chỉ"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    disabled={isEdit ? false : true}
+                  ></Form.Control>
+                </Form.Group>
+                {isEdit && (
+                  <div className="text-center">
+                    <Button
+                      type="button"
+                      className="btn btn-secondary my-3 me-3"
+                      onClick={cancelHandler}
+                    >
+                      Hủy
+                    </Button>
+                    <Button type="submit" className="btn btn-success my-3">
+                      Cập nhật thông tin
+                    </Button>
+                  </div>
+                )}
+              </Form>
+            </Col>
+          )}
+
           <Col md={7}>
             <h1 className="my-4">Danh sách phiếu đặt phòng</h1>
             <p className="text-danger text-italic">

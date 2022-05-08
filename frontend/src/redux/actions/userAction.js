@@ -14,6 +14,7 @@ import {
   UPDATE_USER_PROFILE_REQUEST,
   CHANGE_USER_LOGIN_NAME,
   UPDATE_USER_PROFILE_FAIL,
+  UPDATE_USER_PROFILE_SUCCESS,
 } from "../../constants/userConsts";
 import { encode } from "js-base64";
 import { openNotification } from "../../utils/notification";
@@ -137,6 +138,7 @@ export const updateUserProfile = (userObj) => async (dispatch, getState) => {
 
     const { data } = await axios.put("/api/users/profile", userObj, config);
 
+    dispatch({ type: UPDATE_USER_PROFILE_SUCCESS });
     dispatch({
       type: GET_USER_DETAILS_SUCCESS,
       data: { ...data, dob: data.dob?.split("T")[0] },
