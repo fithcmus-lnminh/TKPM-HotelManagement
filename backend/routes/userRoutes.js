@@ -5,16 +5,20 @@ import {
   getUserProfile,
   registerUser,
   updateProfile,
+  getAllManagers,
+  getAllUsers,
 } from "../controllers/userController.js";
 import { isAdminOrManager } from "../middlewares/isAdminOrManager.js";
+import { isAdmin } from "../middlewares/isAdmin.js";
 
 const router = express.Router();
-// POST API /api/login
+
 router.post("/login", authUser);
 router.post("/register", registerUser);
 router.put("/profile", isAuth, updateProfile);
 router.get("/:id", isAuth, getUserProfile);
-//router.put;
-//router.delete
+router.get("/profile", isAuth, isAdminOrManager, getUserProfile);
+router.get("/all-manager", isAuth, isAdmin, getAllManagers);
+router.get("/all-user", isAuth, isAdmin, getAllUsers);
 
 export default router;

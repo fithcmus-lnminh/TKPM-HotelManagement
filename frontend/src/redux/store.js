@@ -5,6 +5,7 @@ import {
   userLoginReducer,
   userRegisterReducer,
   getUserProfileReducer,
+  updateUserProfileReducer,
 } from "./reducers/userReducer";
 import { navigateReducer } from "./reducers/navigateReducer";
 
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   userRegisterReducer,
   navigateReducer,
   getUserProfileReducer,
+  updateUserProfileReducer,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

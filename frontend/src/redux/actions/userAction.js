@@ -12,7 +12,6 @@ import {
   GET_USER_DETAILS_FAIL,
   GET_USER_DETAILS_RESET,
   UPDATE_USER_PROFILE_REQUEST,
-  UPDATE_USER_PROFILE_SUCCESS,
   CHANGE_USER_LOGIN_NAME,
   UPDATE_USER_PROFILE_FAIL,
 } from "../../constants/userConsts";
@@ -138,8 +137,10 @@ export const updateUserProfile = (userObj) => async (dispatch, getState) => {
 
     const { data } = await axios.put("/api/users/profile", userObj, config);
 
-    dispatch({ type: UPDATE_USER_PROFILE_SUCCESS, data: data });
-    dispatch({ type: GET_USER_DETAILS_SUCCESS, data: data });
+    dispatch({
+      type: GET_USER_DETAILS_SUCCESS,
+      data: { ...data, dob: data.dob?.split("T")[0] },
+    });
     openNotification("success", "Cập nhật thành công");
     if (data.name) {
       sessionStorage.setItem(

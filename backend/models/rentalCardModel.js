@@ -16,7 +16,7 @@ const rentalCardModel = mongoose.Schema(
       type: Date,
       required: true,
     },
-    //Nếu người quản lí đặt phòng cho khách
+    // Nếu người quản lí đặt phòng cho khách
     customerInfo: {
       name: {
         type: String,

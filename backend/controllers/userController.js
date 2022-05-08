@@ -120,7 +120,41 @@ export const updateProfile = async (req, res, next) => {
         token: generateToken(updatedUser._id),
       });
     } else {
-      throw new Error("Không có user", 404);
+      res.status(404);
+      throw new Error("Không có user");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+export const getAllManagers = async (req, res, next) => {
+  try {
+    const managers = await User.find({ role: "Manager" }).select(
+      "_id name email identity_card avatar role"
+    );
+
+    if (managers.length > 0) {
+      res.json(managers);
+    } else {
+      res.status(404);
+      throw new Error("Không tìm thấy nhân viên.");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({ role: "User" }).select(
+      "_id name email identity_card avatar role"
+    );
+
+    if (users.length > 0) {
+      res.json(users);
+    } else {
+      res.status(404);
+      throw new Error("Không tìm thấy người dùng.");
     }
   } catch (err) {
     next(err);

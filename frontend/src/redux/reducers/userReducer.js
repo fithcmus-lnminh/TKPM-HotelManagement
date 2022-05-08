@@ -4,6 +4,8 @@ import {
   GET_USER_DETAILS_REQUEST,
   GET_USER_DETAILS_RESET,
   GET_USER_DETAILS_SUCCESS,
+  UPDATE_USER_PROFILE_FAIL,
+  UPDATE_USER_PROFILE_REQUEST,
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
@@ -69,6 +71,17 @@ export const getUserProfileReducer = (state = {}, action) => {
       return { isLoading: false, errorMessage: action.message };
     case GET_USER_DETAILS_RESET:
       return {};
+    default:
+      return state;
+  }
+};
+
+export const updateUserProfileReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_USER_PROFILE_REQUEST:
+      return { isLoading: true };
+    case UPDATE_USER_PROFILE_FAIL:
+      return { isLoading: false, errorMessage: action.message };
     default:
       return state;
   }

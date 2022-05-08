@@ -30,7 +30,7 @@ const UserProfile = () => {
   //   (state) => state.updateUserProfileReducer
   // );
 
-  console.log(userProfile);
+  console.log("us", userProfile);
 
   useEffect(() => {
     if (!userInfo) {
