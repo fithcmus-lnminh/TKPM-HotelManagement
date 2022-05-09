@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Image, NavDropdown, NavLink } from "react-bootstrap";
+import { Button, Image, Modal, NavDropdown, NavLink } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../redux/actions/userAction";
@@ -78,9 +78,6 @@ const HomeNavbar = () => {
               </>
             ) : (
               <>
-                <Link to="/room-booking" className={`px-3 ${color.text}`}>
-                  Đặt phòng
-                </Link>
                 <Link to="/contact" className={`px-3 ${color.text}`}>
                   Liên hệ
                 </Link>
@@ -90,10 +87,7 @@ const HomeNavbar = () => {
         </div>
         {userInfo ? (
           <div className="d-flex align-items-center justify-content-end">
-            <NavDropdown
-              title={`Xin chào, ${userInfo.name}`}
-              className="me-2"
-            >
+            <NavDropdown title={`Xin chào, ${userInfo.name}`} className="me-2">
               <Link to="/profile">
                 <NavDropdown.Item as="div">
                   <i className="fas fa-user me-2"></i>Hồ sơ cá nhân

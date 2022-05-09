@@ -7,6 +7,8 @@ import {
   getUserProfileReducer,
   updateUserProfileReducer,
 } from "./reducers/userReducer";
+import { allRoomsReducer } from "./reducers/roomReducer";
+
 import { navigateReducer } from "./reducers/navigateReducer";
 
 const reducer = combineReducers({
@@ -15,6 +17,7 @@ const reducer = combineReducers({
   navigateReducer,
   getUserProfileReducer,
   updateUserProfileReducer,
+  allRoomsReducer,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

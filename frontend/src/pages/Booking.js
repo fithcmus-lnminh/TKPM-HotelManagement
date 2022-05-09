@@ -10,7 +10,7 @@ const Booking = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!userInfo) {
-      navigate("/login?redirect=room-booking");
+      navigate("/login?redirect=rooms");
     }
   }, [navigate, userInfo]);
   return <Navbar />;

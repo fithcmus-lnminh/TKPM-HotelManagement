@@ -87,14 +87,6 @@ const Navbar = () => {
             ) : (
               <>
                 <NavLink
-                  to="/room-booking"
-                  className={(nav) =>
-                    nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
-                  }
-                >
-                  Đặt phòng
-                </NavLink>
-                <NavLink
                   to="/contact"
                   className={(nav) =>
                     nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"

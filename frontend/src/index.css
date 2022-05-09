@@ -6,7 +6,7 @@ body {
 }
 
 .bg-dark {
-    background-color: #0e294d !important;
+    background-color: #15355f !important;
 }
 
 a {
@@ -23,7 +23,7 @@ a:hover {
 }
 
 .content-link:hover {
-    color: #0e294d;
+    color: #133a6d;
     font-weight: bold;
 }
 
@@ -76,4 +76,26 @@ a:hover {
 
 .text-danger {
     color: rgb(255, 36, 36) !important; 
+}
+
+.ant-input {
+    border-color: #acacac !important;
+}
+
+.ant-input-search-button {
+    border-color: #acacac !important;
+}
+
+.btn-book {
+    position: absolute;
+    bottom: 1rem;
+    left: 6.5rem;
+}
+
+.card-room {
+    position: relative;
+}
+
+.btn-dark {
+    background-color: #15355f !important;
 }
