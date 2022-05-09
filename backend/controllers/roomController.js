@@ -13,7 +13,24 @@ import User from "../models/userModel.js";
 
 export const getAllRooms = async (req, res, next) => {
   try {
-    const rooms = await Room.find();
+    const keyword = req.query.keyword
+      ? {
+          $expr: {
+            $gt: [
+              {
+                $size: {
+                  $regexFindAll: {
+                    input: { $toString: "$number" },
+                    regex: `${req.query.keyword}`,
+                  },
+                },
+              },
+              0,
+            ],
+          },
+        }
+      : {};
+    const rooms = await Room.find(keyword);
 
     if (rooms.length > 0) {
       res.json({

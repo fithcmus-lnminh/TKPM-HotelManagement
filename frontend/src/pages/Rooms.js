@@ -7,10 +7,12 @@ import { getAllRooms } from "../redux/actions/roomAction";
 import { Input } from "antd";
 import RoomCard from "../components/RoomCard";
 import ReactLoading from "react-loading";
+import { useNavigate, useParams } from "react-router-dom";
 
 const { Search } = Input;
 
 const Rooms = () => {
+  const { keyword } = useParams();
   const { isLoading, allRooms, errorMessage } = useSelector(
     (state) => state.allRoomsReducer
   );
@@ -18,8 +20,18 @@ const Rooms = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllRooms());
-  }, [dispatch]);
+    dispatch(getAllRooms(keyword));
+  }, [dispatch, keyword]);
+
+  const navigate = useNavigate();
+
+  const onSearch = (value) => {
+    if (value.trim()) {
+      navigate(`/search/${value}`);
+    } else {
+      navigate("/rooms");
+    }
+  };
 
   return (
     <>
@@ -30,12 +42,20 @@ const Rooms = () => {
             size="large"
             style={{ width: "50%" }}
             placeholder="Tra cứu phòng"
-            // onSearch={onSearch}
+            onSearch={onSearch}
             enterButton
           />
         </div>
 
         <h2 className="mt-3">DANH SÁCH PHÒNG</h2>
+        {!allRooms && !isLoading && (
+          <p
+            className="text-danger"
+            style={{ fontSize: "1rem", fontStyle: "italic" }}
+          >
+            Không có phòng nào
+          </p>
+        )}
         {isLoading ? (
           <div className="d-flex justify-content-center mt-5">
             <ReactLoading

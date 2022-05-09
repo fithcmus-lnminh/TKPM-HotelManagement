@@ -36,6 +36,7 @@ const App = () => {
       <Route path="/report" element={<Report />} />
       <Route path="/admin/account-management" element={<AccountManagement />} />
       <Route path="/profile" element={<UserProfile />} />
+      <Route path="/search/:keyword" element={<Rooms />} />
     </Routes>
   );
 };
