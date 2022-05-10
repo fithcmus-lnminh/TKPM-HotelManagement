@@ -12,6 +12,11 @@ const rentalCardModel = mongoose.Schema(
       required: true,
       ref: "Room",
     },
+    numHours: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     startDate: {
       type: Date,
       required: true,

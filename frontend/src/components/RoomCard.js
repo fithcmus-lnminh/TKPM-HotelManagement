@@ -13,7 +13,7 @@ const RoomCard = (props) => {
   return (
     <div className="my-3">
       <Card className="mt-3 rounded card-room" style={{ minHeight: "27rem" }}>
-        <Link to={`/room/${room._id}`}>
+        <Link to={`/rooms/${room.number}`}>
           <Card.Img
             src={room.image}
             variant="top"
@@ -22,7 +22,7 @@ const RoomCard = (props) => {
         </Link>
 
         <Card.Body>
-          <Link to={`/room/${room._id}`} style={{ textDecoration: "none" }}>
+          <Link to={`/rooms/${room.number}`} style={{ textDecoration: "none" }}>
             <Card.Title as="div">
               <div className="title" style={{ fontSize: "1rem" }}>
                 <strong>Phòng {room.number}</strong>
@@ -45,10 +45,20 @@ const RoomCard = (props) => {
           </Card.Text>
 
           <Card.Text as="h3">{room.price}đ/h</Card.Text>
-          <div className="text-center btn-book">
-            <Button type="button" className="btn btn-dark" onClick={handleShow}>
-              Đặt phòng
-            </Button>
+          <div className="text-center mt-4">
+            {room.status ? (
+              <Button
+                type="button"
+                className="btn btn-dark"
+                onClick={handleShow}
+              >
+                Đặt phòng
+              </Button>
+            ) : (
+              <p className="text-danger mb-0 pt-2">
+                <strong>Hết phòng</strong>
+              </p>
+            )}
             <Modal
               show={show}
               onHide={handleClose}
@@ -67,7 +77,7 @@ const RoomCard = (props) => {
                 <Button variant="secondary" onClick={handleClose}>
                   Thoát
                 </Button>
-                <Link to={`/room-booking/${room._id}`}>
+                <Link to={`/room-booking/${room.number}`}>
                   <Button variant="success" onClick={handleClose}>
                     Đồng ý
                   </Button>

@@ -2,7 +2,7 @@ import express from "express";
 import { isAuth } from "../middlewares/authMiddleware.js";
 import {
   getAllRooms,
-  getRoomById,
+  getRoomByNumber,
   createBill,
   rentalBillByUserId,
   rentalBillByUserIdAndBillId,
@@ -43,6 +43,6 @@ router.get("/get-rooms-by-type/:type", getRoomByType);
 router.post("/create-room", isAuth, isAdminOrManager, postCreateRoom);
 router.put("/update-room/:roomId", isAuth, isAdminOrManager, updateRoom);
 router.delete("/delete-room/:roomId", isAuth, isAdminOrManager, deleteRoom);
-router.get("/:id", getRoomById);
+router.get("/:number", getRoomByNumber);
 
 export default router;

@@ -15,6 +15,7 @@ import Rooms from "./pages/Rooms";
 import AccountManagement from "./pages/Admin/accountManagement";
 import { addNavigate } from "./redux/actions/sysAction";
 import UserProfile from "./pages/UserProfile";
+import RoomDetails from "./pages/RoomDetails";
 
 const App = () => {
   const navigate = useNavigate();
@@ -27,7 +28,6 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/room-booking" element={<Booking />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/rooms" element={<Rooms />} />
       <Route path="/login" element={<Login />} />
@@ -36,6 +36,8 @@ const App = () => {
       <Route path="/report" element={<Report />} />
       <Route path="/admin/account-management" element={<AccountManagement />} />
       <Route path="/profile" element={<UserProfile />} />
+      <Route path="/room-booking/:number" element={<Booking />} />
+      <Route path="/rooms/:number" element={<RoomDetails />} />
       <Route path="/search/:keyword" element={<Rooms />} />
     </Routes>
   );

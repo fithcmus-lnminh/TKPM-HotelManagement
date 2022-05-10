@@ -14,6 +14,7 @@ export async function authUser(req, res, next) {
         _id: user._id,
         name: user.name,
         email: user.email,
+        identity_card: user.identity_card,
         role: user.role,
         token: generateToken(user._id),
       });

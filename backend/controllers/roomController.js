@@ -45,18 +45,12 @@ export const getAllRooms = async (req, res, next) => {
   }
 };
 
-export const getRoomById = async (req, res, next) => {
+export const getRoomByNumber = async (req, res, next) => {
   try {
-    const room = await Room.findById(req.room._id);
+    const room = await Room.find({ number: req.params.number });
 
     if (room) {
-      res.json({
-        _id: room._id,
-        number: room.number,
-        type: room.type,
-        price: room.price,
-        status: room.status,
-      });
+      res.json(room[0]);
     } else {
       res.status(404);
       throw new Error("Không tìm thấy phòng.");
@@ -218,6 +212,12 @@ export const postCreateRoom = async (req, res, next) => {
   const { number, type, image, price, status, description } = req.body;
 
   try {
+    const existedRoom = Room.find({ number: number });
+
+    if (existedRoom) {
+      throw new Error("Phòng đã tồn tại. Vui lòng thử số phòng khác");
+    }
+
     const info = {
       number,
       type,
@@ -284,13 +284,14 @@ export const getRevenueReport = async (req, res, next) => {
   }
 };
 export const postCreateRentalCard = async (req, res, next) => {
-  const { user, room, startDate, customerInfo } = req.body;
+  const { user, room, startDate, numHours, customerInfo } = req.body;
 
   try {
     const info = {
       user,
       room,
       startDate,
+      numHours,
       customerInfo,
     };
 

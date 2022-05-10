@@ -3,6 +3,9 @@ import {
   GET_ALL_ROOMS_FAIL,
   GET_ALL_ROOMS_REQUEST,
   GET_ALL_ROOMS_SUCCESS,
+  GET_ROOM_DETAILS_REQUEST,
+  GET_ROOM_DETAILS_SUCCESS,
+  GET_ROOM_DETAILS_FAIL,
 } from "../../constants/roomConsts";
 
 export const getAllRooms =
@@ -19,6 +22,24 @@ export const getAllRooms =
     } catch (err) {
       dispatch({
         type: GET_ALL_ROOMS_FAIL,
+        message:
+          err.response && err.response.data.errors.message
+            ? err.response.data.errors.message
+            : err.message,
+      });
+    }
+  };
+
+export const getRoomDetailsByNumber =
+  (number) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: GET_ROOM_DETAILS_REQUEST });
+
+      const { data } = await axios.get(`/api/rooms/${number}`);
+      dispatch({ type: GET_ROOM_DETAILS_SUCCESS, data: data });
+    } catch (err) {
+      dispatch({
+        type: GET_ROOM_DETAILS_FAIL,
         message:
           err.response && err.response.data.errors.message
             ? err.response.data.errors.message
