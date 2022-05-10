@@ -301,10 +301,11 @@ export const postCreateRentalCard = async (req, res, next) => {
       }
     }
 
-    const bookedRoom = await Room.find({ number: room.number });
+    const room2 = await Room.findById(room);
+    const bookedRoom = await Room.find({ number: room2.number });
     if (bookedRoom) {
-      bookedRoom.status = false;
-      await bookedRoom.save();
+      bookedRoom[0].status = false;
+      await bookedRoom[0].save();
     }
 
     const rentalCard = await RentalCard.create({

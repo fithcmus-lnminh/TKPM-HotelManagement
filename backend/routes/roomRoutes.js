@@ -38,7 +38,7 @@ router.get(
 );
 router.get("/rental-card", getAllRentalCard);
 router.get("/rental-card/:userId", getRentalCardById);
-router.post("/create-rental-card", postCreateRentalCard);
+router.post("/create-rental-card", isAuth, postCreateRentalCard);
 router.get("/get-rooms-by-type/:type", getRoomByType);
 router.post("/create-room", isAuth, isAdminOrManager, postCreateRoom);
 router.put("/update-room/:roomId", isAuth, isAdminOrManager, updateRoom);

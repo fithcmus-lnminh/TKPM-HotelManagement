@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { createRentalCard } from "../redux/actions/rentalAction";
 import { getRoomDetailsByNumber } from "../redux/actions/roomAction";
 
 const Booking = () => {
@@ -21,6 +22,7 @@ const Booking = () => {
   const { number } = useParams();
   const dispatch = useDispatch();
 
+  const date = new Date();
   const navigate = useNavigate();
   useEffect(() => {
     if (!userInfo) {
@@ -31,8 +33,17 @@ const Booking = () => {
 
   const extraPrice = numDay > 0 ? roomInfo?.price * numDay * 0.1 : 0;
   const totalPrice = extraPrice !== 0 ? roomInfo?.price + extraPrice : 0;
-  const date = new Date();
-  console.log(date.toISOString());
+
+  const bookingHandler = () => {
+    dispatch(
+      createRentalCard({
+        user: userInfo._id,
+        room: roomInfo._id,
+        startDate: date.toISOString(),
+        numOfDates: numDay,
+      })
+    );
+  };
 
   return (
     <>
@@ -123,6 +134,7 @@ const Booking = () => {
                 className="btn btn-dark w-100"
                 type="button"
                 disabled={Number(numDay) <= 0}
+                onClick={bookingHandler}
               >
                 ĐẶT PHÒNG
               </Button>
