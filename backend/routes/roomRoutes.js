@@ -15,6 +15,7 @@ import {
   postCreateRentalCard,
   updateRoom,
   deleteRoom,
+  updateToPaid,
 } from "../controllers/roomController.js";
 import { isAdminOrManager } from "../middlewares/isAdminOrManager.js";
 
@@ -44,5 +45,6 @@ router.post("/create-room", isAuth, isAdminOrManager, postCreateRoom);
 router.put("/update-room/:roomId", isAuth, isAdminOrManager, updateRoom);
 router.delete("/delete-room/:roomId", isAuth, isAdminOrManager, deleteRoom);
 router.get("/:number", getRoomByNumber);
+router.put("/payment/:id", isAuth, updateToPaid);
 
 export default router;

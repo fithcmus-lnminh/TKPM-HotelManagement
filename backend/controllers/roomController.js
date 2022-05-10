@@ -427,3 +427,28 @@ export const updateRoom = async (req, res, next) => {
     next(err);
   }
 };
+
+export const updateToPaid = async (req, res, next) => {
+  const bill = await Bill.findById(req.params.id);
+
+  try {
+    if (bill) {
+      bill.isPaid = true;
+      bill.paidAt = Date.now();
+      //paypal response
+      bill.paymentResult = {
+        id: req.body.id,
+        status: req.body.status,
+        update_time: req.body.update_time,
+        email_address: req.body.payer.email_address,
+      };
+
+      const updatedBill = await bill.save();
+      res.json(updatedBill);
+    } else {
+      throw new Error("Không có hóa đơn này", 404);
+    }
+  } catch (err) {
+    next(err);
+  }
+};

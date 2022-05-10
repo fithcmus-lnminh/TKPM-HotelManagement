@@ -15,6 +15,9 @@ import roomRoutes from "./routes/roomRoutes.js";
 
 app.use("/api/users", userRoutes);
 app.use("/api/rooms", roomRoutes);
+app.get("/api/config/paypal", (req, res) => {
+  res.send(process.env.PAYPAL_CLIENT_ID);
+});
 
 app.use(errorHandler);
 

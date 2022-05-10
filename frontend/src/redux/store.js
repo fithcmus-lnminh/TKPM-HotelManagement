@@ -10,6 +10,7 @@ import {
 import { allRoomsReducer, roomDetailsReducer } from "./reducers/roomReducer";
 import { navigateReducer } from "./reducers/navigateReducer";
 import { rentalCardReducer, billReducer } from "./reducers/rentalReducer";
+import { paymentReducer } from "./reducers/paymentReducer";
 
 const reducer = combineReducers({
   userLoginReducer,
@@ -21,6 +22,7 @@ const reducer = combineReducers({
   roomDetailsReducer,
   rentalCardReducer,
   billReducer,
+  paymentReducer,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
