@@ -12,7 +12,7 @@ const rentalCardModel = mongoose.Schema(
       required: true,
       ref: "Room",
     },
-    numHours: {
+    numOfDates: {
       type: Number,
       required: true,
       default: 0,

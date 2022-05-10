@@ -284,14 +284,14 @@ export const getRevenueReport = async (req, res, next) => {
   }
 };
 export const postCreateRentalCard = async (req, res, next) => {
-  const { user, room, startDate, numHours, customerInfo } = req.body;
+  const { user, room, startDate, numOfDates, customerInfo } = req.body;
 
   try {
     const info = {
       user,
       room,
       startDate,
-      numHours,
+      numOfDates,
       customerInfo,
     };
 
@@ -299,6 +299,12 @@ export const postCreateRentalCard = async (req, res, next) => {
       if (Boolean(info[key]) === false) {
         delete info[key];
       }
+    }
+
+    const bookedRoom = await Room.find({ number: room.number });
+    if (bookedRoom) {
+      bookedRoom.status = false;
+      await bookedRoom.save();
     }
 
     const rentalCard = await RentalCard.create({

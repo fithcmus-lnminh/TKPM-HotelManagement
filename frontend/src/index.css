@@ -99,3 +99,7 @@ a:hover {
 .btn-dark {
     background-color: #15355f !important;
 }
+
+.text-italic {
+    font-style: italic;
+}
