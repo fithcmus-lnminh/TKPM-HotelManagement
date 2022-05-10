@@ -21,7 +21,7 @@ import { isAdminOrManager } from "../middlewares/isAdminOrManager.js";
 const router = express.Router();
 
 router.get("/all-rooms", getAllRooms);
-router.post("/create-bill", isAuth, isAdminOrManager, createBill);
+router.post("/create-bill", isAuth, createBill);
 router.get("/rental-bill/:userId", rentalBillByUserId);
 router.get("/rental-bill/:userId/:billId", rentalBillByUserIdAndBillId);
 router.get(

@@ -12,13 +12,14 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { createRentalCard } from "../redux/actions/rentalAction";
+import { createBill, createRentalCard } from "../redux/actions/rentalAction";
 import { getRoomDetailsByNumber } from "../redux/actions/roomAction";
 
 const Booking = () => {
   const [numDay, setNumDay] = useState(0);
   const { userInfo } = useSelector((state) => state.userLoginReducer);
   const { roomInfo } = useSelector((state) => state.roomDetailsReducer);
+
   const { number } = useParams();
   const dispatch = useDispatch();
 
@@ -43,6 +44,17 @@ const Booking = () => {
         numOfDates: numDay,
       })
     );
+    dispatch(
+      createBill({
+        user: userInfo._id,
+        room: roomInfo._id,
+        numOfDates: numDay,
+        unitPrice: roomInfo?.price,
+        extraPrice,
+        totalPrice,
+      })
+    );
+    navigate("/checkout");
   };
 
   return (
