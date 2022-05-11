@@ -12,8 +12,8 @@ import {
   getBillByUserId,
   getRentalCardByUserId,
 } from "../redux/actions/rentalAction";
-import { Popconfirm, Space, Table } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Table } from "antd";
+import { PayPalButton } from "react-paypal-button-v2";
 
 const UserProfile = () => {
   const [name, setName] = useState("");
@@ -217,10 +217,38 @@ const UserProfile = () => {
         return (
           <>
             {!record.isPaid && (
-              <Button variant="warning" className="me-1">
+              <Button
+                variant="warning"
+                className="me-1"
+                onClick={() => setShow({ ["showpay_" + record._id]: true })}
+              >
                 Thanh toán
               </Button>
             )}
+            <Modal
+              show={show["showpay_" + record._id]}
+              onHide={() => setShow({ ["showpay_" + record._id]: false })}
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>THANH TOÁN</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <p style={{ fontSize: "1rem" }} className="mb-3">
+                  <strong>TỔNG TIỀN:</strong> ${record.totalPrice}
+                </p>
+                <PayPalButton
+                  amount={record.totalPrice}
+                  // onSuccess={successPaymentHandler}
+                />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Đóng
+                </Button>
+              </Modal.Footer>
+            </Modal>
 
             <div
               className={record.isPaid ? "text-center" : ""}
