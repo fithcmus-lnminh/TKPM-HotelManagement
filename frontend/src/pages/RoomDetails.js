@@ -10,6 +10,7 @@ import {
   Form,
   Image,
   ListGroup,
+  Modal,
   Row,
 } from "react-bootstrap";
 import { useState } from "react";
@@ -21,6 +22,10 @@ import { getRoomDetailsByNumber } from "../redux/actions/roomAction";
 const RoomDetails = () => {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const { number } = useParams();
 
@@ -93,62 +98,45 @@ const RoomDetails = () => {
                   <ListGroup.Item>
                     Mô tả phòng: {roomInfo?.description}
                   </ListGroup.Item>
+                  {roomInfo?.status && (
+                    <>
+                      <Button
+                        type="button"
+                        className="btn btn-dark mt-2"
+                        onClick={handleShow}
+                      >
+                        Đặt phòng
+                      </Button>
+                      <Modal
+                        show={show}
+                        onHide={handleClose}
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                      >
+                        <Modal.Header closeButton>
+                          <Modal.Title>Xác nhận</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <p style={{ fontSize: "1rem" }}>
+                            Bạn có thực sự muốn đặt{" "}
+                            <strong>phòng {roomInfo.number}</strong> ?
+                          </p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button variant="secondary" onClick={handleClose}>
+                            Thoát
+                          </Button>
+                          <Link to={`/room-booking/${roomInfo.number}`}>
+                            <Button variant="success" onClick={handleClose}>
+                              Đồng ý
+                            </Button>
+                          </Link>
+                        </Modal.Footer>
+                      </Modal>
+                    </>
+                  )}
                 </ListGroup>
               </Col>
-
-              {/* <Col md={3}>
-              <ListGroup>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Price:</Col>
-                    <Col className="title">${product.price}</Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Status:</Col>
-                    <Col className="title">
-                      {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-                {product.countInStock > 0 && (
-                  <>
-                    <ListGroup.Item>
-                      <Row>
-                        <Col className="d-flex align-items-center">
-                          Quantity:
-                        </Col>
-                        <Col>
-                          <Form.Control
-                            as="select"
-                            value={quantity}
-                            onChange={(e) => setQuantity(e.target.value)}
-                          >
-                            {[...Array(product.countInStock).keys()].map(
-                              (val) => (
-                                <option key={val + 1} value={val + 1}>
-                                  {val + 1}
-                                </option>
-                              )
-                            )}
-                          </Form.Control>
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <Button
-                        className="btn w-100"
-                        type="button"
-                        onClick={addToCartHandler}
-                      >
-                        Add to cart
-                      </Button>
-                    </ListGroup.Item>
-                  </>
-                )}
-              </ListGroup>
-            </Col> */}
               <Col md={4}>
                 <h2>Đánh giá</h2>
                 {roomInfo?.reviews?.length === 0 && (

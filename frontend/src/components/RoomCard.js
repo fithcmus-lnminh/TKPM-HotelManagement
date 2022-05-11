@@ -44,7 +44,7 @@ const RoomCard = (props) => {
             )}
           </Card.Text>
 
-          <Card.Text as="h3">{room.price}đ/h</Card.Text>
+          <Card.Text as="h3">${room.price}/h</Card.Text>
           <div className="text-center mt-4">
             {room.status ? (
               <Button

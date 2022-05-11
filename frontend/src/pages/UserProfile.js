@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import { getUserDetails, updateUserProfile } from "../redux/actions/userAction";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Navbar from "../components/Navbar";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import ReactLoading from "react-loading";
+import {
+  getBillByUserId,
+  getRentalCardByUserId,
+} from "../redux/actions/rentalAction";
+import { Popconfirm, Space, Table } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+
 const UserProfile = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,12 +23,18 @@ const UserProfile = () => {
   const [customerType, setCustomerType] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.userLoginReducer);
+  const { isLoading: isLoadingRental, rentalInfo } = useSelector(
+    (state) => state.rentalCardReducer
+  );
+  const { isLoading: isLoadingBill, billInfo } = useSelector(
+    (state) => state.billReducer
+  );
   const { isLoading, errorMessage, userProfile } = useSelector(
     (state) => state.getUserProfileReducer
   );
@@ -33,8 +46,6 @@ const UserProfile = () => {
   // const updateProfileReducer = useSelector(
   //   (state) => state.updateUserProfileReducer
   // );
-
-  console.log("us", userProfile);
 
   useEffect(() => {
     if (!userInfo) {
@@ -51,6 +62,8 @@ const UserProfile = () => {
         userProfile.dob && setDob(userProfile.dob);
         userProfile.customerType && setCustomerType(userProfile.customerType);
       }
+      dispatch(getRentalCardByUserId(userInfo?._id));
+      dispatch(getBillByUserId(userInfo?._id));
     }
   }, [userInfo, userProfile, dispatch, navigate]);
 
@@ -93,6 +106,117 @@ const UserProfile = () => {
     userProfile.dob && setDob(userProfile.dob);
     userProfile.customerType && setCustomerType(userProfile.customerType);
   };
+
+  const dataSourceRental = [];
+  const dataSourceBill = [];
+  if (rentalInfo) {
+    for (let item of rentalInfo.rentalCard.reverse()) {
+      let endDate = new Date(item.startDate);
+      endDate.setDate(endDate.getDate() + item.numOfDates);
+      dataSourceRental.push({
+        _id: item._id,
+        number: item.room.number,
+        startDate: new Date(item.startDate).toLocaleString(),
+        endDate: endDate.toLocaleString(),
+      });
+    }
+  }
+
+  if (billInfo) {
+    console.log(billInfo.bills);
+    for (let item of billInfo.bills.reverse()) {
+      dataSourceBill.push({
+        _id: item._id,
+        number: item.room.number,
+        createDate: new Date(item.createdAt).toLocaleString(),
+        totalPrice: item.totalPrice,
+        isPaid: item.isPaid,
+      });
+    }
+  }
+
+  const columnsRental = [
+    {
+      title: "Số phòng",
+      dataIndex: "number",
+      key: "number",
+      width: "15%",
+    },
+    {
+      title: "Ngày bắt đầu",
+      dataIndex: "startDate",
+      key: "startDate",
+      width: "20%",
+    },
+    {
+      title: "Ngày kết thúc",
+      dataIndex: "endDate",
+      key: "endDate",
+      width: "20%",
+    },
+  ];
+
+  const columnsBill = [
+    {
+      title: "Số phòng",
+      dataIndex: "number",
+      key: "number",
+      width: "15%",
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "createDate",
+      key: "createDate",
+      width: "20%",
+    },
+    {
+      title: "Tổng tiền",
+      dataIndex: "totalPrice",
+      key: "totalPrice",
+      width: "15%",
+      render: (text, record, index) => {
+        return "$" + text;
+      },
+    },
+    {
+      title: "Đã thanh toán",
+      dataIndex: "isPaid",
+      key: "isPaid",
+      render: (text, record, index) => {
+        return text ? (
+          <div className="text-center">
+            <i
+              className="fas fa-check"
+              style={{ color: "green", fontSize: "1.25rem" }}
+            ></i>
+          </div>
+        ) : (
+          <div className="text-center">
+            <i
+              className="fas fa-xmark"
+              style={{ color: "red", fontSize: "1.25rem" }}
+            ></i>
+          </div>
+        );
+      },
+    },
+    {
+      title: "",
+      dataIndex: "action",
+      key: "action",
+      width: "30%",
+      render: (text, record, index) => {
+        return (
+          <>
+            <Button variant="warning" className="me-1">
+              Thanh toán
+            </Button>
+            <Button variant="dark">Chi tiết</Button>
+          </>
+        );
+      },
+    },
+  ];
 
   return (
     <>
@@ -230,10 +354,54 @@ const UserProfile = () => {
           )}
 
           <Col md={7}>
-            <h1 className="my-4">Danh sách phiếu đặt phòng</h1>
-            <p className="text-danger text-italic">
-              Không có phiếu đặt phòng nào
-            </p>
+            <h2 className="my-4">Danh sách phiếu đặt phòng</h2>
+            {isLoadingRental ? (
+              <div className="d-flex justify-content-center mt-2">
+                <ReactLoading
+                  color="black"
+                  type="bars"
+                  height="24px"
+                  className="mb-4"
+                ></ReactLoading>
+              </div>
+            ) : !rentalInfo ? (
+              <p
+                className="text-danger text-italic"
+                style={{ fontSize: "1rem" }}
+              >
+                Không có phiếu đặt phòng nào
+              </p>
+            ) : (
+              <Table
+                pagination={{ pageSize: 3, showSizeChanger: false }}
+                dataSource={dataSourceRental}
+                columns={columnsRental}
+              />
+            )}
+            ;<h2 className="mb-4">Danh sách hóa đơn</h2>
+            {isLoadingBill ? (
+              <div className="d-flex justify-content-center mt-2">
+                <ReactLoading
+                  color="black"
+                  type="bars"
+                  height="24px"
+                  className="mb-4"
+                ></ReactLoading>
+              </div>
+            ) : billInfo.bills.length === 0 ? (
+              <p
+                className="text-danger text-italic"
+                style={{ fontSize: "1rem" }}
+              >
+                Không có hóa đơn.
+              </p>
+            ) : (
+              <Table
+                pagination={{ pageSize: 3, showSizeChanger: false }}
+                dataSource={dataSourceBill}
+                columns={columnsBill}
+              />
+            )}
           </Col>
         </Row>
       </Container>

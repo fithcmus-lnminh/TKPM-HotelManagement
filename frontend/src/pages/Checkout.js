@@ -8,7 +8,9 @@ import { PayPalButton } from "react-paypal-button-v2";
 import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-  const { isLoading, billInfo } = useSelector((state) => state.billReducer);
+  const { isLoading, billInfo } = useSelector(
+    (state) => state.createBillReducer
+  );
   console.log(billInfo);
   const navigate = useNavigate();
   return (

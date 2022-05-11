@@ -158,9 +158,12 @@ export const getRentalCardById = async (req, res, next) => {
 };
 
 export const rentalBillByUserId = async (req, res, next) => {
-  const userId = req.params[userId];
+  const userId = req.params.userId;
   try {
-    const bills = await Bill.find({ user: userId });
+    const bills = await Bill.find({ user: userId }).populate({
+      path: "room",
+      select: "_id number type image price status description",
+    });
 
     if (bills) {
       res.status(200).json({ bills });
