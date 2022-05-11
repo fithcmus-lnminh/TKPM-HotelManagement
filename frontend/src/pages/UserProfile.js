@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Button, Row, Col, Container } from "react-bootstrap";
+import { Form, Button, Row, Col, Container, Modal } from "react-bootstrap";
 import { getUserDetails, updateUserProfile } from "../redux/actions/userAction";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +25,11 @@ const UserProfile = () => {
   const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
   const [isEdit, setIsEdit] = useState(false);
+  const [show, setShow] = useState({});
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -110,7 +115,7 @@ const UserProfile = () => {
   const dataSourceRental = [];
   const dataSourceBill = [];
   if (rentalInfo) {
-    for (let item of rentalInfo.rentalCard.reverse()) {
+    for (let item of rentalInfo.rentalCard) {
       let endDate = new Date(item.startDate);
       endDate.setDate(endDate.getDate() + item.numOfDates);
       dataSourceRental.push({
@@ -123,14 +128,17 @@ const UserProfile = () => {
   }
 
   if (billInfo) {
-    console.log(billInfo.bills);
-    for (let item of billInfo.bills.reverse()) {
+    for (let item of billInfo.bills) {
       dataSourceBill.push({
         _id: item._id,
         number: item.room.number,
+        numOfDates: item.numOfDates,
         createDate: new Date(item.createdAt).toLocaleString(),
+        unitPrice: item.unitPrice,
+        extraPrice: item.extraPrice,
         totalPrice: item.totalPrice,
         isPaid: item.isPaid,
+        paidAt: new Date(item.paidAt).toLocaleString(),
       });
     }
   }
@@ -208,10 +216,67 @@ const UserProfile = () => {
       render: (text, record, index) => {
         return (
           <>
-            <Button variant="warning" className="me-1">
-              Thanh toán
-            </Button>
-            <Button variant="dark">Chi tiết</Button>
+            {!record.isPaid && (
+              <Button variant="warning" className="me-1">
+                Thanh toán
+              </Button>
+            )}
+
+            <div
+              className={record.isPaid ? "text-center" : ""}
+              style={{ display: "inline" }}
+            >
+              <Button
+                variant="dark"
+                onClick={() => setShow({ ["show_" + record._id]: true })}
+              >
+                Chi tiết
+              </Button>
+            </div>
+            <Modal
+              show={show["show_" + record._id]}
+              onHide={() => setShow({ ["show_" + record._id]: false })}
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Chi tiết hóa đơn</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <p style={{ fontSize: "1rem" }}>
+                  <strong>Mã hóa đơn:</strong> {record._id}
+                </p>
+                <p style={{ fontSize: "1rem" }}>
+                  <strong>Ngày tạo:</strong> {record.createDate}
+                </p>
+                <p style={{ fontSize: "1rem" }}>
+                  <strong>Số phòng:</strong> {record.number}
+                </p>
+                <p style={{ fontSize: "1rem" }}>
+                  <strong>Đơn giá phòng:</strong> ${record.unitPrice}/ngày
+                </p>
+                <p style={{ fontSize: "1rem" }}>
+                  <strong>Số ngày thuê:</strong> ${record.numOfDates}
+                </p>
+                <p style={{ fontSize: "1rem" }}>
+                  <strong>VAT 10%:</strong> ${record.extraPrice}
+                </p>
+                <p style={{ fontSize: "1rem" }}>
+                  <strong>TỔNG TIỀN:</strong> ${record.totalPrice}
+                </p>
+                <p style={{ fontSize: "1rem" }}>
+                  <strong>Tình trạng:</strong>{" "}
+                  {record.isPaid
+                    ? `Đã thanh toán vào ${record.paidAt}`
+                    : "Chưa thanh toán"}
+                </p>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Đóng
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </>
         );
       },
@@ -388,7 +453,7 @@ const UserProfile = () => {
                   className="mb-4"
                 ></ReactLoading>
               </div>
-            ) : billInfo.bills.length === 0 ? (
+            ) : billInfo?.bills.length === 0 ? (
               <p
                 className="text-danger text-italic"
                 style={{ fontSize: "1rem" }}

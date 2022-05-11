@@ -146,7 +146,7 @@ export const getRentalCardById = async (req, res, next) => {
 
     if (rentalCard.length > 0) {
       res.json({
-        rentalCard,
+        rentalCard: rentalCard.reverse(),
       });
     } else {
       res.status(404);
@@ -166,7 +166,7 @@ export const rentalBillByUserId = async (req, res, next) => {
     });
 
     if (bills) {
-      res.status(200).json({ bills });
+      res.status(200).json({ bills: bills.reverse() });
     } else {
       res.status(404);
       throw new Error("Không tìm hóa đơn nào.");
