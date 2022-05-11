@@ -35,7 +35,7 @@ const Header = () => {
               </p>
               <p className="text-center mb-4">Giá chỉ từ $100</p>
               <div className="text-center">
-                <Link to="/room-booking">
+                <Link to="/rooms">
                   <button
                     type="button"
                     className="btn btn-info text-center px-4"

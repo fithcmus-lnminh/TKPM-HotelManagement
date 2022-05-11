@@ -29,13 +29,7 @@ const rentalCardModel = mongoose.Schema(
       identity_card: {
         type: Number,
       },
-      dob: {
-        type: Date,
-      },
       phoneNumber: {
-        type: String,
-      },
-      address: {
         type: String,
       },
     },

@@ -1,22 +1,21 @@
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  ListGroup,
-  FormLabel,
-  Button,
-} from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { createBill, createRentalCard } from "../redux/actions/rentalAction";
 import { getRoomDetailsByNumber } from "../redux/actions/roomAction";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { openNotification } from "../utils/notification";
 
 const Booking = () => {
   const [numDay, setNumDay] = useState(0);
+  const [name, setName] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [phone, setPhone] = useState("");
   const { userInfo } = useSelector((state) => state.userLoginReducer);
   const { roomInfo } = useSelector((state) => state.roomDetailsReducer);
 
@@ -36,14 +35,29 @@ const Booking = () => {
   const totalPrice = extraPrice !== 0 ? roomInfo?.price + extraPrice : 0;
 
   const bookingHandler = () => {
-    dispatch(
-      createRentalCard({
-        user: userInfo._id,
-        room: roomInfo._id,
-        startDate: date.toISOString(),
-        numOfDates: numDay,
-      })
-    );
+    if (userInfo?.role === "Manager") {
+      dispatch(
+        createRentalCard({
+          user: userInfo._id,
+          room: roomInfo._id,
+          startDate: date.toISOString(),
+          numOfDates: numDay,
+          customerInfo: {
+            name,
+            identity_card: idNumber,
+            phoneNumber: phone,
+          },
+        })
+      );
+    } else
+      dispatch(
+        createRentalCard({
+          user: userInfo._id,
+          room: roomInfo._id,
+          startDate: date.toISOString(),
+          numOfDates: numDay,
+        })
+      );
     dispatch(
       createBill({
         user: userInfo._id,
@@ -54,7 +68,11 @@ const Booking = () => {
         totalPrice,
       })
     );
-    navigate("/checkout");
+    if (userInfo?.role !== "Manager") navigate("/checkout");
+    else {
+      navigate("/rooms");
+      openNotification("success", "Đặt phòng thành công");
+    }
   };
 
   return (
@@ -69,11 +87,11 @@ const Booking = () => {
               </ListGroup.Item>
               <ListGroup.Item className="py-3">
                 <p style={{ fontSize: "1.25rem" }} className="mb-4">
-                  <strong>THÔNG TIN KHÁCH HÀNG</strong>
+                  <strong>THÔNG TIN NGƯỜI ĐẶT PHÒNG</strong>
                 </p>
 
                 <p style={{ fontSize: "1rem" }}>
-                  <strong>Tên khách hàng:</strong> {userInfo?.name}
+                  <strong>Người đặt:</strong> {userInfo?.name}
                 </p>
                 <p style={{ fontSize: "1rem" }}>
                   <strong>CMND/CCCD:</strong> {userInfo?.identity_card}
@@ -141,16 +159,69 @@ const Booking = () => {
                 </div>
               </ListGroup.Item>
             </ListGroup>
-            <div className="text-end mt-3">
-              <Button
-                className="btn btn-dark w-100"
-                type="button"
-                disabled={Number(numDay) <= 0}
-                onClick={bookingHandler}
-              >
-                ĐẶT PHÒNG
-              </Button>
-            </div>
+            {userInfo?.role !== "Manager" && (
+              <div className="text-end mt-3">
+                <Button
+                  className="btn btn-dark w-100"
+                  type="button"
+                  disabled={Number(numDay) <= 0}
+                  onClick={bookingHandler}
+                >
+                  ĐẶT PHÒNG
+                </Button>
+              </div>
+            )}
+            {userInfo?.role === "Manager" && (
+              <>
+                <ListGroup>
+                  <ListGroup.Item style={{ marginTop: "1rem" }}>
+                    <p style={{ fontSize: "1.25rem" }} className="mb-1">
+                      <strong>THÔNG TIN KHÁCH HÀNG</strong>
+                    </p>
+
+                    <Form.Group controlId="name" className="mt-3">
+                      <Form.Label>Họ và tên</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Nhập họ tên"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      ></Form.Control>
+                    </Form.Group>
+                    <Form.Group controlId="identity_card" className="mt-3">
+                      <Form.Label>CMND/CCCD</Form.Label>
+                      <Form.Control
+                        type="number"
+                        placeholder="Nhập CMND/CCCD"
+                        value={idNumber}
+                        onChange={(e) => setIdNumber(e.target.value)}
+                      ></Form.Control>
+                    </Form.Group>
+                    <Form.Group controlId="phone" className="mt-3">
+                      <Form.Label>Số điện thoại</Form.Label>
+                      <PhoneInput
+                        inputClass="w-100"
+                        country={"us"}
+                        value={phone}
+                        onChange={(phone) => setPhone(phone)}
+                      />
+                    </Form.Group>
+                  </ListGroup.Item>
+                </ListGroup>
+                <div className="text-end mt-3">
+                  <Button
+                    className="btn btn-dark w-100"
+                    type="button"
+                    disabled={
+                      Number(numDay) <= 0 || !name || !idNumber || !phone
+                    }
+                    onClick={bookingHandler}
+                  >
+                    ĐẶT PHÒNG
+                  </Button>
+                </div>
+              </>
+            )}
           </Col>
         </Row>
       </Container>

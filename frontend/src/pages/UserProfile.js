@@ -193,13 +193,6 @@ const UserProfile = () => {
 
                 <Form.Group controlId="phone" className="mt-3">
                   <Form.Label>Số điện thoại</Form.Label>
-                  {/* <Form.Control
-                  type="text"
-                  placeholder="Chưa có số điện thoại"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  disabled={isEdit ? false : true}
-                ></Form.Control> */}
                   <PhoneInput
                     inputClass="w-100"
                     country={"us"}

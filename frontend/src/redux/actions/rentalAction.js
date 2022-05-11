@@ -27,6 +27,8 @@ export const createRentalCard = (rentalObj) => async (dispatch, getState) => {
       config
     );
 
+    console.log(data);
+
     dispatch({ type: CREATE_RENTAL_CARD_SUCCESS });
   } catch (err) {
     dispatch({
