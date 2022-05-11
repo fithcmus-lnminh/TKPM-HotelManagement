@@ -284,7 +284,7 @@ const UserProfile = () => {
                   <strong>Đơn giá phòng:</strong> ${record.unitPrice}/ngày
                 </p>
                 <p style={{ fontSize: "1rem" }}>
-                  <strong>Số ngày thuê:</strong> ${record.numOfDates}
+                  <strong>Số ngày thuê:</strong> {record.numOfDates}
                 </p>
                 <p style={{ fontSize: "1rem" }}>
                   <strong>VAT 10%:</strong> ${record.extraPrice}
