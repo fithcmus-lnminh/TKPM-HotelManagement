@@ -51,9 +51,6 @@ const RoomDetails = () => {
   useEffect(() => {
     if (isSuccessCreateReview) {
       openNotification("success", "Đánh giá thành công");
-      setRating("");
-      setComment("");
-      dispatch({ type: CREATE_REVIEW_RESET });
     }
     dispatch(getRoomDetailsByNumber(number));
   }, [dispatch, number, isSuccessCreateReview]);
@@ -64,6 +61,9 @@ const RoomDetails = () => {
     else if (!comment) setMessage("Vui lòng nhập bình luận");
     else {
       setMessage("");
+      setRating("");
+      setComment("");
+      dispatch({ type: CREATE_REVIEW_RESET });
       dispatch(createRoomReview(number, { rating, comment }));
     }
   };

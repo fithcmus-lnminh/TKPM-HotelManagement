@@ -10,6 +10,11 @@ import { getRoomDetailsByNumber } from "../redux/actions/roomAction";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { openNotification } from "../utils/notification";
+import {
+  CREATE_BILL_SUCCESS,
+  STORE_BILL_DATA,
+} from "../constants/rentalConsts";
+import { encode } from "js-base64";
 
 const Booking = () => {
   const [numDay, setNumDay] = useState(0);
@@ -18,7 +23,6 @@ const Booking = () => {
   const [phone, setPhone] = useState("");
   const { userInfo } = useSelector((state) => state.userLoginReducer);
   const { roomInfo } = useSelector((state) => state.roomDetailsReducer);
-
   const { number } = useParams();
   const dispatch = useDispatch();
 
@@ -58,16 +62,19 @@ const Booking = () => {
           numOfDates: numDay,
         })
       );
-    dispatch(
-      createBill({
-        user: userInfo._id,
-        room: roomInfo._id,
-        numOfDates: numDay,
-        unitPrice: roomInfo?.price,
-        extraPrice,
-        totalPrice,
-      })
+
+    localStorage.setItem(
+      "billData",
+      encode(
+        JSON.stringify({
+          unitPrice: roomInfo?.price,
+          extraPrice,
+          totalPrice,
+          numOfDates: numDay,
+        })
+      )
     );
+
     if (userInfo?.role !== "Manager") navigate("/checkout");
     else {
       navigate("/rooms");

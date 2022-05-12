@@ -33,9 +33,7 @@ export const createRentalCard = (rentalObj) => async (dispatch, getState) => {
       config
     );
 
-    console.log(data);
-
-    dispatch({ type: CREATE_RENTAL_CARD_SUCCESS });
+    dispatch({ type: CREATE_RENTAL_CARD_SUCCESS, data: data });
   } catch (err) {
     dispatch({
       type: CREATE_RENTAL_CARD_FAIL,

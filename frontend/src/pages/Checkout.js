@@ -1,99 +1,108 @@
 import React from "react";
 import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import ReactLoading from "react-loading";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { PayPalButton } from "react-paypal-button-v2";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { createBill } from "../redux/actions/rentalAction";
+import { decode, encode } from "js-base64";
 
 const Checkout = () => {
-  const { isLoading, billInfo } = useSelector(
-    (state) => state.createBillReducer
-  );
-  console.log(billInfo);
+  const { billInfo } = useSelector((state) => state.createBillReducer);
+
+  if (billInfo?._id)
+    localStorage.setItem("billId", encode(JSON.stringify(billInfo?._id)));
+
+  const { rentalInfo } = useSelector((state) => state.createRentalCardReducer);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (rentalInfo)
+      dispatch(createBill({ ...billData, rentalCard: rentalInfo?._id }));
+  }, [rentalInfo]);
+
+  const billData = localStorage.getItem("billData")
+    ? JSON.parse(decode(localStorage.getItem("billData")))
+    : {};
+
   const navigate = useNavigate();
   return (
     <>
       <Navbar />
       <Container style={{ padding: "0 10rem" }}>
-        {isLoading ? (
-          <div className="d-flex justify-content-center mt-5">
-            <ReactLoading
-              color="black"
-              type="bars"
-              height="57px"
-            ></ReactLoading>
+        <>
+          <div
+            className="text-success mt-5 d-flex justify-content-center align-items-center"
+            style={{ fontSize: "2.25rem" }}
+          >
+            <CheckCircleOutlined
+              className="me-4"
+              style={{ fontSize: "3.5rem" }}
+            />{" "}
+            ĐẶT PHÒNG THÀNH CÔNG
           </div>
-        ) : (
-          <>
-            <div
-              className="text-success mt-5 d-flex justify-content-center align-items-center"
-              style={{ fontSize: "2.25rem" }}
-            >
-              <CheckCircleOutlined
-                className="me-4"
-                style={{ fontSize: "3.5rem" }}
-              />{" "}
-              ĐẶT PHÒNG THÀNH CÔNG
-            </div>
-            <Row>
-              <Col md={6}>
-                <ListGroup>
-                  <ListGroup.Item style={{ marginTop: "4rem" }}>
-                    <div className="d-flex align-items-center">
-                      <label className="me-4" style={{ fontSize: "1rem" }}>
-                        <strong>Số ngày thuê phòng:</strong>{" "}
-                        {billInfo?.numOfDates}
-                      </label>
-                    </div>
-                    <div
-                      className="mt-3 mb-2"
-                      style={{ fontSize: "1rem", display: "block" }}
-                    >
-                      <strong>Đơn giá phòng:</strong> {billInfo?.unitPrice}/ngày
-                    </div>
-                    <div
-                      className="mt-3 mb-2"
-                      style={{ fontSize: "1rem", display: "block" }}
-                    >
-                      <strong>VAT 10%: </strong> {billInfo?.extraPrice}đ
-                    </div>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <div
-                      className="my-2"
-                      style={{ fontSize: "1rem", display: "block" }}
-                    >
-                      <strong>THÀNH TIỀN: {billInfo?.totalPrice}đ</strong>
-                    </div>
-                  </ListGroup.Item>
-                </ListGroup>
-                <div className="text-center">
-                  <Button
-                    variant="secondary"
-                    className="mt-3 rounded-pill px-4 py-2"
-                    onClick={() => {
-                      navigate("/rooms");
-                    }}
+          <Row>
+            <Col md={6}>
+              <ListGroup>
+                <ListGroup.Item style={{ marginTop: "4rem" }}>
+                  <div className="d-flex align-items-center">
+                    <label className="me-4" style={{ fontSize: "1rem" }}>
+                      <strong>Số ngày thuê phòng:</strong>{" "}
+                      {billData?.numOfDates}
+                    </label>
+                  </div>
+                  <div
+                    className="mt-3 mb-2"
+                    style={{ fontSize: "1rem", display: "block" }}
                   >
-                    THANH TOÁN SAU
-                  </Button>
-                </div>
-              </Col>
+                    <strong>Đơn giá phòng:</strong> ${billData?.unitPrice}
+                    /ngày
+                  </div>
+                  <div
+                    className="mt-3 mb-2"
+                    style={{ fontSize: "1rem", display: "block" }}
+                  >
+                    <strong>VAT 10%: </strong> ${billData?.extraPrice}
+                  </div>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <div
+                    className="my-2"
+                    style={{ fontSize: "1rem", display: "block" }}
+                  >
+                    <strong>THÀNH TIỀN: ${billData?.totalPrice}</strong>
+                  </div>
+                </ListGroup.Item>
+              </ListGroup>
+              <div className="text-center">
+                <Button
+                  variant="secondary"
+                  className="mt-3 rounded-pill px-4 py-2"
+                  onClick={() => {
+                    navigate("/rooms");
+                    localStorage.deleteItem("billData");
+                  }}
+                >
+                  THANH TOÁN SAU
+                </Button>
+              </div>
+            </Col>
 
-              <Col>
-                <h4 className="mt-5 d-flex justify-content-center">
-                  THANH TOÁN NGAY
-                </h4>
-                <PayPalButton
-                  amount={billInfo?.totalPrice}
-                  // onSuccess={successPaymentHandler}
-                />
-              </Col>
-            </Row>
-          </>
-        )}
+            <Col>
+              <h4 className="mt-5 d-flex justify-content-center">
+                THANH TOÁN NGAY
+              </h4>
+              <PayPalButton
+                amount={billInfo?.totalPrice}
+                // onSuccess={successPaymentHandler}
+              />
+            </Col>
+          </Row>
+        </>
       </Container>
     </>
   );

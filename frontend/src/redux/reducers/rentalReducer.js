@@ -11,6 +11,7 @@ import {
   GET_RENTAL_CARD_FAIL,
   GET_RENTAL_CARD_REQUEST,
   GET_RENTAL_CARD_SUCCESS,
+  STORE_BILL_DATA,
 } from "../../constants/rentalConsts";
 
 export const createRentalCardReducer = (state = {}, action) => {
@@ -18,7 +19,7 @@ export const createRentalCardReducer = (state = {}, action) => {
     case CREATE_RENTAL_CARD_REQUEST:
       return { isLoading: true };
     case CREATE_RENTAL_CARD_SUCCESS:
-      return { isLoading: false, isSuccess: true };
+      return { isLoading: false, isSuccess: true, rentalInfo: action.data };
     case CREATE_RENTAL_CARD_FAIL:
       return { isLoading: false, errorMessage: action.message };
     default:
@@ -26,7 +27,7 @@ export const createRentalCardReducer = (state = {}, action) => {
   }
 };
 
-export const createBillReducer = (state = {}, action) => {
+export const createBillReducer = (state = { billData: {} }, action) => {
   switch (action.type) {
     case CREATE_BILL_REQUEST:
       return { isLoading: true };
@@ -34,6 +35,8 @@ export const createBillReducer = (state = {}, action) => {
       return { isLoading: false, isSuccess: true, billInfo: action.data };
     case CREATE_BILL_FAIL:
       return { isLoading: false, errorMessage: action.message };
+    case STORE_BILL_DATA:
+      return { billData: action.data };
     default:
       return state;
   }

@@ -61,14 +61,11 @@ export const getRoomByNumber = async (req, res, next) => {
 };
 
 export const createBill = async (req, res, next) => {
-  const { user, room, numOfDates, unitPrice, extraPrice, totalPrice } =
-    req.body;
+  const { rentalCard, unitPrice, extraPrice, totalPrice } = req.body;
 
   try {
     const bill = await Bill.create({
-      user,
-      room,
-      numOfDates,
+      rentalCard,
       unitPrice,
       extraPrice,
       totalPrice,
@@ -77,9 +74,7 @@ export const createBill = async (req, res, next) => {
     if (bill) {
       res.status(200).json({
         _id: bill._id,
-        user: bill.user,
-        room: bill.room,
-        numOfDates: bill.numOfDates,
+        rentalCard: bill.rentalCard,
         unitPrice: bill.unitPrice,
         extraPrice: bill.extraPrice,
         totalPrice: bill.totalPrice,
@@ -161,8 +156,8 @@ export const rentalBillByUserId = async (req, res, next) => {
   const userId = req.params.userId;
   try {
     const bills = await Bill.find({ user: userId }).populate({
-      path: "room",
-      select: "_id number type image price status description",
+      path: "rentalCard",
+      select: "_id user room numOfDates startDate",
     });
 
     if (bills) {
@@ -304,20 +299,27 @@ export const postCreateRentalCard = async (req, res, next) => {
       }
     }
 
-    const room2 = await Room.findById(room);
-    const bookedRoom = await Room.find({ number: room2.number });
-    if (bookedRoom) {
-      bookedRoom[0].status = false;
-      await bookedRoom[0].save();
-    }
+    // const room2 = await Room.findById(room);
+    // const bookedRoom = await Room.find({ number: room2.number });
+    // if (bookedRoom) {
+    //   bookedRoom[0].status = false;
+    //   await bookedRoom[0].save();
+    // }
 
     const rentalCard = await RentalCard.create({
       ...info,
     });
 
+    console.log(rentalCard);
+
     if (rentalCard) {
       res.status(201).json({
-        ...info,
+        _id: rentalCard._id,
+        user: rentalCard.user,
+        room: rentalCard.room,
+        startDate: rentalCard.startDate,
+        numOfDates: rentalCard.numOfDates,
+        customerInfo: rentalCard.customerInfo,
       });
     } else {
       res.status(404);

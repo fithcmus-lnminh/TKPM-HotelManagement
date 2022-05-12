@@ -2,20 +2,10 @@ import mongoose from "mongoose";
 
 const billSchema = mongoose.Schema(
   {
-    user: {
+    rentalCard: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User",
-    },
-    room: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Room",
-    },
-    numOfDates: {
-      type: Number,
-      required: true,
-      default: 1,
+      ref: "RentalCard",
     },
     unitPrice: {
       type: Number,
