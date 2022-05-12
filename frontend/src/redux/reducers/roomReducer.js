@@ -1,4 +1,8 @@
 import {
+  CREATE_REVIEW_FAIL,
+  CREATE_REVIEW_REQUEST,
+  CREATE_REVIEW_RESET,
+  CREATE_REVIEW_SUCCESS,
   GET_ALL_ROOMS_FAIL,
   GET_ALL_ROOMS_REQUEST,
   GET_ALL_ROOMS_SUCCESS,
@@ -28,6 +32,21 @@ export const roomDetailsReducer = (state = {}, action) => {
       return { isLoading: false, roomInfo: action.data };
     case GET_ROOM_DETAILS_FAIL:
       return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const roomCreateReviewReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CREATE_REVIEW_REQUEST:
+      return { isLoading: true };
+    case CREATE_REVIEW_SUCCESS:
+      return { isLoading: false, isSuccess: true };
+    case CREATE_REVIEW_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    case CREATE_REVIEW_RESET:
+      return {};
     default:
       return state;
   }

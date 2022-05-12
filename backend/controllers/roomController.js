@@ -455,3 +455,43 @@ export const updateToPaid = async (req, res, next) => {
     next(err);
   }
 };
+
+export const createRoomReview = async (req, res, next) => {
+  try {
+    const { rating, comment } = req.body;
+
+    const room = await Room.find({ number: req.params.number });
+
+    if (room) {
+      const alreadyReviewed = room[0].reviews.find(
+        (r) => r.user.toString() === req.user._id.toString()
+      );
+
+      if (alreadyReviewed) {
+        res.status(400);
+        throw new Error("Bạn đã đánh giá phòng này");
+      }
+
+      const review = {
+        name: req.user.name,
+        rating: Number(rating),
+        comment,
+        user: req.user._id,
+      };
+
+      room[0].reviews.push(review);
+
+      room[0].numReviews = room[0].reviews.length;
+      room[0].rating =
+        room[0].reviews.reduce((acc, item) => acc + item.rating, 0) /
+        room[0].reviews.length;
+
+      await room[0].save();
+      res.status(201).json("Đã thêm đánh giá");
+    } else {
+      throw new Error("Không có phòng này", 404);
+    }
+  } catch (err) {
+    next(err);
+  }
+};

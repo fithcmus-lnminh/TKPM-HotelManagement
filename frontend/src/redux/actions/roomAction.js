@@ -6,6 +6,9 @@ import {
   GET_ROOM_DETAILS_REQUEST,
   GET_ROOM_DETAILS_SUCCESS,
   GET_ROOM_DETAILS_FAIL,
+  CREATE_REVIEW_REQUEST,
+  CREATE_REVIEW_SUCCESS,
+  CREATE_REVIEW_FAIL,
 } from "../../constants/roomConsts";
 
 export const getAllRooms =
@@ -40,6 +43,38 @@ export const getRoomDetailsByNumber =
     } catch (err) {
       dispatch({
         type: GET_ROOM_DETAILS_FAIL,
+        message:
+          err.response && err.response.data.errors.message
+            ? err.response.data.errors.message
+            : err.message,
+      });
+    }
+  };
+
+export const createRoomReview =
+  (number, review) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: CREATE_REVIEW_REQUEST });
+
+      const { userInfo } = getState().userLoginReducer;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        `/api/rooms/${number}/reviews`,
+        review,
+        config
+      );
+
+      dispatch({ type: CREATE_REVIEW_SUCCESS });
+    } catch (err) {
+      dispatch({
+        type: CREATE_REVIEW_FAIL,
         message:
           err.response && err.response.data.errors.message
             ? err.response.data.errors.message

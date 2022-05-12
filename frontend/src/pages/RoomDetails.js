@@ -17,12 +17,18 @@ import { useState } from "react";
 import Rating from "../components/Rating";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getRoomDetailsByNumber } from "../redux/actions/roomAction";
+import {
+  createRoomReview,
+  getRoomDetailsByNumber,
+} from "../redux/actions/roomAction";
+import { openNotification } from "../utils/notification";
+import { CREATE_REVIEW_RESET } from "../constants/roomConsts";
 
 const RoomDetails = () => {
   const [comment, setComment] = useState("");
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState("");
   const [show, setShow] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -34,17 +40,32 @@ const RoomDetails = () => {
     (state) => state.roomDetailsReducer
   );
 
+  const {
+    isLoading: isLoadingCreateReview,
+    isSuccess: isSuccessCreateReview,
+    errorMessage: errorCreateReview,
+  } = useSelector((state) => state.roomCreateReviewReducer);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (isSuccessCreateReview) {
+      openNotification("success", "Đánh giá thành công");
+      setRating("");
+      setComment("");
+      dispatch({ type: CREATE_REVIEW_RESET });
+    }
     dispatch(getRoomDetailsByNumber(number));
-  }, [dispatch, number]);
-
-  console.log(roomInfo);
+  }, [dispatch, number, isSuccessCreateReview]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    //  dispatch(createProductReview(id, { rating, comment }));
+    if (!rating) setMessage("Vui lòng chọn đánh giá");
+    else if (!comment) setMessage("Vui lòng nhập bình luận");
+    else {
+      setMessage("");
+      dispatch(createRoomReview(number, { rating, comment }));
+    }
   };
   return (
     <>
@@ -145,19 +166,21 @@ const RoomDetails = () => {
                 <ListGroup>
                   {roomInfo?.reviews?.map((review, index) => (
                     <ListGroup.Item key={index}>
-                      <strong className="title me-2">{review.name}</strong>
-                      <Rating value={review.rating} color="#f8e825" />
+                      <div className="d-flex">
+                        <strong className="title me-2">{review.name}</strong>
+                        <Rating value={review.rating} color="#f8e825" />
+                      </div>
+
                       <p>{review.createdAt.substring(0, 10)}</p>
                       <p>{review.comment}</p>
                     </ListGroup.Item>
                   ))}
                   <ListGroup.Item>
                     <h3>Viết bình luận và đánh giá</h3>
-                    {/* {errorMessageProductReview && (
-                    <Message variant="danger">
-                      {errorMessageProductReview}
-                    </Message>
-                  )} */}
+                    {errorCreateReview && !message && (
+                      <Message variant="danger">{errorCreateReview}</Message>
+                    )}
+                    {message && <Message variant="danger">{message}</Message>}
                     {userInfo ? (
                       <Form onSubmit={submitHandler}>
                         <Form.Group controlId="rating" className="mt-2">
@@ -167,7 +190,9 @@ const RoomDetails = () => {
                             value={rating}
                             onChange={(e) => setRating(e.target.value)}
                           >
-                            <option value="">Chọn ...</option>
+                            <option value="" disabled>
+                              Chọn ...
+                            </option>
                             <option value="1">1 - Rất tệ</option>
                             <option value="2">2 - Tệ</option>
                             <option value="3">3 - Tốt</option>
@@ -189,6 +214,7 @@ const RoomDetails = () => {
                             type="submit"
                             variant="dark"
                             className="mt-2 w-50"
+                            disabled={isLoadingCreateReview}
                           >
                             Xác nhận
                           </Button>
@@ -196,8 +222,11 @@ const RoomDetails = () => {
                       </Form>
                     ) : (
                       <Message>
-                        Please <Link to="/login">sign in</Link> to write a
-                        review
+                        Vui lòng
+                        <Link to={`/login?redirect=rooms/${roomInfo?.number}`}>
+                          đăng nhập
+                        </Link>{" "}
+                        để đánh giá phòng
                       </Message>
                     )}
                   </ListGroup.Item>
