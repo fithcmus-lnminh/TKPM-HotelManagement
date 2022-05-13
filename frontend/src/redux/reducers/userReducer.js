@@ -1,4 +1,7 @@
 import {
+  CHANGE_PASSWORD_FAIL,
+  CHANGE_PASSWORD_REQUEST,
+  CHANGE_PASSWORD_SUCCESS,
   CHANGE_USER_LOGIN_NAME,
   GET_USER_DETAILS_FAIL,
   GET_USER_DETAILS_REQUEST,
@@ -84,6 +87,19 @@ export const updateUserProfileReducer = (state = {}, action) => {
     case UPDATE_USER_PROFILE_SUCCESS:
       return { isLoading: false };
     case UPDATE_USER_PROFILE_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const changePasswordReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CHANGE_PASSWORD_REQUEST:
+      return { isLoading: true };
+    case CHANGE_PASSWORD_SUCCESS:
+      return { isLoading: false, isSuccess: true };
+    case CHANGE_PASSWORD_FAIL:
       return { isLoading: false, errorMessage: action.message };
     default:
       return state;

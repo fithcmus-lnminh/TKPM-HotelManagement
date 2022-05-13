@@ -93,6 +93,11 @@ const HomeNavbar = () => {
                   <i className="fas fa-user me-2"></i>Hồ sơ cá nhân
                 </NavDropdown.Item>
               </Link>
+              <Link to="/change-password">
+                <NavDropdown.Item as="div">
+                  <i className="fas fa-key me-2"></i>Đổi mật khẩu
+                </NavDropdown.Item>
+              </Link>
               <NavDropdown.Item onClick={logoutHandler}>
                 <i className="fas fa-arrow-right-from-bracket me-2"></i>
                 Đăng xuất

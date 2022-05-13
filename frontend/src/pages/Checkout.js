@@ -2,7 +2,6 @@ import React from "react";
 import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
-import ReactLoading from "react-loading";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { PayPalButton } from "react-paypal-button-v2";
 import { useNavigate } from "react-router-dom";

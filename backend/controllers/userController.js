@@ -161,3 +161,26 @@ export const getAllUsers = async (req, res, next) => {
     next(err);
   }
 };
+
+export const changePassword = async (req, res, next) => {
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (user && (await user.comparePassword(oldPassword))) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+      user.password = hashedPassword;
+
+      await user.save();
+      return res.status(200).json("Thay đổi mật khẩu thành công");
+    } else {
+      res.status(404);
+      throw new Error("Mật khẩu cũ không đúng");
+    }
+  } catch (err) {
+    next(err);
+  }
+};

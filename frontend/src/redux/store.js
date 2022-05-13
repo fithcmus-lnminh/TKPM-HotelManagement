@@ -6,6 +6,7 @@ import {
   userRegisterReducer,
   getUserProfileReducer,
   updateUserProfileReducer,
+  changePasswordReducer,
 } from "./reducers/userReducer";
 import {
   allRoomsReducer,
@@ -35,6 +36,7 @@ const reducer = combineReducers({
   rentalCardReducer,
   billReducer,
   roomCreateReviewReducer,
+  changePasswordReducer,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

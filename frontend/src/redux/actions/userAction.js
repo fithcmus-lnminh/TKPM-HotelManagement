@@ -15,6 +15,9 @@ import {
   CHANGE_USER_LOGIN_NAME,
   UPDATE_USER_PROFILE_FAIL,
   UPDATE_USER_PROFILE_SUCCESS,
+  CHANGE_PASSWORD_REQUEST,
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_PASSWORD_FAIL,
 } from "../../constants/userConsts";
 import { encode } from "js-base64";
 import { openNotification } from "../../utils/notification";
@@ -162,3 +165,36 @@ export const updateUserProfile = (userObj) => async (dispatch, getState) => {
     });
   }
 };
+
+export const changeUserPassword =
+  (passwordObj) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: CHANGE_PASSWORD_REQUEST });
+
+      const { userInfo } = getState().userLoginReducer;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        "/api/users/change-password",
+        passwordObj,
+        config
+      );
+
+      dispatch({ type: CHANGE_PASSWORD_SUCCESS });
+      openNotification("success", "Thay đổi mật khẩu thành công");
+    } catch (err) {
+      dispatch({
+        type: CHANGE_PASSWORD_FAIL,
+        message:
+          err.response && err.response.data.errors.message
+            ? err.response.data.errors.message
+            : err.message,
+      });
+    }
+  };

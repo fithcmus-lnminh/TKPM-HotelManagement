@@ -112,8 +112,6 @@ const UserProfile = () => {
     userProfile.customerType && setCustomerType(userProfile.customerType);
   };
 
-  console.log(rentalInfo);
-
   const dataSourceRental = [];
   const dataSourceBill = [];
   if (rentalInfo) {
@@ -177,13 +175,13 @@ const UserProfile = () => {
       title: "Ngày tạo",
       dataIndex: "createDate",
       key: "createDate",
-      width: "20%",
+      width: "25%",
     },
     {
       title: "Tổng tiền",
       dataIndex: "totalPrice",
       key: "totalPrice",
-      width: "15%",
+      width: "13%",
       render: (text, record, index) => {
         return "$" + text;
       },
