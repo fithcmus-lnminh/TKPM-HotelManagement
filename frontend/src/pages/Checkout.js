@@ -83,7 +83,7 @@ const Checkout = () => {
                   className="mt-3 rounded-pill px-4 py-2"
                   onClick={() => {
                     navigate("/rooms");
-                    localStorage.deleteItem("billData");
+                    localStorage.removeItem("billData");
                   }}
                 >
                   THANH TOÁN SAU

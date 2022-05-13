@@ -155,12 +155,16 @@ export const getRentalCardById = async (req, res, next) => {
 export const rentalBillByUserId = async (req, res, next) => {
   const userId = req.params.userId;
   try {
-    const rentalCard = await RentalCard.find({ user: userId });
-    const bills = await Bill.find({ rentalCard: rentalCard[0]._id }).populate({
-      path: "rentalCard",
-      select: "_id user room numOfDates startDate",
-      populate: { path: "room" },
-    });
+    const rentalCards = await RentalCard.find({ user: userId });
+    let bills = [];
+    for (let r of rentalCards) {
+      const bill = await Bill.find({ rentalCard: r._id }).populate({
+        path: "rentalCard",
+        select: "_id user room numOfDates startDate",
+        populate: { path: "room" },
+      });
+      bills.push(bill[0]);
+    }
 
     if (bills) {
       res.status(200).json({ bills: bills.reverse() });
@@ -301,12 +305,12 @@ export const postCreateRentalCard = async (req, res, next) => {
       }
     }
 
-    // const room2 = await Room.findById(room);
-    // const bookedRoom = await Room.find({ number: room2.number });
-    // if (bookedRoom) {
-    //   bookedRoom[0].status = false;
-    //   await bookedRoom[0].save();
-    // }
+    const room2 = await Room.findById(room);
+    const bookedRoom = await Room.find({ number: room2.number });
+    if (bookedRoom) {
+      bookedRoom[0].status = false;
+      await bookedRoom[0].save();
+    }
 
     const rentalCard = await RentalCard.create({
       ...info,

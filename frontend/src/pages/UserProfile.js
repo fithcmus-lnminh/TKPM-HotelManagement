@@ -127,6 +127,8 @@ const UserProfile = () => {
     }
   }
 
+  console.log(billInfo);
+
   if (billInfo) {
     for (let item of billInfo.bills) {
       dataSourceBill.push({
