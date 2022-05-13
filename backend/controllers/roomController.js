@@ -155,9 +155,11 @@ export const getRentalCardById = async (req, res, next) => {
 export const rentalBillByUserId = async (req, res, next) => {
   const userId = req.params.userId;
   try {
-    const bills = await Bill.find({ user: userId }).populate({
+    const rentalCard = await RentalCard.find({ user: userId });
+    const bills = await Bill.find({ rentalCard: rentalCard[0]._id }).populate({
       path: "rentalCard",
       select: "_id user room numOfDates startDate",
+      populate: { path: "room" },
     });
 
     if (bills) {

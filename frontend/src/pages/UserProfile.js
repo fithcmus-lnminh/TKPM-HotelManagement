@@ -112,6 +112,8 @@ const UserProfile = () => {
     userProfile.customerType && setCustomerType(userProfile.customerType);
   };
 
+  console.log(rentalInfo);
+
   const dataSourceRental = [];
   const dataSourceBill = [];
   if (rentalInfo) {
@@ -131,8 +133,8 @@ const UserProfile = () => {
     for (let item of billInfo.bills) {
       dataSourceBill.push({
         _id: item._id,
-        number: item.room.number,
-        numOfDates: item.numOfDates,
+        number: item.rentalCard.room.number,
+        numOfDates: item.rentalCard.numOfDates,
         createDate: new Date(item.createdAt).toLocaleString(),
         unitPrice: item.unitPrice,
         extraPrice: item.extraPrice,
