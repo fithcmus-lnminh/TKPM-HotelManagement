@@ -22,6 +22,7 @@ const UserProfile = () => {
   const [dob, setDob] = useState("");
   const [customerType, setCustomerType] = useState("");
   const [phone, setPhone] = useState("");
+  const [role, setRole] = useState("");
   const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
   const [isEdit, setIsEdit] = useState(false);
@@ -66,6 +67,7 @@ const UserProfile = () => {
         userProfile.address && setAddress(userProfile.address);
         userProfile.dob && setDob(userProfile.dob);
         userProfile.customerType && setCustomerType(userProfile.customerType);
+        userProfile.role && setRole(userProfile.role);
       }
       dispatch(getRentalCardByUserId(userInfo?._id));
       dispatch(getBillByUserId(userInfo?._id));
@@ -126,8 +128,6 @@ const UserProfile = () => {
       });
     }
   }
-
-  console.log(billInfo);
 
   if (billInfo) {
     for (let item of billInfo.bills) {
@@ -392,7 +392,7 @@ const UserProfile = () => {
                       ></Form.Control>
                     </Form.Group>
                   </Col>
-                  {customerType !== "" && (
+                  {customerType !== "" ? (
                     <Col>
                       <Form.Group controlId="customerType" className="mt-3">
                         <Form.Label>Loại khách</Form.Label>
@@ -405,6 +405,22 @@ const UserProfile = () => {
                           <option value="Domestic">Khách nội địa</option>
                           <option value="Foreigner">Khách nước ngoài</option>
                         </Form.Control>
+                      </Form.Group>
+                    </Col>
+                  ) : (
+                    <Col>
+                      <Form.Group controlId="role" className="mt-3">
+                        <Form.Label>Vai trò</Form.Label>
+                        <Form.Control
+                          value={
+                            role === "Receptionist"
+                              ? "Nhân viên lễ tân"
+                              : role === "Manager"
+                              ? "Quản lý"
+                              : "Admin"
+                          }
+                          disabled
+                        ></Form.Control>
                       </Form.Group>
                     </Col>
                   )}

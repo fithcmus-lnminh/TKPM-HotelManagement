@@ -97,7 +97,9 @@ export const updateProfile = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     const { name, email, identity_card, dob, phone, address } = req.body;
-    console.log(req.body);
+
+    const existedUser = await User.find({ email });
+    if (existedUser) throw new Error("Địa chỉ email đã tồn tại");
 
     if (user) {
       user.name = name || user.name;
