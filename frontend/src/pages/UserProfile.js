@@ -45,7 +45,7 @@ const UserProfile = () => {
     (state) => state.getUserProfileReducer
   );
 
-  const { isLoading: updateLoading } = useSelector(
+  const { isLoading: updateLoading, errorMessage: updateError } = useSelector(
     (state) => state.updateUserProfileReducer
   );
 
@@ -72,11 +72,12 @@ const UserProfile = () => {
       dispatch(getRentalCardByUserId(userInfo?._id));
       dispatch(getBillByUserId(userInfo?._id));
     }
-  }, [userInfo, userProfile, dispatch, navigate]);
+    updateError && setIsEdit(true);
+  }, [userInfo, userProfile, dispatch, navigate, updateError]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    setMessage(null);
+    setMessage("");
     if (name === "") setMessage("Vui lòng nhập tên");
     else if (idNumber === "") setMessage("Vui lòng nhập CMND/CCCD");
     else if (dob === "") setMessage("Vui lòng nhập ngày sinh");
@@ -347,6 +348,7 @@ const UserProfile = () => {
               {errorMessage && (
                 <Message variant="danger">{errorMessage}</Message>
               )}
+              {updateError && <Message variant="danger">{updateError}</Message>}
 
               <Form onSubmit={submitHandler}>
                 <Form.Group controlId="name" className="mt-3">

@@ -36,6 +36,7 @@ const RoomDetails = () => {
   const { number } = useParams();
 
   const { userInfo } = useSelector((state) => state.userLoginReducer);
+
   const { isLoading, roomInfo } = useSelector(
     (state) => state.roomDetailsReducer
   );
@@ -119,43 +120,45 @@ const RoomDetails = () => {
                   <ListGroup.Item>
                     Mô tả phòng: {roomInfo?.description}
                   </ListGroup.Item>
-                  {roomInfo?.status && (
-                    <>
-                      <Button
-                        type="button"
-                        className="btn btn-dark mt-2"
-                        onClick={handleShow}
-                      >
-                        Đặt phòng
-                      </Button>
-                      <Modal
-                        show={show}
-                        onHide={handleClose}
-                        aria-labelledby="contained-modal-title-vcenter"
-                        centered
-                      >
-                        <Modal.Header closeButton>
-                          <Modal.Title>Xác nhận</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          <p style={{ fontSize: "1rem" }}>
-                            Bạn có thực sự muốn đặt{" "}
-                            <strong>phòng {roomInfo.number}</strong> ?
-                          </p>
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button variant="secondary" onClick={handleClose}>
-                            Thoát
-                          </Button>
-                          <Link to={`/room-booking/${roomInfo.number}`}>
-                            <Button variant="success" onClick={handleClose}>
-                              Đồng ý
+                  {roomInfo?.status &&
+                    (userInfo?.role === "Receptionist" ||
+                      userInfo?.role === "User") && (
+                      <>
+                        <Button
+                          type="button"
+                          className="btn btn-dark mt-2"
+                          onClick={handleShow}
+                        >
+                          Đặt phòng
+                        </Button>
+                        <Modal
+                          show={show}
+                          onHide={handleClose}
+                          aria-labelledby="contained-modal-title-vcenter"
+                          centered
+                        >
+                          <Modal.Header closeButton>
+                            <Modal.Title>Xác nhận</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            <p style={{ fontSize: "1rem" }}>
+                              Bạn có thực sự muốn đặt{" "}
+                              <strong>phòng {roomInfo.number}</strong> ?
+                            </p>
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                              Thoát
                             </Button>
-                          </Link>
-                        </Modal.Footer>
-                      </Modal>
-                    </>
-                  )}
+                            <Link to={`/room-booking/${roomInfo.number}`}>
+                              <Button variant="success" onClick={handleClose}>
+                                Đồng ý
+                              </Button>
+                            </Link>
+                          </Modal.Footer>
+                        </Modal>
+                      </>
+                    )}
                 </ListGroup>
               </Col>
               <Col md={4}>

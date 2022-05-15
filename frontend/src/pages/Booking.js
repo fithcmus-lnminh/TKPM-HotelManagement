@@ -166,7 +166,7 @@ const Booking = () => {
                 </div>
               </ListGroup.Item>
             </ListGroup>
-            {userInfo?.role !== "Manager" && (
+            {userInfo?.role !== "Receptionist" && (
               <div className="text-end mt-3">
                 <Button
                   className="btn btn-dark w-100"
@@ -178,7 +178,7 @@ const Booking = () => {
                 </Button>
               </div>
             )}
-            {userInfo?.role === "Manager" && (
+            {userInfo?.role === "Receptionist" && (
               <>
                 <ListGroup>
                   <ListGroup.Item style={{ marginTop: "1rem" }}>

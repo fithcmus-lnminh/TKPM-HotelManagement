@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Button, Card, Modal } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 
 const RoomCard = (props) => {
   const { room } = props;
   const [show, setShow] = useState(false);
+
+  const { userInfo } = useSelector((state) => state.userLoginReducer);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -46,7 +49,8 @@ const RoomCard = (props) => {
 
           <Card.Text as="h3">${room.price}/ngày</Card.Text>
           <div className="text-center mt-4">
-            {room.status ? (
+            {room?.status &&
+            (userInfo?.role === "User" || userInfo?.role === "Receptionist") ? (
               <Button
                 type="button"
                 className="btn btn-dark"
@@ -54,10 +58,14 @@ const RoomCard = (props) => {
               >
                 Đặt phòng
               </Button>
-            ) : (
+            ) : !room.status &&
+              (userInfo?.role === "User" ||
+                userInfo?.role === "Receptionist") ? (
               <p className="text-danger mb-0 pt-2">
                 <strong>Hết phòng</strong>
               </p>
+            ) : (
+              <></>
             )}
             <Modal
               show={show}
