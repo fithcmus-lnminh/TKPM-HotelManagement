@@ -85,7 +85,7 @@ export const getUserProfile = async (req, res, next) => {
         role: user.role,
       });
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không tìm thấy người dùng.");
     }
   } catch (err) {
@@ -101,11 +101,11 @@ export const updateProfile = async (req, res, next) => {
     const existedEmail = await User.find({ email });
     const existedIDC = await User.find({ identity_card });
     if (existedEmail) {
-      res.status(404);
+      res.status(400);
       throw new Error("Địa chỉ email đã tồn tại");
     }
     if (existedIDC) {
-      res.status(404);
+      res.status(400);
       throw new Error("CMND/CCCD đã tồn tại");
     }
 
@@ -131,7 +131,7 @@ export const updateProfile = async (req, res, next) => {
         token: generateToken(updatedUser._id),
       });
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không có user");
     }
   } catch (err) {
@@ -147,7 +147,7 @@ export const getAllManagers = async (req, res, next) => {
     if (managers.length > 0) {
       res.json(managers);
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không tìm thấy nhân viên.");
     }
   } catch (err) {
@@ -164,7 +164,7 @@ export const getAllUsers = async (req, res, next) => {
     if (users.length > 0) {
       res.json(users);
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không tìm thấy người dùng.");
     }
   } catch (err) {
@@ -187,7 +187,7 @@ export const changePassword = async (req, res, next) => {
       await user.save();
       return res.status(200).json("Thay đổi mật khẩu thành công");
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Mật khẩu cũ không đúng");
     }
   } catch (err) {

@@ -34,10 +34,10 @@ export const getAllRooms = async (req, res, next) => {
 
     if (rooms.length > 0) {
       res.json({
-        rooms: rooms,
+        rooms: rooms.reverse(),
       });
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không có phòng nào.");
     }
   } catch (err) {
@@ -52,7 +52,7 @@ export const getRoomByNumber = async (req, res, next) => {
     if (room) {
       res.json(room[0]);
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không tìm thấy phòng.");
     }
   } catch (err) {
@@ -106,7 +106,7 @@ export const getAllRentalCard = async (req, res, next) => {
         rentalCard,
       });
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không có phiếu thuê nào.");
     }
   } catch (err) {
@@ -124,7 +124,7 @@ export const getRentalCardById = async (req, res, next) => {
     });
 
     if (flag === -1) {
-      res.status(404);
+      res.status(400);
       throw new Error("Người dùng không hợp lệ.");
     }
 
@@ -144,7 +144,7 @@ export const getRentalCardById = async (req, res, next) => {
         rentalCard: rentalCard.reverse(),
       });
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không có phiếu thuê nào.");
     }
   } catch (err) {
@@ -169,7 +169,7 @@ export const rentalBillByUserId = async (req, res, next) => {
     if (bills) {
       res.status(200).json({ bills: bills.reverse() });
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không tìm hóa đơn nào.");
     }
   } catch (err) {
@@ -187,7 +187,7 @@ export const getRoomByType = async (req, res, next) => {
         rooms,
       });
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không tìm thấy phòng.");
     }
   } catch (err) {
@@ -205,7 +205,7 @@ export const rentalBillByUserIdAndBillId = async (req, res, next) => {
     if (bill) {
       res.status(200).json({ bill });
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không tìm hóa đơn.");
     }
   } catch (err) {
@@ -214,11 +214,13 @@ export const rentalBillByUserIdAndBillId = async (req, res, next) => {
 };
 export const postCreateRoom = async (req, res, next) => {
   const { number, type, image, price, description } = req.body;
+  console.log(req.body);
 
   try {
-    const existedRoom = Room.find({ number: number });
+    const existedRoom = await Room.find({ number: number });
 
-    if (existedRoom) {
+    if (existedRoom.length > 0) {
+      res.status(400);
       throw new Error("Phòng đã tồn tại. Vui lòng thử số phòng khác");
     }
 
@@ -240,13 +242,13 @@ export const postCreateRoom = async (req, res, next) => {
     const room = await Room.create({
       ...info,
     });
-
+    console.log(room);
     if (room) {
       res.status(201).json({
         ...info,
       });
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không tạo được phòng.");
     }
   } catch (err) {
@@ -277,7 +279,7 @@ export const getRevenueReport = async (req, res, next) => {
       }
       res.status(200).json(revenue);
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error(
         "Không có doanh thu trong tháng " + month + " năm " + year
       );
@@ -327,7 +329,7 @@ export const postCreateRentalCard = async (req, res, next) => {
         customerInfo: rentalCard.customerInfo,
       });
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error("Không đặt được phòng.");
     }
   } catch (err) {
@@ -356,7 +358,7 @@ export const getDensityUseReport = async (req, res, next) => {
     if (bills) {
       res.status(200).json(bills.length);
     } else {
-      res.status(404);
+      res.status(400);
       throw new Error(
         "Không có lượt đặt phòng nào trong tháng " + month + " năm " + year
       );
@@ -376,7 +378,7 @@ export const deleteRoom = async (req, res, next) => {
     });
 
     if (flag === -1) {
-      res.status(404);
+      res.status(400);
       throw new Error("Không tìm thấy phòng.");
     } else {
       await Room.deleteOne({ _id: roomId });
@@ -402,7 +404,7 @@ export const updateRoom = async (req, res, next) => {
     });
 
     if (flag === -1) {
-      res.status(404);
+      res.status(400);
       throw new Error("Không tìm thấy phòng.");
     } else {
       const info = {
@@ -429,7 +431,7 @@ export const updateRoom = async (req, res, next) => {
           message: "Cập nhật thông tin phòng thành công",
         });
       } else {
-        res.status(404);
+        res.status(400);
         throw new Error("Không thể cập nhật được phòng này.");
       }
     }
@@ -456,7 +458,7 @@ export const updateToPaid = async (req, res, next) => {
       const updatedBill = await bill.save();
       res.json(updatedBill);
     } else {
-      throw new Error("Không có hóa đơn này", 404);
+      throw new Error("Không có hóa đơn này");
     }
   } catch (err) {
     next(err);
@@ -496,7 +498,8 @@ export const createRoomReview = async (req, res, next) => {
       await room[0].save();
       res.status(201).json("Đã thêm đánh giá");
     } else {
-      throw new Error("Không có phòng này", 404);
+      res.status(400);
+      throw new Error("Không có phòng này");
     }
   } catch (err) {
     next(err);

@@ -12,6 +12,7 @@ import {
   allRoomsReducer,
   roomDetailsReducer,
   roomCreateReviewReducer,
+  roomCreateReducer,
 } from "./reducers/roomReducer";
 import { navigateReducer } from "./reducers/navigateReducer";
 import {
@@ -37,6 +38,7 @@ const reducer = combineReducers({
   billReducer,
   roomCreateReviewReducer,
   changePasswordReducer,
+  roomCreateReducer,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

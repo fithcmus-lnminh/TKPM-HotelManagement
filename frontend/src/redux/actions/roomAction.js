@@ -9,7 +9,11 @@ import {
   CREATE_REVIEW_REQUEST,
   CREATE_REVIEW_SUCCESS,
   CREATE_REVIEW_FAIL,
+  CREATE_ROOM_REQUEST,
+  CREATE_ROOM_SUCCESS,
+  CREATE_ROOM_FAIL,
 } from "../../constants/roomConsts";
+import { openNotification } from "../../utils/notification";
 
 export const getAllRooms =
   (keyword = "") =>
@@ -82,3 +86,36 @@ export const createRoomReview =
       });
     }
   };
+
+export const createRoom = (roomObj) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: CREATE_ROOM_REQUEST });
+
+    const { userInfo } = getState().userLoginReducer;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/rooms/create-room`,
+      roomObj,
+      config
+    );
+
+    dispatch({ type: CREATE_ROOM_SUCCESS });
+    openNotification("success", "Thêm phòng thành công");
+  } catch (err) {
+    openNotification("error", err.response.data.errors.message || err.message);
+    dispatch({
+      type: CREATE_ROOM_FAIL,
+      message:
+        err.response && err.response.data.errors.message
+          ? err.response.data.errors.message
+          : err.message,
+    });
+  }
+};

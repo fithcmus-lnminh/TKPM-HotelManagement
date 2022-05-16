@@ -3,6 +3,9 @@ import {
   CREATE_REVIEW_REQUEST,
   CREATE_REVIEW_RESET,
   CREATE_REVIEW_SUCCESS,
+  CREATE_ROOM_FAIL,
+  CREATE_ROOM_REQUEST,
+  CREATE_ROOM_SUCCESS,
   GET_ALL_ROOMS_FAIL,
   GET_ALL_ROOMS_REQUEST,
   GET_ALL_ROOMS_SUCCESS,
@@ -47,6 +50,19 @@ export const roomCreateReviewReducer = (state = {}, action) => {
       return { isLoading: false, errorMessage: action.message };
     case CREATE_REVIEW_RESET:
       return {};
+    default:
+      return state;
+  }
+};
+
+export const roomCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CREATE_ROOM_REQUEST:
+      return { isLoading: true };
+    case CREATE_ROOM_SUCCESS:
+      return { isLoading: false, isSuccess: true };
+    case CREATE_ROOM_FAIL:
+      return { isLoading: false, errorMessage: action.message };
     default:
       return state;
   }

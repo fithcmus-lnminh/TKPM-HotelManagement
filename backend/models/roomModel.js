@@ -24,8 +24,8 @@ const roomSchema = mongoose.Schema(
     type: {
       type: String,
       required: true,
-      default: "Single",
-      enum: ["Single", "Double", "Triple", "Quad"],
+      default: "Phòng đơn",
+      enum: ["Phòng đơn", "Phòng đôi", "Phòng ba", "Phòng bốn", "Phòng VIP"],
     },
     image: {
       type: String,

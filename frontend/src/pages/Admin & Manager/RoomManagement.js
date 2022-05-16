@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllRooms } from "../../redux/actions/roomAction";
+import { createRoom, getAllRooms } from "../../redux/actions/roomAction";
 import ReactLoading from "react-loading";
 import { useState } from "react";
 import { Uploader } from "uploader";
@@ -20,6 +20,11 @@ import Message from "../../components/Message";
 const RoomManagement = () => {
   const dispatch = useDispatch();
   const { isLoading, allRooms } = useSelector((state) => state.allRoomsReducer);
+  const {
+    isLoading: isLoadingCreateRoom,
+    isSuccess,
+    errorMessage,
+  } = useSelector((state) => state.roomCreateReducer);
   const [show, setShow] = useState(false);
   const [number, setNumber] = useState("");
   const [type, setType] = useState("Phòng đơn");
@@ -38,7 +43,19 @@ const RoomManagement = () => {
 
   useEffect(() => {
     dispatch(getAllRooms());
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    isSuccess && dispatch(getAllRooms());
+    if (!errorMessage && isSuccess) {
+      setNumber("");
+      setPrice("");
+      setMessage("");
+      setDesciption("");
+      setType("Phòng đơn");
+      handleClose();
+    }
+  }, [dispatch, isSuccess, errorMessage]);
 
   const dataSource = allRooms ? allRooms.rooms : [];
 
@@ -129,8 +146,7 @@ const RoomManagement = () => {
     else if (!description) setMessage("Vui lòng nhập mô tả");
     else if (!image) setMessage("Vui lòng upload hình ảnh");
     else {
-      console.log({ number, type, price, image, description });
-      handleClose();
+      dispatch(createRoom({ number, type, price, image, description }));
     }
   };
 
@@ -169,6 +185,9 @@ const RoomManagement = () => {
                 <Form onSubmit={submitHandler}>
                   <Modal.Body>
                     {message && <Message variant="danger">{message}</Message>}
+                    {errorMessage && (
+                      <Message variant="danger">{errorMessage}</Message>
+                    )}
                     <Row>
                       <Col>
                         <Form.Group controlId="number" className="">
@@ -248,7 +267,11 @@ const RoomManagement = () => {
                     </Row>
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button type="submit" variant="dark">
+                    <Button
+                      type="submit"
+                      variant="dark"
+                      disabled={isLoadingCreateRoom}
+                    >
                       Thêm phòng
                     </Button>
                   </Modal.Footer>
