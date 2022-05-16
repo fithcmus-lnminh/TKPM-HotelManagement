@@ -213,7 +213,7 @@ export const rentalBillByUserIdAndBillId = async (req, res, next) => {
   }
 };
 export const postCreateRoom = async (req, res, next) => {
-  const { number, type, image, price, status, description } = req.body;
+  const { number, type, image, price, description } = req.body;
 
   try {
     const existedRoom = Room.find({ number: number });
@@ -227,7 +227,7 @@ export const postCreateRoom = async (req, res, next) => {
       type,
       image,
       price,
-      status,
+      status: true,
       description,
     };
 
@@ -236,7 +236,6 @@ export const postCreateRoom = async (req, res, next) => {
         delete info[key];
       }
     }
-    console.log("info", info);
 
     const room = await Room.create({
       ...info,
