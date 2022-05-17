@@ -142,7 +142,7 @@ export const getAllEmp = async (req, res, next) => {
   try {
     const emp = await User.find({
       $or: [{ role: "Receptionist" }, { role: "Manager" }],
-    }).select("_id name email identity_card role");
+    }).select("_id name email identity_card role createdAt");
 
     console.log(emp);
 
@@ -160,7 +160,7 @@ export const getAllEmp = async (req, res, next) => {
 export const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find({ role: "User" }).select(
-      "_id name email identity_card avatar role"
+      "_id name email identity_card avatar role createdAt"
     );
 
     if (users.length > 0) {

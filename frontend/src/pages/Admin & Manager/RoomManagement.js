@@ -6,7 +6,6 @@ import { Popconfirm, Space, Table } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
-  SearchOutlined,
 } from "@ant-design/icons";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
