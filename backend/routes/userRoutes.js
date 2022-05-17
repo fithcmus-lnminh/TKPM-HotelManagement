@@ -5,7 +5,7 @@ import {
   getUserProfile,
   registerUser,
   updateProfile,
-  getAllManagers,
+  getAllEmp,
   getAllUsers,
   changePassword,
 } from "../controllers/userController.js";
@@ -18,9 +18,9 @@ router.post("/login", authUser);
 router.post("/register", registerUser);
 router.put("/profile", isAuth, updateProfile);
 router.put("/change-password", isAuth, changePassword);
-router.get("/:id", isAuth, getUserProfile);
 router.get("/profile", isAuth, isAdminOrManager, getUserProfile);
-router.get("/all-manager", isAuth, isAdmin, getAllManagers);
+router.get("/all-emp", isAuth, isAdmin, getAllEmp);
 router.get("/all-user", isAuth, isAdmin, getAllUsers);
+router.get("/:id", isAuth, getUserProfile);
 
 export default router;

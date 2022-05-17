@@ -3,6 +3,12 @@ import {
   CHANGE_PASSWORD_REQUEST,
   CHANGE_PASSWORD_SUCCESS,
   CHANGE_USER_LOGIN_NAME,
+  GET_ALL_CUSTOMER_FAIL,
+  GET_ALL_CUSTOMER_REQUEST,
+  GET_ALL_CUSTOMER_SUCCESS,
+  GET_ALL_EMPLOYEE_FAIL,
+  GET_ALL_EMPLOYEE_REQUEST,
+  GET_ALL_EMPLOYEE_SUCCESS,
   GET_USER_DETAILS_FAIL,
   GET_USER_DETAILS_REQUEST,
   GET_USER_DETAILS_RESET,
@@ -100,6 +106,32 @@ export const changePasswordReducer = (state = {}, action) => {
     case CHANGE_PASSWORD_SUCCESS:
       return { isLoading: false, isSuccess: true };
     case CHANGE_PASSWORD_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const customerReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_ALL_CUSTOMER_REQUEST:
+      return { isLoading: true };
+    case GET_ALL_CUSTOMER_SUCCESS:
+      return { isLoading: false, customers: action.data };
+    case GET_ALL_CUSTOMER_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const employeeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_ALL_EMPLOYEE_REQUEST:
+      return { isLoading: true };
+    case GET_ALL_EMPLOYEE_SUCCESS:
+      return { isLoading: false, employees: action.data };
+    case GET_ALL_EMPLOYEE_FAIL:
       return { isLoading: false, errorMessage: action.message };
     default:
       return state;

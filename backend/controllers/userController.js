@@ -138,14 +138,16 @@ export const updateProfile = async (req, res, next) => {
     next(err);
   }
 };
-export const getAllManagers = async (req, res, next) => {
+export const getAllEmp = async (req, res, next) => {
   try {
-    const managers = await User.find({ role: "Manager" }).select(
-      "_id name email identity_card avatar role"
-    );
+    const emp = await User.find({
+      $or: [{ role: "Receptionist" }, { role: "Manager" }],
+    }).select("_id name email identity_card role");
 
-    if (managers.length > 0) {
-      res.json(managers);
+    console.log(emp);
+
+    if (emp.length > 0) {
+      res.json(emp);
     } else {
       res.status(400);
       throw new Error("Không tìm thấy nhân viên.");

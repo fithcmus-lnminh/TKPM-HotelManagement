@@ -100,6 +100,17 @@ a:hover {
     background-color: #15355f !important;
 }
 
+.btn-outline-dark {
+    background-color: #fff;
+    color: #15355f;
+    border: 1px solid #15355f;
+}
+
+.btn-outline-dark:hover {
+    background-color: #15355f;
+    color: #fff
+}
+
 .text-italic {
     font-style: italic;
 }

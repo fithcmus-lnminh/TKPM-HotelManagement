@@ -18,6 +18,12 @@ import {
   CHANGE_PASSWORD_REQUEST,
   CHANGE_PASSWORD_SUCCESS,
   CHANGE_PASSWORD_FAIL,
+  GET_ALL_CUSTOMER_REQUEST,
+  GET_ALL_CUSTOMER_SUCCESS,
+  GET_ALL_CUSTOMER_FAIL,
+  GET_ALL_EMPLOYEE_REQUEST,
+  GET_ALL_EMPLOYEE_SUCCESS,
+  GET_ALL_EMPLOYEE_FAIL,
 } from "../../constants/userConsts";
 import { encode } from "js-base64";
 import { openNotification } from "../../utils/notification";
@@ -198,3 +204,57 @@ export const changeUserPassword =
       });
     }
   };
+
+export const getAllCustomer = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_ALL_CUSTOMER_REQUEST });
+
+    const { userInfo } = getState().userLoginReducer;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get("/api/users/all-user", config);
+
+    dispatch({ type: GET_ALL_CUSTOMER_SUCCESS, data: data });
+  } catch (err) {
+    dispatch({
+      type: GET_ALL_CUSTOMER_FAIL,
+      message:
+        err.response && err.response.data.errors.message
+          ? err.response.data.errors.message
+          : err.message,
+    });
+  }
+};
+
+export const getAllEmployee = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_ALL_EMPLOYEE_REQUEST });
+
+    const { userInfo } = getState().userLoginReducer;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get("/api/users/all-emp", config);
+
+    dispatch({ type: GET_ALL_EMPLOYEE_SUCCESS, data: data });
+  } catch (err) {
+    dispatch({
+      type: GET_ALL_EMPLOYEE_FAIL,
+      message:
+        err.response && err.response.data.errors.message
+          ? err.response.data.errors.message
+          : err.message,
+    });
+  }
+};
