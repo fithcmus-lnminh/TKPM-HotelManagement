@@ -49,9 +49,7 @@ const HomeNavbar = () => {
             <Link to="/" className={`px-3 ${color.text}`}>
               Trang chủ
             </Link>
-            <Link to="/rooms" className={`px-3 ${color.text}`}>
-              Xem phòng
-            </Link>
+
             {userInfo?.role === "Admin" ? (
               <>
                 <Link to="/room-management" className={`px-3 ${color.text}`}>
@@ -78,6 +76,9 @@ const HomeNavbar = () => {
               </>
             ) : (
               <>
+                <Link to="/rooms" className={`px-3 ${color.text}`}>
+                  Xem phòng
+                </Link>
                 <Link to="/contact" className={`px-3 ${color.text}`}>
                   Liên hệ
                 </Link>

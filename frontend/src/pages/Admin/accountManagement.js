@@ -6,7 +6,8 @@ import { Popconfirm, Space, Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAllCustomer, getAllEmployee } from "../../redux/actions/userAction";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
+import ReactLoading from "react-loading";
 
 const AccountManagement = () => {
   const [isManageCustomer, setIsManageCustomer] = useState(true);
@@ -120,14 +121,24 @@ const AccountManagement = () => {
             </Button>
           </div>
         </div>
-        <Table
-          className="mt-4"
-          dataSource={
-            isManageCustomer ? dataSourceCustomer : dataSourceEmployee
-          }
-          columns={columns}
-          pagination={{ pageSize: 5, showSizeChanger: false }}
-        />
+        {isLoadingCustomer || isLoadingEmployee ? (
+          <div className="d-flex justify-content-center mt-5">
+            <ReactLoading
+              color="black"
+              type="spin"
+              height="45px"
+            ></ReactLoading>
+          </div>
+        ) : (
+          <Table
+            className="mt-4"
+            dataSource={
+              isManageCustomer ? dataSourceCustomer : dataSourceEmployee
+            }
+            columns={columns}
+            pagination={{ pageSize: 5, showSizeChanger: false }}
+          />
+        )}
       </Container>
     </>
   );

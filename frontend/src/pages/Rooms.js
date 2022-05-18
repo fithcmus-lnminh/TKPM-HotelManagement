@@ -17,6 +17,8 @@ const Rooms = () => {
     (state) => state.allRoomsReducer
   );
 
+  const { userInfo } = useSelector((state) => state.userLoginReducer);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,7 +49,11 @@ const Rooms = () => {
           />
         </div>
 
-        <h2 className="mt-3">DANH SÁCH PHÒNG</h2>
+        <h2 className="mt-3">
+          {userInfo?.role === "Admin" || userInfo?.role === "Manager"
+            ? "XEM BÁO CÁO"
+            : "DANH SÁCH PHÒNG"}
+        </h2>
         {!allRooms && !isLoading && (
           <p
             className="text-danger"

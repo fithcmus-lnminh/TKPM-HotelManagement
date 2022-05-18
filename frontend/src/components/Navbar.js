@@ -30,14 +30,7 @@ const Navbar = () => {
             >
               Trang chủ
             </NavLink>
-            <NavLink
-              to="/rooms"
-              className={(nav) =>
-                nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
-              }
-            >
-              Xem phòng
-            </NavLink>
+
             {userInfo?.role === "Admin" ? (
               <>
                 <NavLink
@@ -86,6 +79,14 @@ const Navbar = () => {
               </>
             ) : (
               <>
+                <NavLink
+                  to="/rooms"
+                  className={(nav) =>
+                    nav.isActive ? "px-3 text-white fw-bold" : "px-3 text-gray"
+                  }
+                >
+                  Xem phòng
+                </NavLink>
                 <NavLink
                   to="/contact"
                   className={(nav) =>

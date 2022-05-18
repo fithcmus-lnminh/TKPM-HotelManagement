@@ -50,7 +50,9 @@ const RoomCard = (props) => {
           <Card.Text as="h3">${room.price}/ngày</Card.Text>
           <div className="text-center mt-4">
             {room?.status &&
-            (userInfo?.role === "User" || userInfo?.role === "Receptionist") ? (
+            (!userInfo ||
+              userInfo?.role === "User" ||
+              userInfo?.role === "Receptionist") ? (
               <Button
                 type="button"
                 className="btn btn-dark"
@@ -59,13 +61,21 @@ const RoomCard = (props) => {
                 Đặt phòng
               </Button>
             ) : !room.status &&
-              (userInfo?.role === "User" ||
+              (!userInfo ||
+                userInfo?.role === "User" ||
                 userInfo?.role === "Receptionist") ? (
               <p className="text-danger mb-0 pt-2">
                 <strong>Hết phòng</strong>
               </p>
             ) : (
-              <></>
+              <>
+                <Button type="button" className="btn btn-warning me-3">
+                  Doanh thu
+                </Button>
+                <Button type="button" className="btn btn-dark">
+                  Mật độ sử dụng
+                </Button>
+              </>
             )}
             <Modal
               show={show}

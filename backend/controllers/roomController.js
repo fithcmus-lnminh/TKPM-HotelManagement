@@ -257,8 +257,8 @@ export const postCreateRoom = async (req, res, next) => {
 };
 
 export const getRevenueReport = async (req, res, next) => {
-  const year = req.params[year];
-  const month = req.params[month];
+  const year = req.params.year;
+  const month = req.params.month;
   const days = daysInMonth(month, year);
 
   var startDate = year + "-" + pad2(month) + "-01 00:00:00.000";
@@ -338,16 +338,16 @@ export const postCreateRentalCard = async (req, res, next) => {
 };
 
 export const getDensityUseReport = async (req, res, next) => {
-  const roomId = req.params[roomId];
-  const year = req.params[year];
-  const month = req.params[month];
+  const roomId = req.params.roomId;
+  const year = req.params.year;
+  const month = req.params.month;
   const days = daysInMonth(month, year);
 
   var startDate = year + "-" + pad2(month) + "-01 00:00:00.000";
   var endDate = year + "-" + pad2(month) + "-" + pad2(days) + " 23:59:59.000";
 
   try {
-    const bills = await Bill.find({
+    const rentals = await RentalCard.find({
       room: roomId,
       createdAt: {
         $gte: startDate,
@@ -355,8 +355,8 @@ export const getDensityUseReport = async (req, res, next) => {
       },
     });
 
-    if (bills) {
-      res.status(200).json(bills.length);
+    if (rentals) {
+      res.status(200).json(rentals.length);
     } else {
       res.status(400);
       throw new Error(

@@ -3,10 +3,7 @@ import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 
 import { Popconfirm, Space, Table } from "antd";
-import {
-  EditOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createRoom, getAllRooms } from "../../redux/actions/roomAction";
@@ -24,21 +21,22 @@ const RoomManagement = () => {
     isSuccess,
     errorMessage,
   } = useSelector((state) => state.roomCreateReducer);
-  const [show, setShow] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [number, setNumber] = useState("");
   const [type, setType] = useState("Phòng đơn");
   const [image, setImage] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDesciption] = useState("");
   const [message, setMessage] = useState("");
+  const [show, setShow] = useState({});
 
   // Get production API keys from Upload.io
   const uploader = new Uploader({
     apiKey: "free",
   });
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
 
   useEffect(() => {
     dispatch(getAllRooms());
@@ -119,9 +117,37 @@ const RoomManagement = () => {
       width: "10%",
       render: (text, record) => (
         <Space size="middle">
-          <button className="btn btn-warning px-2" onClick={() => {}}>
+          <button
+            className="btn btn-warning px-2"
+            onClick={() => setShow({ ["showedit_" + record.number]: true })}
+          >
             <EditOutlined />
           </button>
+          <Modal
+            show={show["showedit_" + record.number]}
+            onHide={() => setShow({ ["showedit_" + record.number]: false })}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>CHỈNH SỬA PHÒNG</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p style={{ fontSize: "1rem" }}>
+                <strong>Số phòng</strong> {record.number}
+              </p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  setShow({ ["showedit_" + record.number]: false })
+                }
+              >
+                Đóng
+              </Button>
+            </Modal.Footer>
+          </Modal>
           <Popconfirm
             title="Bạn có chắc chắn muốn xóa phòng này không?"
             onConfirm={() => {}}
@@ -172,7 +198,7 @@ const RoomManagement = () => {
                 <i className="fas fa-plus me-2"></i>Thêm phòng
               </Button>
               <Modal
-                show={show}
+                show={showModal}
                 onHide={handleClose}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
