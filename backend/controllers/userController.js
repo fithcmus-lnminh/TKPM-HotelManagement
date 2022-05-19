@@ -98,13 +98,17 @@ export const updateProfile = async (req, res, next) => {
     const user = await User.findById(req.user._id);
     const { name, email, identity_card, dob, phone, address } = req.body;
 
-    const existedEmail = await User.find({ email });
-    const existedIDC = await User.find({ identity_card });
-    if (existedEmail) {
+    const existedEmail = await User.find({ email, _id: { $ne: req.user._id } });
+    const existedIDC = await User.find({
+      identity_card,
+      _id: { $ne: req.user._id },
+    });
+
+    if (existedEmail.length > 0) {
       res.status(400);
       throw new Error("Địa chỉ email đã tồn tại");
     }
-    if (existedIDC) {
+    if (existedIDC.length > 0) {
       res.status(400);
       throw new Error("CMND/CCCD đã tồn tại");
     }
