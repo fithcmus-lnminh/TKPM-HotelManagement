@@ -15,6 +15,8 @@ import {
   roomDetailsReducer,
   roomCreateReviewReducer,
   roomCreateReducer,
+  revenueReportReducer,
+  destinyReportReducer,
 } from "./reducers/roomReducer";
 import { navigateReducer } from "./reducers/navigateReducer";
 import {
@@ -43,6 +45,8 @@ const reducer = combineReducers({
   roomCreateReducer,
   customerReducer,
   employeeReducer,
+  revenueReportReducer,
+  destinyReportReducer,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

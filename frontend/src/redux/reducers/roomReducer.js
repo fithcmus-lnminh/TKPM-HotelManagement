@@ -9,6 +9,12 @@ import {
   GET_ALL_ROOMS_FAIL,
   GET_ALL_ROOMS_REQUEST,
   GET_ALL_ROOMS_SUCCESS,
+  GET_DESTINY_FAIL,
+  GET_DESTINY_REQUEST,
+  GET_DESTINY_SUCCESS,
+  GET_REVENUE_FAIL,
+  GET_REVENUE_REQUEST,
+  GET_REVENUE_SUCCESS,
   GET_ROOM_DETAILS_FAIL,
   GET_ROOM_DETAILS_REQUEST,
   GET_ROOM_DETAILS_SUCCESS,
@@ -62,6 +68,32 @@ export const roomCreateReducer = (state = {}, action) => {
     case CREATE_ROOM_SUCCESS:
       return { isLoading: false, isSuccess: true };
     case CREATE_ROOM_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const revenueReportReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_REVENUE_REQUEST:
+      return { isLoading: true };
+    case GET_REVENUE_SUCCESS:
+      return { isLoading: false, revenue: action.data };
+    case GET_REVENUE_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const destinyReportReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_DESTINY_REQUEST:
+      return { isLoading: true };
+    case GET_DESTINY_SUCCESS:
+      return { isLoading: false, destiny: action.data };
+    case GET_DESTINY_FAIL:
       return { isLoading: false, errorMessage: action.message };
     default:
       return state;

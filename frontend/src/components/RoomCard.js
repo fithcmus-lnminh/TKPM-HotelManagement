@@ -69,12 +69,7 @@ const RoomCard = (props) => {
               </p>
             ) : (
               <>
-                <Button type="button" className="btn btn-warning me-3">
-                  Doanh thu
-                </Button>
-                <Button type="button" className="btn btn-dark">
-                  Mật độ sử dụng
-                </Button>
+               
               </>
             )}
             <Modal

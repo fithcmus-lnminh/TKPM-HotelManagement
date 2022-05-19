@@ -124,6 +124,7 @@ const RoomManagement = () => {
             <EditOutlined />
           </button>
           <Modal
+            size="lg"
             show={show["showedit_" + record.number]}
             onHide={() => setShow({ ["showedit_" + record.number]: false })}
             aria-labelledby="contained-modal-title-vcenter"
@@ -133,9 +134,48 @@ const RoomManagement = () => {
               <Modal.Title>CHỈNH SỬA PHÒNG</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <p style={{ fontSize: "1rem" }}>
-                <strong>Số phòng</strong> {record.number}
-              </p>
+              <Row>
+                <Col>
+                  <Form.Group controlId="number" className="">
+                    <Form.Label className="fw-bold">Số phòng</Form.Label>
+                    <Form.Control
+                      type="number"
+                      placeholder="Nhập số phòng"
+                      value={number}
+                      onChange={(e) => setNumber(e.target.value)}
+                    ></Form.Control>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="type" className="">
+                    <Form.Label className="fw-bold">Loại phòng</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={number}
+                      onChange={(e) => setType(e.target.value)}
+                    >
+                      <option value="Phòng đơn">Phòng đơn</option>
+                      <option value="Phòng đôi">Phòng đôi</option>
+                      <option value="Phòng ba">Phòng ba</option>
+                      <option value="Phòng bốn">Phòng bốn</option>
+                      <option value="Phòng VIP">Phòng VIP</option>
+                    </Form.Control>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="price" className="">
+                    <Form.Label className="fw-bold">
+                      Đơn giá theo ngày ($)
+                    </Form.Label>
+                    <Form.Control
+                      type="number"
+                      placeholder="Nhập đơn giá"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    ></Form.Control>
+                  </Form.Group>
+                </Col>
+              </Row>
             </Modal.Body>
             <Modal.Footer>
               <Button

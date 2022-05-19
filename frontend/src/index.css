@@ -114,3 +114,8 @@ a:hover {
 .text-italic {
     font-style: italic;
 }
+
+.month-year-picker {
+    margin-left: 0 !important;
+    margin-top: 1rem !important;
+}

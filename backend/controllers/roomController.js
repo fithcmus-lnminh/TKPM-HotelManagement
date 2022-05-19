@@ -274,7 +274,7 @@ export const getRevenueReport = async (req, res, next) => {
 
     if (bills) {
       let revenue = 0;
-      for await (const bill of bills) {
+      for (const bill of bills) {
         revenue += bill.totalPrice;
       }
       res.status(200).json(revenue);

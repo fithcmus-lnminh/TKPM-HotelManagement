@@ -12,6 +12,12 @@ import {
   CREATE_ROOM_REQUEST,
   CREATE_ROOM_SUCCESS,
   CREATE_ROOM_FAIL,
+  GET_REVENUE_SUCCESS,
+  GET_REVENUE_FAIL,
+  GET_REVENUE_REQUEST,
+  GET_DESTINY_REQUEST,
+  GET_DESTINY_SUCCESS,
+  GET_DESTINY_FAIL,
 } from "../../constants/roomConsts";
 import { openNotification } from "../../utils/notification";
 
@@ -119,3 +125,65 @@ export const createRoom = (roomObj) => async (dispatch, getState) => {
     });
   }
 };
+
+export const getRevenue = (year, month) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_REVENUE_REQUEST });
+
+    const { userInfo } = getState().userLoginReducer;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/rooms/revenue-report/${year}/${month}`,
+      config
+    );
+
+    dispatch({ type: GET_REVENUE_SUCCESS, data: data });
+  } catch (err) {
+    dispatch({
+      type: GET_REVENUE_FAIL,
+      message:
+        err.response && err.response.data.errors.message
+          ? err.response.data.errors.message
+          : err.message,
+    });
+  }
+};
+
+export const getDensity =
+  (roomId, year, month) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: GET_DESTINY_REQUEST });
+
+      const { userInfo } = getState().userLoginReducer;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        `/api/rooms/density-use-report/${roomId}/${year}/${month}`,
+        config
+      );
+
+      dispatch({ type: GET_DESTINY_SUCCESS, data: data });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: GET_DESTINY_FAIL,
+        message:
+          err.response && err.response.data.errors.message
+            ? err.response.data.errors.message
+            : err.message,
+      });
+    }
+  };
