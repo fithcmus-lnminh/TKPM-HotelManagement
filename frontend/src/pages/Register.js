@@ -37,8 +37,6 @@ const Register = () => {
   const dispatch = useDispatch();
 
   const submitHandler = (e) => {
-    console.log(name, email, password, idNumber, type);
-    console.log(email, password);
     e.preventDefault();
     setMessage(null);
     if (name === "") setMessage("Vui lòng nhập họ tên");

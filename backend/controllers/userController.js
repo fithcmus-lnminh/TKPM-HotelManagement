@@ -39,6 +39,15 @@ export async function registerUser(req, res, next) {
       throw new Error("Email đã tồn tại");
     }
 
+    const existedIDC = await User.find({
+      identity_card,
+    });
+
+    if (existedIDC.length > 0) {
+      res.status(400);
+      throw new Error("CMND/CCCD đã tồn tại");
+    }
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = await User.create({
@@ -195,6 +204,51 @@ export const changePassword = async (req, res, next) => {
     } else {
       res.status(400);
       throw new Error("Mật khẩu cũ không đúng");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const createEmployee = async (req, res, next) => {
+  const { name, identity_card, email, role } = req.body;
+
+  try {
+    const existedEmail = await User.find({ email });
+    const existedIDC = await User.find({
+      identity_card,
+    });
+
+    if (existedEmail.length > 0) {
+      res.status(400);
+      throw new Error("Địa chỉ email đã tồn tại");
+    }
+    if (existedIDC.length > 0) {
+      res.status(400);
+      throw new Error("CMND/CCCD đã tồn tại");
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash("123456", salt);
+    const emp = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      identity_card,
+      role,
+    });
+
+    if (emp) {
+      res.status(201).json({
+        _id: emp._id,
+        name: emp.name,
+        email: emp.email,
+        role: emp.role,
+        identity_card: emp.identity_card,
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid User Data");
     }
   } catch (err) {
     next(err);

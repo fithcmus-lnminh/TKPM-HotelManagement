@@ -8,6 +8,7 @@ import {
   getAllEmp,
   getAllUsers,
   changePassword,
+  createEmployee,
 } from "../controllers/userController.js";
 import { isAdminOrManager } from "../middlewares/isAdminOrManager.js";
 import { isAdmin } from "../middlewares/isAdmin.js";
@@ -21,6 +22,7 @@ router.put("/change-password", isAuth, changePassword);
 router.get("/profile", isAuth, isAdminOrManager, getUserProfile);
 router.get("/all-emp", isAuth, isAdmin, getAllEmp);
 router.get("/all-user", isAuth, isAdmin, getAllUsers);
+router.post("/create-emp", isAuth, isAdmin, createEmployee)
 router.get("/:id", isAuth, getUserProfile);
 
 export default router;
