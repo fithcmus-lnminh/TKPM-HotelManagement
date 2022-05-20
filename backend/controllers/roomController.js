@@ -393,11 +393,18 @@ export const deleteRoom = async (req, res, next) => {
 };
 
 export const updateRoom = async (req, res, next) => {
-  const { number, type, image, price, status, description } = req.body;
+  const { number, type, image, price, description } = req.body;
 
   try {
     const roomId = req.params.roomId;
     const rooms = await Room.find();
+
+    const existedRoom = await Room.find({ number });
+
+    if (existedRoom.length > 0) {
+      res.status(400);
+      throw new Error("Số phòng đã tồn tại");
+    }
 
     const flag = rooms.findIndex((room) => {
       return room._id.toString() === roomId;
@@ -412,7 +419,6 @@ export const updateRoom = async (req, res, next) => {
         type,
         image,
         price,
-        status,
         description,
       };
 
@@ -425,11 +431,7 @@ export const updateRoom = async (req, res, next) => {
       const roomUpdate = await Room.updateOne({ _id: roomId }, info);
 
       if (roomUpdate) {
-        res.status(201).json({
-          room: roomUpdate,
-          success: true,
-          message: "Cập nhật thông tin phòng thành công",
-        });
+        res.status(201).json(roomUpdate);
       } else {
         res.status(400);
         throw new Error("Không thể cập nhật được phòng này.");

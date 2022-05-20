@@ -18,6 +18,9 @@ import {
   GET_ROOM_DETAILS_FAIL,
   GET_ROOM_DETAILS_REQUEST,
   GET_ROOM_DETAILS_SUCCESS,
+  UPDATE_ROOM_FAIL,
+  UPDATE_ROOM_REQUEST,
+  UPDATE_ROOM_SUCCESS,
 } from "../../constants/roomConsts";
 
 export const allRoomsReducer = (state = {}, action) => {
@@ -94,6 +97,19 @@ export const destinyReportReducer = (state = {}, action) => {
     case GET_DESTINY_SUCCESS:
       return { isLoading: false, destiny: action.data };
     case GET_DESTINY_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const updateRoomReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_ROOM_REQUEST:
+      return { isLoading: true };
+    case UPDATE_ROOM_SUCCESS:
+      return { isLoading: false, isSuccess: true, updatedRoom: action.data };
+    case UPDATE_ROOM_FAIL:
       return { isLoading: false, errorMessage: action.message };
     default:
       return state;

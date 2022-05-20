@@ -18,6 +18,9 @@ import {
   GET_DESTINY_REQUEST,
   GET_DESTINY_SUCCESS,
   GET_DESTINY_FAIL,
+  UPDATE_ROOM_REQUEST,
+  UPDATE_ROOM_SUCCESS,
+  UPDATE_ROOM_FAIL,
 } from "../../constants/roomConsts";
 import { openNotification } from "../../utils/notification";
 
@@ -187,3 +190,36 @@ export const getDensity =
       });
     }
   };
+
+export const updateRoom = (id, obj) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: UPDATE_ROOM_REQUEST });
+
+    const { userInfo } = getState().userLoginReducer;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/rooms/update-room/${id}`,
+      obj,
+      config
+    );
+
+    dispatch({ type: UPDATE_ROOM_SUCCESS, data: data });
+    openNotification("success", "Cập nhật thành công");
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: UPDATE_ROOM_FAIL,
+      message:
+        err.response && err.response.data.errors.message
+          ? err.response.data.errors.message
+          : err.message,
+    });
+  }
+};

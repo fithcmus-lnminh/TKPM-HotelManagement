@@ -119,3 +119,9 @@ a:hover {
     margin-left: 0 !important;
     margin-top: 1rem !important;
 }
+
+.change-text {
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 1rem;
+}

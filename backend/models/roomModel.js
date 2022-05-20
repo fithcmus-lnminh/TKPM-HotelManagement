@@ -52,6 +52,10 @@ const roomSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
+    description: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
