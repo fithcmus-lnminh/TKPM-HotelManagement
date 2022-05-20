@@ -3,6 +3,9 @@ import {
   CHANGE_PASSWORD_REQUEST,
   CHANGE_PASSWORD_SUCCESS,
   CHANGE_USER_LOGIN_NAME,
+  CREATE_EMPLOYEE_FAIL,
+  CREATE_EMPLOYEE_REQUEST,
+  CREATE_EMPLOYEE_SUCCESS,
   GET_ALL_CUSTOMER_FAIL,
   GET_ALL_CUSTOMER_REQUEST,
   GET_ALL_CUSTOMER_SUCCESS,
@@ -132,6 +135,19 @@ export const employeeReducer = (state = {}, action) => {
     case GET_ALL_EMPLOYEE_SUCCESS:
       return { isLoading: false, employees: action.data };
     case GET_ALL_EMPLOYEE_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const createEmployeeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CREATE_EMPLOYEE_REQUEST:
+      return { isLoading: true };
+    case CREATE_EMPLOYEE_SUCCESS:
+      return { isLoading: false, isSuccess: true };
+    case CREATE_EMPLOYEE_FAIL:
       return { isLoading: false, errorMessage: action.message };
     default:
       return state;

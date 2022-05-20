@@ -24,6 +24,9 @@ import {
   GET_ALL_EMPLOYEE_REQUEST,
   GET_ALL_EMPLOYEE_SUCCESS,
   GET_ALL_EMPLOYEE_FAIL,
+  CREATE_EMPLOYEE_REQUEST,
+  CREATE_EMPLOYEE_SUCCESS,
+  CREATE_EMPLOYEE_FAIL,
 } from "../../constants/userConsts";
 import { encode } from "js-base64";
 import { openNotification } from "../../utils/notification";
@@ -251,6 +254,35 @@ export const getAllEmployee = () => async (dispatch, getState) => {
   } catch (err) {
     dispatch({
       type: GET_ALL_EMPLOYEE_FAIL,
+      message:
+        err.response && err.response.data.errors.message
+          ? err.response.data.errors.message
+          : err.message,
+    });
+  }
+};
+
+export const createEmployee = (obj) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: CREATE_EMPLOYEE_REQUEST });
+
+    const { userInfo } = getState().userLoginReducer;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post("/api/users/create-emp", obj, config);
+    console.log(data);
+
+    dispatch({ type: CREATE_EMPLOYEE_SUCCESS });
+    openNotification("success", "Thêm nhân viên thành công");
+  } catch (err) {
+    dispatch({
+      type: CREATE_EMPLOYEE_FAIL,
       message:
         err.response && err.response.data.errors.message
           ? err.response.data.errors.message

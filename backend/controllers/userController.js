@@ -160,7 +160,7 @@ export const getAllEmp = async (req, res, next) => {
     console.log(emp);
 
     if (emp.length > 0) {
-      res.json(emp);
+      res.json(emp.reverse());
     } else {
       res.status(400);
       throw new Error("Không tìm thấy nhân viên.");
@@ -177,7 +177,7 @@ export const getAllUsers = async (req, res, next) => {
     );
 
     if (users.length > 0) {
-      res.json(users);
+      res.json(users.reverse());
     } else {
       res.status(400);
       throw new Error("Không tìm thấy người dùng.");

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import { Popconfirm, Space, Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,10 +8,18 @@ import { useEffect } from "react";
 import { getAllCustomer, getAllEmployee } from "../../redux/actions/userAction";
 import { DeleteOutlined } from "@ant-design/icons";
 import ReactLoading from "react-loading";
+import Message from "../../components/Message";
+import { createEmployee } from "../../redux/actions/userAction";
 
 const AccountManagement = () => {
   const [isManageCustomer, setIsManageCustomer] = useState(true);
   const [isManageEmployee, setIsManageEmployee] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [message, setMessage] = useState("");
+  const [name, setName] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("Receptionist");
 
   const { isLoading: isLoadingCustomer, customers } = useSelector(
     (state) => state.customerReducer
@@ -19,12 +27,38 @@ const AccountManagement = () => {
   const { isLoading: isLoadingEmployee, employees } = useSelector(
     (state) => state.employeeReducer
   );
+  const {
+    isLoading: isLoadingCreateEmployee,
+    isSuccess,
+    errorMessage,
+  } = useSelector((state) => state.createEmployeeReducer);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllCustomer());
     dispatch(getAllEmployee());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setEmail("");
+      setIdNumber("");
+      setName("");
+      setRole("Receptionist");
+      handleClose();
+      dispatch(getAllEmployee());
+      setIsManageCustomer(false);
+      setIsManageEmployee(true);
+    }
+  }, [dispatch, isSuccess]);
+
+  const handleClose = () => {
+    setShowModal(false);
+  };
+  const handleShow = () => {
+    setShowModal(true);
+  };
 
   const dataSourceCustomer = customers ?? [];
   const dataSourceEmployee = employees ?? [];
@@ -85,6 +119,18 @@ const AccountManagement = () => {
     },
   ];
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    if (!name) setMessage("Vui lòng nhập tên");
+    else if (!idNumber) setMessage("Vui lòng nhập CMND/CCCD");
+    else if (!email) setMessage("Vui lòng nhập email");
+    else {
+      setMessage("");
+      dispatch(createEmployee({ name, identity_card: idNumber, email, role }));
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -116,9 +162,88 @@ const AccountManagement = () => {
             </Button>
           </div>
           <div>
-            <Button variant="success">
+            <Button variant="success" onClick={handleShow}>
               <i className="fas fa-plus me-2"></i>Thêm nhân viên
             </Button>
+            <Modal
+              show={showModal}
+              onHide={handleClose}
+              size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>THÊM NHÂN VIÊN</Modal.Title>
+              </Modal.Header>
+              <Form onSubmit={submitHandler}>
+                <Modal.Body>
+                  {message && <Message variant="danger">{message}</Message>}
+                  {errorMessage && (
+                    <Message variant="danger">{errorMessage}</Message>
+                  )}
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="name" className="">
+                        <Form.Label className="fw-bold">Họ tên</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="Nhập họ tên"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group controlId="role" className="">
+                        <Form.Label className="fw-bold">
+                          Loại nhân viên
+                        </Form.Label>
+                        <Form.Control
+                          as="select"
+                          value={role}
+                          onChange={(e) => setRole(e.target.value)}
+                        >
+                          <option value="Receptionist">Nhân viên lễ tân</option>
+                          <option value="Manager">Quản lý</option>
+                        </Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row className="mt-3">
+                    <Col>
+                      <Form.Group controlId="idNumber">
+                        <Form.Label className="fw-bold">CMND/CCCD</Form.Label>
+                        <Form.Control
+                          type="number"
+                          placeholder="Nhập CMND/CCCD"
+                          value={idNumber}
+                          onChange={(e) => setIdNumber(e.target.value)}
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group controlId="email">
+                        <Form.Label className="fw-bold">Email</Form.Label>
+                        <Form.Control
+                          type="email"
+                          placeholder="Nhập email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <p className="text-italic mt-3">
+                    Mật khẩu mặc định của nhân viên là 123456
+                  </p>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button type="submit" variant="dark">
+                    Thêm nhân viên
+                  </Button>
+                </Modal.Footer>
+              </Form>
+            </Modal>
           </div>
         </div>
         {isLoadingCustomer || isLoadingEmployee ? (

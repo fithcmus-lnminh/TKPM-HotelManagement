@@ -9,6 +9,7 @@ import {
   changePasswordReducer,
   customerReducer,
   employeeReducer,
+  createEmployeeReducer,
 } from "./reducers/userReducer";
 import {
   allRoomsReducer,
@@ -51,6 +52,7 @@ const reducer = combineReducers({
   destinyReportReducer,
   updateRoomReducer,
   deleteRoomReducer,
+  createEmployeeReducer,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
