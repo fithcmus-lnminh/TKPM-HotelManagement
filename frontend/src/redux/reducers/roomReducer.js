@@ -6,6 +6,9 @@ import {
   CREATE_ROOM_FAIL,
   CREATE_ROOM_REQUEST,
   CREATE_ROOM_SUCCESS,
+  DELETE_ROOM_FAIL,
+  DELETE_ROOM_REQUEST,
+  DELETE_ROOM_SUCCESS,
   GET_ALL_ROOMS_FAIL,
   GET_ALL_ROOMS_REQUEST,
   GET_ALL_ROOMS_SUCCESS,
@@ -110,6 +113,19 @@ export const updateRoomReducer = (state = {}, action) => {
     case UPDATE_ROOM_SUCCESS:
       return { isLoading: false, isSuccess: true, updatedRoom: action.data };
     case UPDATE_ROOM_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const deleteRoomReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DELETE_ROOM_REQUEST:
+      return { isLoading: true };
+    case DELETE_ROOM_SUCCESS:
+      return { isLoading: false, isSuccess: true };
+    case DELETE_ROOM_FAIL:
       return { isLoading: false, errorMessage: action.message };
     default:
       return state;

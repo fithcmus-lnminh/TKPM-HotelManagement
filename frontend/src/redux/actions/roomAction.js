@@ -21,6 +21,9 @@ import {
   UPDATE_ROOM_REQUEST,
   UPDATE_ROOM_SUCCESS,
   UPDATE_ROOM_FAIL,
+  DELETE_ROOM_SUCCESS,
+  DELETE_ROOM_FAIL,
+  DELETE_ROOM_REQUEST,
 } from "../../constants/roomConsts";
 import { openNotification } from "../../utils/notification";
 
@@ -216,6 +219,34 @@ export const updateRoom = (id, obj) => async (dispatch, getState) => {
     console.log(err);
     dispatch({
       type: UPDATE_ROOM_FAIL,
+      message:
+        err.response && err.response.data.errors.message
+          ? err.response.data.errors.message
+          : err.message,
+    });
+  }
+};
+
+export const deleteRoom = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: DELETE_ROOM_REQUEST });
+
+    const { userInfo } = getState().userLoginReducer;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.delete(`/api/rooms/delete-room/${id}`, config);
+
+    dispatch({ type: DELETE_ROOM_SUCCESS });
+    openNotification("success", "Xóa phòng thành công");
+  } catch (err) {
+    dispatch({
+      type: DELETE_ROOM_FAIL,
       message:
         err.response && err.response.data.errors.message
           ? err.response.data.errors.message

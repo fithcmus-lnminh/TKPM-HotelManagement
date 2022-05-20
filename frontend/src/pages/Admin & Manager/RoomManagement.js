@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createRoom,
+  deleteRoom,
   getAllRooms,
   updateRoom,
 } from "../../redux/actions/roomAction";
@@ -38,6 +39,11 @@ const RoomManagement = () => {
     isSuccess: isSuccessUpdateRoom,
     errorMessage: errorUpdateRoom,
   } = useSelector((state) => state.updateRoomReducer);
+  const {
+    isLoading: isLoadingDeleteRoom,
+    isSuccess: isSuccessDeleteRoom,
+    errorMessage: errorDeleteRoom,
+  } = useSelector((state) => state.deleteRoomReducer);
 
   const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState("");
@@ -73,7 +79,8 @@ const RoomManagement = () => {
   }, []);
 
   useEffect(() => {
-    (isSuccess || isSuccessUpdateRoom) && dispatch(getAllRooms());
+    (isSuccess || isSuccessUpdateRoom || isSuccessDeleteRoom) &&
+      dispatch(getAllRooms());
     if (
       (!errorMessage && isSuccess) ||
       (!errorUpdateRoom && isSuccessUpdateRoom)
@@ -85,7 +92,14 @@ const RoomManagement = () => {
       setType("Phòng đơn");
       handleClose();
     }
-  }, [dispatch, isSuccess, isSuccessUpdateRoom, errorMessage, errorUpdateRoom]);
+  }, [
+    dispatch,
+    isSuccess,
+    isSuccessUpdateRoom,
+    errorMessage,
+    errorUpdateRoom,
+    isSuccessDeleteRoom,
+  ]);
 
   const submitEditHandler = (e) => {
     e.preventDefault();
@@ -321,7 +335,9 @@ const RoomManagement = () => {
           </Modal>
           <Popconfirm
             title="Bạn có chắc chắn muốn xóa phòng này không?"
-            onConfirm={() => {}}
+            onConfirm={() => {
+              dispatch(deleteRoom(record._id));
+            }}
             okText="Xóa"
             cancelText="Hủy"
           >
