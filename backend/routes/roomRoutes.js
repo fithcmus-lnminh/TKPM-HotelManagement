@@ -17,6 +17,9 @@ import {
   deleteRoom,
   updateToPaid,
   createRoomReview,
+  cancelRoom,
+  getCancelInfo,
+  getTopRooms,
 } from "../controllers/roomController.js";
 import { isAdminOrManager } from "../middlewares/isAdminOrManager.js";
 
@@ -42,7 +45,10 @@ router.get("/rental-card", getAllRentalCard);
 router.get("/rental-card/:userId", getRentalCardById);
 router.post("/create-rental-card", isAuth, postCreateRentalCard);
 router.get("/get-rooms-by-type/:type", getRoomByType);
+router.get("/get-top-rooms", getTopRooms);
 router.post("/create-room", isAuth, isAdminOrManager, postCreateRoom);
+router.post("/cancel-room/:rentalId", isAuth, cancelRoom);
+router.get("/cancel-room/:userId", isAuth, getCancelInfo);
 router.put("/update-room/:roomId", isAuth, isAdminOrManager, updateRoom);
 router.delete("/delete-room/:roomId", isAuth, isAdminOrManager, deleteRoom);
 router.get("/:number", getRoomByNumber);

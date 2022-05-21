@@ -7,10 +7,17 @@ const cancelSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
-    rental_card: {
-      type: mongoose.Schema.Types.ObjectId,
+    roomNumber: {
+      type: Number,
       required: true,
-      ref: "RentalCard",
+    },
+    startDate: {
+      type: Date,
+      required: true,
+    },
+    numOfDates: {
+      type: Number,
+      required: true,
     },
     date: {
       type: Date,

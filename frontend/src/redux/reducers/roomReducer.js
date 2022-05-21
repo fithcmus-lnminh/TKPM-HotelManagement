@@ -21,6 +21,9 @@ import {
   GET_ROOM_DETAILS_FAIL,
   GET_ROOM_DETAILS_REQUEST,
   GET_ROOM_DETAILS_SUCCESS,
+  GET_TOP_ROOMS_FAIL,
+  GET_TOP_ROOMS_REQUEST,
+  GET_TOP_ROOMS_SUCCESS,
   UPDATE_ROOM_FAIL,
   UPDATE_ROOM_REQUEST,
   UPDATE_ROOM_SUCCESS,
@@ -126,6 +129,19 @@ export const deleteRoomReducer = (state = {}, action) => {
     case DELETE_ROOM_SUCCESS:
       return { isLoading: false, isSuccess: true };
     case DELETE_ROOM_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const topRoomsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_TOP_ROOMS_REQUEST:
+      return { isLoading: true };
+    case GET_TOP_ROOMS_SUCCESS:
+      return { isLoading: false, topRooms: action.data };
+    case GET_TOP_ROOMS_FAIL:
       return { isLoading: false, errorMessage: action.message };
     default:
       return state;

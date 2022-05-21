@@ -9,11 +9,15 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import ReactLoading from "react-loading";
 import {
+  cancelRental,
   getBillByUserId,
+  getCancelRental,
   getRentalCardByUserId,
+  payBill,
 } from "../redux/actions/rentalAction";
-import { Table } from "antd";
+import { Popconfirm, Table } from "antd";
 import { PayPalButton } from "react-paypal-button-v2";
+import axios from "axios";
 
 const UserProfile = () => {
   const [name, setName] = useState("");
@@ -27,6 +31,7 @@ const UserProfile = () => {
   const [message, setMessage] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [show, setShow] = useState({});
+  const [sdkReady, setSdkReady] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -49,6 +54,15 @@ const UserProfile = () => {
     (state) => state.updateUserProfileReducer
   );
 
+  const { isLoading: isLoadingGetCancel, cancelInfo } = useSelector(
+    (state) => state.getCancelRentalReducer
+  );
+
+  const { isSuccess } = useSelector((state) => state.cancelRentalReducer);
+  const { isSuccess: isSuccessPayment } = useSelector(
+    (state) => state.paymentReducer
+  );
+
   // const updateProfileReducer = useSelector(
   //   (state) => state.updateUserProfileReducer
   // );
@@ -69,11 +83,43 @@ const UserProfile = () => {
         userProfile.customerType && setCustomerType(userProfile.customerType);
         userProfile.role && setRole(userProfile.role);
       }
+      dispatch(getCancelRental(userInfo?._id));
       dispatch(getRentalCardByUserId(userInfo?._id));
       dispatch(getBillByUserId(userInfo?._id));
     }
     updateError && setIsEdit(true);
   }, [userInfo, userProfile, dispatch, navigate, updateError]);
+
+  useEffect(() => {
+    if ((isSuccess && userInfo) || isSuccessPayment) {
+      dispatch(getCancelRental(userInfo?._id));
+      dispatch(getRentalCardByUserId(userInfo?._id));
+      dispatch(getBillByUserId(userInfo?._id));
+    }
+  }, [dispatch, isSuccess, userInfo, isSuccessPayment]);
+
+  useEffect(() => {
+    const addPaypalScript = async (req, res) => {
+      const { data: clientId } = await axios.get("/api/config/paypal");
+      //adding script for recognize paypal
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+      script.async = true;
+      script.onload = () => {
+        setSdkReady(true);
+      };
+      document.body.appendChild(script);
+    };
+
+    if (!billInfo?.isPaid) {
+      if (!window.paypal) {
+        addPaypalScript();
+      } else {
+        setSdkReady(true);
+      }
+    }
+  });
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -117,6 +163,7 @@ const UserProfile = () => {
 
   const dataSourceRental = [];
   const dataSourceBill = [];
+  const dataSourceCancel = [];
   if (rentalInfo) {
     for (let item of rentalInfo.rentalCard) {
       let endDate = new Date(item.startDate);
@@ -146,6 +193,19 @@ const UserProfile = () => {
     }
   }
 
+  if (cancelInfo) {
+    for (let item of cancelInfo) {
+      dataSourceCancel.push({
+        _id: item._id,
+        user_cancel: item.user_cancel.name,
+        roomNumber: item.roomNumber,
+        startDate: new Date(item.startDate).toLocaleString(),
+        numOfDates: item.numOfDates,
+        date: new Date(item.date).toLocaleString(),
+      });
+    }
+  }
+
   const columnsRental = [
     {
       title: "Số phòng",
@@ -164,6 +224,34 @@ const UserProfile = () => {
       dataIndex: "endDate",
       key: "endDate",
       width: "20%",
+    },
+    {
+      title: "",
+      dataIndex: "action",
+      key: "action",
+      width: "15%",
+      render: (text, record, index) => {
+        const date1 = new Date(record.startDate);
+        const date2 = new Date(record.endDate);
+        const date3 = new Date();
+        if (date3 < date2 && date3 > date1)
+          return (
+            <Popconfirm
+              title="Bạn có chắc chắn muốn hủy đặt phòng này không?"
+              onConfirm={() => {
+                dispatch(cancelRental(record._id));
+              }}
+              okText="Đồng ý"
+              cancelText="Hủy"
+            >
+              <Button variant="danger">
+                <i className="fas fa-xmark me-2"></i>
+                Hủy phòng
+              </Button>
+            </Popconfirm>
+          );
+        else return "";
+      },
     },
   ];
 
@@ -241,10 +329,22 @@ const UserProfile = () => {
                 <p style={{ fontSize: "1rem" }} className="mb-3">
                   <strong>TỔNG TIỀN:</strong> ${record.totalPrice}
                 </p>
-                <PayPalButton
-                  amount={record.totalPrice}
-                  // onSuccess={successPaymentHandler}
-                />
+                {!sdkReady ? (
+                  <ReactLoading
+                    color="black"
+                    type="bars"
+                    height="24px"
+                    className="mb-4"
+                  ></ReactLoading>
+                ) : (
+                  <PayPalButton
+                    amount={record.totalPrice}
+                    onSuccess={(paymentResult) => {
+                      dispatch(payBill(record._id, paymentResult));
+                      setShow({ ["showpay_" + record._id]: false });
+                    }}
+                  />
+                )}
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
@@ -259,7 +359,9 @@ const UserProfile = () => {
             >
               <Button
                 variant="dark"
-                onClick={() => setShow({ ["show_" + record._id]: true })}
+                onClick={() => {
+                  setShow({ ["show_" + record._id]: true });
+                }}
               >
                 Chi tiết
               </Button>
@@ -313,6 +415,44 @@ const UserProfile = () => {
       },
     },
   ];
+
+  const columnsCancel = [
+    {
+      title: "Số phòng",
+      dataIndex: "roomNumber",
+      key: "roomNumber",
+      width: "15%",
+    },
+    {
+      title: "Ngày bắt đầu đặt",
+      dataIndex: "startDate",
+      key: "startDate",
+      width: "25%",
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "numOfDates",
+      key: "numOfDates",
+      width: "13%",
+      render: (text, record, index) => {
+        return text + " ngày";
+      },
+    },
+    {
+      title: "Người hủy",
+      dataIndex: "user_cancel",
+      key: "user_cancel",
+    },
+    {
+      title: "Ngày hủy",
+      dataIndex: "date",
+      key: "date",
+    },
+  ];
+
+  // const successPaymentHandler = (paymentResult) => {
+  //   billId && dispatch(payBill(billId, paymentResult));
+  // };
 
   return (
     <>
@@ -518,6 +658,24 @@ const UserProfile = () => {
                   columns={columnsBill}
                 />
               )}
+              {cancelInfo?.length > 0 &&
+                (isLoadingGetCancel ? (
+                  <ReactLoading
+                    color="black"
+                    type="bars"
+                    height="24px"
+                    className="mb-4"
+                  ></ReactLoading>
+                ) : (
+                  <>
+                    <h2 className="my-4">Danh sách phiếu hủy</h2>
+                    <Table
+                      pagination={{ pageSize: 3, showSizeChanger: false }}
+                      dataSource={dataSourceCancel}
+                      columns={columnsCancel}
+                    />
+                  </>
+                ))}
             </Col>
           )}
           {userInfo?.role === "Admin" && (

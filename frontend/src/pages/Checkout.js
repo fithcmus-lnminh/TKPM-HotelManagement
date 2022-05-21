@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { PayPalButton } from "react-paypal-button-v2";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { createBill } from "../redux/actions/rentalAction";
 import { decode, encode } from "js-base64";
@@ -92,13 +92,15 @@ const Checkout = () => {
             </Col>
 
             <Col>
-              <h4 className="mt-5 d-flex justify-content-center">
-                THANH TOÁN NGAY
-              </h4>
-              <PayPalButton
-                amount={billInfo?.totalPrice}
-                // onSuccess={successPaymentHandler}
-              />
+              <h3
+                className="d-flex justify-content-center"
+                style={{ marginTop: "8rem" }}
+              >
+                THANH TOÁN NGAY{" "}
+                <Link to="/profile" className="ms-2">
+                  TẠI ĐÂY
+                </Link>
+              </h3>
             </Col>
           </Row>
         </>

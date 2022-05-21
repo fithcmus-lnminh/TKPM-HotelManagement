@@ -56,6 +56,7 @@ const AccountManagement = () => {
       setIsManageCustomer(false);
       setIsManageEmployee(true);
     }
+
     if (isSuccess || (isSuccessDeleteUser && !isLoadingDeleteUser))
       dispatch(getAllEmployee());
   }, [dispatch, isSuccess, isSuccessDeleteUser]);

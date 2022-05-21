@@ -24,6 +24,9 @@ import {
   DELETE_ROOM_SUCCESS,
   DELETE_ROOM_FAIL,
   DELETE_ROOM_REQUEST,
+  GET_TOP_ROOMS_REQUEST,
+  GET_TOP_ROOMS_SUCCESS,
+  GET_TOP_ROOMS_FAIL,
 } from "../../constants/roomConsts";
 import { openNotification } from "../../utils/notification";
 
@@ -247,6 +250,23 @@ export const deleteRoom = (id) => async (dispatch, getState) => {
   } catch (err) {
     dispatch({
       type: DELETE_ROOM_FAIL,
+      message:
+        err.response && err.response.data.errors.message
+          ? err.response.data.errors.message
+          : err.message,
+    });
+  }
+};
+
+export const getTopRooms = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_TOP_ROOMS_REQUEST });
+
+    const { data } = await axios.get("/api/rooms/get-top-rooms");
+    dispatch({ type: GET_TOP_ROOMS_SUCCESS, data: data });
+  } catch (err) {
+    dispatch({
+      type: GET_TOP_ROOMS_FAIL,
       message:
         err.response && err.response.data.errors.message
           ? err.response.data.errors.message

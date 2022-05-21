@@ -35,8 +35,14 @@ const Booking = () => {
     dispatch(getRoomDetailsByNumber(number));
   }, [navigate, userInfo, dispatch, number]);
 
-  const extraPrice = numDay > 0 ? roomInfo?.price * numDay * 0.1 : 0;
-  const totalPrice = extraPrice !== 0 ? roomInfo?.price + extraPrice : 0;
+  const extraPrice =
+    numDay > 0 ? (roomInfo?.price * numDay * 0.1).toFixed(2) : 0;
+  const totalPriceWithoutForeigner =
+    extraPrice !== 0 ? Number(roomInfo?.price) + Number(extraPrice) : 0;
+  const totalPrice =
+    userInfo?.customerType === "Foreigner"
+      ? (totalPriceWithoutForeigner * 1.1).toFixed(2)
+      : totalPriceWithoutForeigner.toFixed(2);
 
   const bookingHandler = () => {
     if (userInfo?.role === "Manager") {
@@ -148,13 +154,22 @@ const Booking = () => {
                   className="mt-3 mb-2"
                   style={{ fontSize: "1rem", display: "block" }}
                 >
-                  <strong>Đơn giá phòng:</strong> {roomInfo?.price}/ngày
+                  <strong>Đơn giá phòng:</strong> ${roomInfo?.price}/ngày
                 </div>
                 <div
                   className="mt-3 mb-2"
                   style={{ fontSize: "1rem", display: "block" }}
                 >
-                  <strong>VAT 10%: </strong> {extraPrice}đ
+                  <strong>VAT 10%: </strong> ${extraPrice}
+                </div>
+                <div
+                  className="mt-3 mb-2"
+                  style={{ fontSize: "1rem", display: "block" }}
+                >
+                  <p className="text-italic">
+                    Nếu bạn là người nước ngoài thì tổng tiển sẽ phụ thu thêm
+                    10%
+                  </p>
                 </div>
               </ListGroup.Item>
               <ListGroup.Item>
@@ -162,7 +177,7 @@ const Booking = () => {
                   className="my-2"
                   style={{ fontSize: "1rem", display: "block" }}
                 >
-                  <strong>THÀNH TIỀN: {totalPrice}đ</strong>
+                  <strong>THÀNH TIỀN: ${totalPrice}</strong>
                 </div>
               </ListGroup.Item>
             </ListGroup>

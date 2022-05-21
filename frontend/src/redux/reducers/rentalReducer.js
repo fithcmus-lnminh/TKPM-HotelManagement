@@ -1,4 +1,7 @@
 import {
+  CANCEL_RENTAL_FAIL,
+  CANCEL_RENTAL_REQUEST,
+  CANCEL_RENTAL_SUCCESS,
   CREATE_BILL_FAIL,
   CREATE_BILL_REQUEST,
   CREATE_BILL_SUCCESS,
@@ -8,6 +11,9 @@ import {
   GET_BILL_FAIL,
   GET_BILL_REQUEST,
   GET_BILL_SUCCESS,
+  GET_CANCEL_FAIL,
+  GET_CANCEL_REQUEST,
+  GET_CANCEL_SUCCESS,
   GET_RENTAL_CARD_FAIL,
   GET_RENTAL_CARD_REQUEST,
   GET_RENTAL_CARD_SUCCESS,
@@ -62,6 +68,32 @@ export const billReducer = (state = {}, action) => {
     case GET_BILL_SUCCESS:
       return { isLoading: false, billInfo: action.data };
     case GET_BILL_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const cancelRentalReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CANCEL_RENTAL_REQUEST:
+      return { isLoading: true };
+    case CANCEL_RENTAL_SUCCESS:
+      return { isLoading: false, isSuccess: true };
+    case CANCEL_RENTAL_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+};
+
+export const getCancelRentalReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_CANCEL_REQUEST:
+      return { isLoading: true };
+    case GET_CANCEL_SUCCESS:
+      return { isLoading: false, cancelInfo: action.data };
+    case GET_CANCEL_FAIL:
       return { isLoading: false, errorMessage: action.message };
     default:
       return state;

@@ -1,5 +1,6 @@
 import Room from "../models/roomModel.js";
 import Bill from "../models/billModel.js";
+import CancelInfo from "../models/cancelModel.js";
 
 function daysInMonth(month, year) {
   return new Date(year, month, 0).getDate();
@@ -444,6 +445,7 @@ export const updateRoom = async (req, res, next) => {
 
 export const updateToPaid = async (req, res, next) => {
   const bill = await Bill.findById(req.params.id);
+  console.log(bill);
 
   try {
     if (bill) {
@@ -456,6 +458,7 @@ export const updateToPaid = async (req, res, next) => {
         update_time: req.body.update_time,
         email_address: req.body.payer.email_address,
       };
+      console.log(bill);
 
       const updatedBill = await bill.save();
       res.json(updatedBill);
@@ -503,6 +506,77 @@ export const createRoomReview = async (req, res, next) => {
       res.status(400);
       throw new Error("Không có phòng này");
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const cancelRoom = async (req, res, next) => {
+  const rentalId = req.params.rentalId;
+
+  try {
+    const rentalInfo = await RentalCard.findById(rentalId).populate({
+      path: "room",
+    });
+
+    const room = await Room.find({ number: rentalInfo.room.number });
+    if (room) {
+      room[0].status = true;
+    }
+    await room[0].save();
+
+    if (rentalInfo) {
+      const cancel = CancelInfo.create({
+        user_cancel: req.user._id,
+        roomNumber: rentalInfo.room.number,
+        startDate: rentalInfo.startDate,
+        numOfDates: rentalInfo.numOfDates,
+        date: new Date(),
+      });
+
+      if (cancel) {
+        res.status(201).json(cancel);
+        await RentalCard.remove({ _id: rentalId });
+      } else {
+        res.status(400);
+        throw new error("Không thể hủy phòng");
+      }
+    } else {
+      res.status(400);
+      throw new error("Không tìm thấy phiếu đặt phòng");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getCancelInfo = async (req, res, next) => {
+  const userId = req.params.userId;
+
+  try {
+    const cancel = await CancelInfo.find({ user_cancel: userId }).populate({
+      path: "user_cancel",
+    });
+    // .populate({
+    //   path: "rental_card",
+    //   populate: { path: "room" },
+    // });
+
+    if (cancel.length > 0) {
+      res.status(201).json(cancel);
+    } else {
+      res.status(401).json("Không có thông tin hủy đặt hàng.");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getTopRooms = async (req, res, next) => {
+  try {
+    const rooms = await Room.find({}).sort({ rating: -1 }).limit(4);
+
+    res.json(rooms);
   } catch (err) {
     next(err);
   }
