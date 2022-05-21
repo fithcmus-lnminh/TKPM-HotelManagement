@@ -10,6 +10,7 @@ import {
   customerReducer,
   employeeReducer,
   createEmployeeReducer,
+  deleteUserReducer,
 } from "./reducers/userReducer";
 import {
   allRoomsReducer,
@@ -53,6 +54,7 @@ const reducer = combineReducers({
   updateRoomReducer,
   deleteRoomReducer,
   createEmployeeReducer,
+  deleteUserReducer,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

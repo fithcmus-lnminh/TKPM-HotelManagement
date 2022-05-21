@@ -466,56 +466,70 @@ const UserProfile = () => {
             </Col>
           )}
 
-          <Col md={7}>
-            <h2 className="my-4">Danh sách phiếu đặt phòng</h2>
-            {isLoadingRental ? (
-              <div className="d-flex justify-content-center mt-2">
-                <ReactLoading
-                  color="black"
-                  type="bars"
-                  height="24px"
-                  className="mb-4"
-                ></ReactLoading>
-              </div>
-            ) : !rentalInfo ? (
-              <p
-                className="text-danger text-italic"
-                style={{ fontSize: "1rem" }}
-              >
-                Không có phiếu đặt phòng nào
-              </p>
-            ) : (
-              <Table
-                pagination={{ pageSize: 3, showSizeChanger: false }}
-                dataSource={dataSourceRental}
-                columns={columnsRental}
-              />
-            )}
-            ;<h2 className="mb-4">Danh sách hóa đơn</h2>
-            {isLoadingBill ? (
-              <div className="d-flex justify-content-center mt-2">
-                <ReactLoading
-                  color="black"
-                  type="bars"
-                  height="24px"
-                  className="mb-4"
-                ></ReactLoading>
-              </div>
-            ) : billInfo?.bills.length === 0 ? (
-              <p
-                className="text-danger text-italic"
-                style={{ fontSize: "1rem" }}
-              >
-                Không có hóa đơn.
-              </p>
-            ) : (
-              <Table
-                pagination={{ pageSize: 3, showSizeChanger: false }}
-                dataSource={dataSourceBill}
-                columns={columnsBill}
-              />
-            )}
-          </Col>
+          {(!userInfo?.role ||
+            userInfo?.role === "User" ||
+            userInfo?.role === "Receptionist") && (
+            <Col md={7}>
+              <h2 className="my-4">Danh sách phiếu đặt phòng</h2>
+              {isLoadingRental ? (
+                <div className="d-flex justify-content-center mt-2">
+                  <ReactLoading
+                    color="black"
+                    type="bars"
+                    height="24px"
+                    className="mb-4"
+                  ></ReactLoading>
+                </div>
+              ) : !rentalInfo ? (
+                <p
+                  className="text-danger text-italic"
+                  style={{ fontSize: "1rem" }}
+                >
+                  Không có phiếu đặt phòng nào
+                </p>
+              ) : (
+                <Table
+                  pagination={{ pageSize: 3, showSizeChanger: false }}
+                  dataSource={dataSourceRental}
+                  columns={columnsRental}
+                />
+              )}
+              ;<h2 className="mb-4">Danh sách hóa đơn</h2>
+              {isLoadingBill ? (
+                <div className="d-flex justify-content-center mt-2">
+                  <ReactLoading
+                    color="black"
+                    type="bars"
+                    height="24px"
+                    className="mb-4"
+                  ></ReactLoading>
+                </div>
+              ) : billInfo?.bills.length === 0 ? (
+                <p
+                  className="text-danger text-italic"
+                  style={{ fontSize: "1rem" }}
+                >
+                  Không có hóa đơn.
+                </p>
+              ) : (
+                <Table
+                  pagination={{ pageSize: 3, showSizeChanger: false }}
+                  dataSource={dataSourceBill}
+                  columns={columnsBill}
+                />
+              )}
+            </Col>
+          )}
+          {userInfo?.role === "Admin" && (
+            <Col md={7} className="my-auto text-center">
+              <h2>Bạn đang đăng nhập với tư cách là Admin</h2>
+            </Col>
+          )}
+          {userInfo?.role === "Manager" && (
+            <Col md={7} className="my-auto text-center">
+              <h2>Bạn đang đăng nhập với tư cách là người quản lý</h2>
+            </Col>
+          )}
         </Row>
       </Container>
     </>

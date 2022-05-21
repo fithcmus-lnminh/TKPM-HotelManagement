@@ -6,6 +6,9 @@ import {
   CREATE_EMPLOYEE_FAIL,
   CREATE_EMPLOYEE_REQUEST,
   CREATE_EMPLOYEE_SUCCESS,
+  DELETE_USER_FAIL,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
   GET_ALL_CUSTOMER_FAIL,
   GET_ALL_CUSTOMER_REQUEST,
   GET_ALL_CUSTOMER_SUCCESS,
@@ -153,3 +156,16 @@ export const createEmployeeReducer = (state = {}, action) => {
       return state;
   }
 };
+
+export const deleteUserReducer = (state = {}, action) => {
+   switch (action.type) {
+    case DELETE_USER_REQUEST:
+      return { isLoading: true };
+    case DELETE_USER_SUCCESS:
+      return { isLoading: false, isSuccess: true };
+    case DELETE_USER_FAIL:
+      return { isLoading: false, errorMessage: action.message };
+    default:
+      return state;
+  }
+}

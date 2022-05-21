@@ -27,10 +27,12 @@ import {
   CREATE_EMPLOYEE_REQUEST,
   CREATE_EMPLOYEE_SUCCESS,
   CREATE_EMPLOYEE_FAIL,
+  DELETE_USER_FAIL,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_REQUEST,
 } from "../../constants/userConsts";
 import { encode } from "js-base64";
 import { openNotification } from "../../utils/notification";
-import { CREATE_REVIEW_RESET } from "../../constants/roomConsts";
 
 export const login =
   (email, password, redirect) => async (dispatch, getState) => {
@@ -283,6 +285,35 @@ export const createEmployee = (obj) => async (dispatch, getState) => {
   } catch (err) {
     dispatch({
       type: CREATE_EMPLOYEE_FAIL,
+      message:
+        err.response && err.response.data.errors.message
+          ? err.response.data.errors.message
+          : err.message,
+    });
+  }
+};
+
+export const deleteUser = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: DELETE_USER_REQUEST });
+
+    const { userInfo } = getState().userLoginReducer;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.delete(`/api/users/delete-user/${id}`, config);
+    console.log(data);
+
+    dispatch({ type: DELETE_USER_SUCCESS });
+    openNotification("success", "Xóa tài khoản thành công");
+  } catch (err) {
+    dispatch({
+      type: DELETE_USER_FAIL,
       message:
         err.response && err.response.data.errors.message
           ? err.response.data.errors.message

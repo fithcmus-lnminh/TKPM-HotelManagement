@@ -254,3 +254,20 @@ export const createEmployee = async (req, res, next) => {
     next(err);
   }
 };
+
+export const deleteUser = async (req, res, next) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await User.remove({ _id: userId });
+
+    if (user.deletedCount > 0) {
+      res.status(200).send("Xóa thành công");
+    } else {
+      res.status(400);
+      res.send("Xóa thất bại");
+    }
+  } catch (err) {
+    next(err);
+  }
+};

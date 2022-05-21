@@ -5,7 +5,11 @@ import Navbar from "../../components/Navbar";
 import { Popconfirm, Space, Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getAllCustomer, getAllEmployee } from "../../redux/actions/userAction";
+import {
+  deleteUser,
+  getAllCustomer,
+  getAllEmployee,
+} from "../../redux/actions/userAction";
 import { DeleteOutlined } from "@ant-design/icons";
 import ReactLoading from "react-loading";
 import Message from "../../components/Message";
@@ -27,6 +31,8 @@ const AccountManagement = () => {
   const { isLoading: isLoadingEmployee, employees } = useSelector(
     (state) => state.employeeReducer
   );
+  const { isLoading: isLoadingDeleteUser, isSuccess: isSuccessDeleteUser } =
+    useSelector((state) => state.deleteUserReducer);
   const {
     isLoading: isLoadingCreateEmployee,
     isSuccess,
@@ -47,11 +53,12 @@ const AccountManagement = () => {
       setName("");
       setRole("Receptionist");
       handleClose();
-      dispatch(getAllEmployee());
       setIsManageCustomer(false);
       setIsManageEmployee(true);
     }
-  }, [dispatch, isSuccess]);
+    if (isSuccess || (isSuccessDeleteUser && !isLoadingDeleteUser))
+      dispatch(getAllEmployee());
+  }, [dispatch, isSuccess, isSuccessDeleteUser]);
 
   const handleClose = () => {
     setShowModal(false);
@@ -105,8 +112,10 @@ const AccountManagement = () => {
       render: (text, record) => (
         <Space size="middle">
           <Popconfirm
-            title="Bạn có chắc chắn muốn xóa phòng này không?"
-            onConfirm={() => {}}
+            title="Bạn có chắc chắn muốn xóa tài khoản này không?"
+            onConfirm={() => {
+              dispatch(deleteUser(record._id));
+            }}
             okText="Xóa"
             cancelText="Hủy"
           >
