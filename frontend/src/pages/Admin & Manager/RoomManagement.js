@@ -25,6 +25,7 @@ import { useState } from "react";
 import { Uploader } from "uploader";
 import { UploadDropzone } from "react-uploader";
 import Message from "../../components/Message";
+import Meta from "../../components/Meta";
 
 const RoomManagement = () => {
   const dispatch = useDispatch();
@@ -364,6 +365,7 @@ const RoomManagement = () => {
 
   return (
     <>
+      <Meta title="Quản lý phòng" />
       <Navbar />
       <Container style={{ padding: "0 5rem" }}>
         <h2 className="mt-5 mb-3">QUẢN LÝ PHÒNG</h2>

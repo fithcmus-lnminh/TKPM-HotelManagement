@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { createBill } from "../redux/actions/rentalAction";
 import { decode, encode } from "js-base64";
+import Meta from "../components/Meta";
 
 const Checkout = () => {
   const { billInfo } = useSelector((state) => state.createBillReducer);
@@ -31,6 +32,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   return (
     <>
+      <Meta title="Đặt phòng thành công" />
       <Navbar />
       <Container style={{ padding: "0 10rem" }}>
         <>

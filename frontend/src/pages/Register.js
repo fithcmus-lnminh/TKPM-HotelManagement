@@ -7,6 +7,7 @@ import { register } from "../redux/actions/userAction";
 import ReactLoading from "react-loading";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import Meta from "../components/Meta";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -54,6 +55,7 @@ const Register = () => {
 
   return (
     <>
+      <Meta title="Đăng ký tài khoản" />
       <Navbar />
       <div className="register-section d-flex justify-content-center align-items-center">
         <Card

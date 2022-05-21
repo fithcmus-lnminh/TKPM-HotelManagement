@@ -1,10 +1,12 @@
 import React from "react";
 import { Container } from "react-bootstrap";
+import Meta from "../components/Meta";
 import Navbar from "../components/Navbar";
 
 const Contact = () => {
   return (
     <>
+      <Meta title="Liên hệ" />
       <Navbar />
       <Container className="text-center mt-5">
         <h4>ĐỒ ÁN MÔN HỌC THIẾT KẾ PHẦN MỀM</h4>

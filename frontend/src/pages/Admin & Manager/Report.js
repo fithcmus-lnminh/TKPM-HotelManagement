@@ -11,6 +11,7 @@ import {
 } from "../../redux/actions/roomAction";
 import Message from "../../components/Message";
 import ReactLoading from "react-loading";
+import Meta from "../../components/Meta";
 
 const Report = () => {
   const { allRooms } = useSelector((state) => state.allRoomsReducer);
@@ -43,6 +44,7 @@ const Report = () => {
 
   return (
     <>
+      <Meta title="Xem báo cáo" />
       <Navbar />
       <Container style={{ padding: "0 5rem" }}>
         <h2 className="mt-5 mb-3">XEM BÁO CÁO</h2>

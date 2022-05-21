@@ -15,6 +15,7 @@ import {
   STORE_BILL_DATA,
 } from "../constants/rentalConsts";
 import { encode } from "js-base64";
+import Meta from "../components/Meta";
 
 const Booking = () => {
   const [numDay, setNumDay] = useState(0);
@@ -90,6 +91,7 @@ const Booking = () => {
 
   return (
     <>
+      <Meta title="Đặt phòng" />
       <Navbar />
       <Container style={{ padding: "0 10rem" }}>
         <Row className="d-flex justify-content-between">

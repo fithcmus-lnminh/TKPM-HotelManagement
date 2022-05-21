@@ -8,6 +8,7 @@ import { Input } from "antd";
 import RoomCard from "../components/RoomCard";
 import ReactLoading from "react-loading";
 import { useNavigate, useParams } from "react-router-dom";
+import Meta from "../components/Meta";
 
 const { Search } = Input;
 
@@ -37,6 +38,7 @@ const Rooms = () => {
 
   return (
     <>
+      <Meta title="Xem phòng" />
       <Navbar />
       <Container>
         <div className="text-center mt-4">

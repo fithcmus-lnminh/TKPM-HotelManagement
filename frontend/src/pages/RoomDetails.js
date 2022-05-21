@@ -23,6 +23,7 @@ import {
 } from "../redux/actions/roomAction";
 import { openNotification } from "../utils/notification";
 import { CREATE_REVIEW_RESET } from "../constants/roomConsts";
+import Meta from "../components/Meta";
 
 const RoomDetails = () => {
   const [comment, setComment] = useState("");
@@ -70,6 +71,7 @@ const RoomDetails = () => {
   };
   return (
     <>
+    <Meta title={`Phòng ${roomInfo?.number}`} />
       <Navbar />
       <Container>
         <Link to="/rooms" className="btn btn-dark py-2 mb-2 mt-4">

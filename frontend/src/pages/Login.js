@@ -7,6 +7,7 @@ import { login } from "../redux/actions/userAction";
 import { useDispatch, useSelector } from "react-redux";
 import ReactLoading from "react-loading";
 import { useEffect } from "react";
+import Meta from "../components/Meta";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -43,6 +44,7 @@ const Login = () => {
 
   return (
     <>
+      <Meta title="Đăng nhập" />
       <Navbar />
       <div className="login-section d-flex justify-content-center align-items-center">
         <Card

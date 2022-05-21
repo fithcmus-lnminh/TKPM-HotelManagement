@@ -14,6 +14,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import ReactLoading from "react-loading";
 import Message from "../../components/Message";
 import { createEmployee } from "../../redux/actions/userAction";
+import Meta from "../../components/Meta";
 
 const AccountManagement = () => {
   const [isManageCustomer, setIsManageCustomer] = useState(true);
@@ -143,6 +144,7 @@ const AccountManagement = () => {
 
   return (
     <>
+      <Meta title="Quản lý tài khoản" />
       <Navbar />
       <Container style={{ padding: "0 5rem" }}>
         <h2 className="mt-5 mb-3">QUẢN LÝ TÀI KHOẢN</h2>

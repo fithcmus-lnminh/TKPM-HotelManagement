@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeUserPassword } from "../redux/actions/userAction";
 import Message from "../components/Message";
+import Meta from "../components/Meta";
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -39,6 +40,7 @@ const ChangePassword = () => {
 
   return (
     <>
+      <Meta title="Đổi mật khẩu" />
       <Navbar />
       <Container>
         <FormContainer>

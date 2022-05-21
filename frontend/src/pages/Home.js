@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { getAllRooms, getTopRooms } from "../redux/actions/roomAction";
 import ReactLoading from "react-loading";
 import Footer from "../components/Footer";
+import Meta from "../components/Meta";
 
 const Home = () => {
   const { isLoading, allRooms } = useSelector((state) => state.allRoomsReducer);
@@ -24,6 +25,7 @@ const Home = () => {
 
   return (
     <>
+      <Meta title="TKPM Hotel - Trang chủ" />
       <div className="nav-display">
         <Navbar />
       </div>

@@ -18,6 +18,7 @@ import {
 import { Popconfirm, Table } from "antd";
 import { PayPalButton } from "react-paypal-button-v2";
 import axios from "axios";
+import Meta from "../components/Meta";
 
 const UserProfile = () => {
   const [name, setName] = useState("");
@@ -456,6 +457,7 @@ const UserProfile = () => {
 
   return (
     <>
+      <Meta title="Hồ sơ cá nhân" />
       <Navbar />
       <Container>
         <Row className="d-flex justify-content-between">
