@@ -117,6 +117,8 @@ export const updateRoomReducer = (state = {}, action) => {
       return { isLoading: false, isSuccess: true, updatedRoom: action.data };
     case UPDATE_ROOM_FAIL:
       return { isLoading: false, errorMessage: action.message };
+    case "UPDATE_ROOM_RESET":
+      return {};
     default:
       return state;
   }

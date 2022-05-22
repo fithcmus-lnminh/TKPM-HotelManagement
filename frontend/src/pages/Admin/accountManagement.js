@@ -58,8 +58,10 @@ const AccountManagement = () => {
       setIsManageEmployee(true);
     }
 
-    if (isSuccess || (isSuccessDeleteUser && !isLoadingDeleteUser))
+    if (isSuccess || (isSuccessDeleteUser && !isLoadingDeleteUser)) {
+      dispatch(getAllCustomer());
       dispatch(getAllEmployee());
+    }
   }, [dispatch, isSuccess, isSuccessDeleteUser]);
 
   const handleClose = () => {

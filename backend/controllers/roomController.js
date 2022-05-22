@@ -394,14 +394,16 @@ export const deleteRoom = async (req, res, next) => {
 };
 
 export const updateRoom = async (req, res, next) => {
-  const { number, type, image, price, description } = req.body;
-
+  const { currentRoom, number, type, image, price, description } = req.body;
   try {
     const roomId = req.params.roomId;
     const rooms = await Room.find();
 
-    const existedRoom = await Room.find({ number });
+    const existedRoom = await Room.find({
+      number: { $eq: number, $ne: currentRoom },
+    });
 
+    console.log(existedRoom);
     if (existedRoom.length > 0) {
       res.status(400);
       throw new Error("Số phòng đã tồn tại");

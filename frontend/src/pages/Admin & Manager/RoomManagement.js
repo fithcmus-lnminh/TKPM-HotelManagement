@@ -56,6 +56,7 @@ const RoomManagement = () => {
   const [message, setMessage] = useState("");
   const [show, setShow] = useState({});
   const [isChangeImg, setIsChangeImg] = useState(false);
+  const [currentRoom, setCurrentRoom] = useState("");
 
   // Get production API keys from Upload.io
   const uploader = new Uploader({
@@ -86,6 +87,7 @@ const RoomManagement = () => {
       (!errorMessage && isSuccess) ||
       (!errorUpdateRoom && isSuccessUpdateRoom)
     ) {
+      setMessage("");
       setNumber("");
       setPrice("");
       setMessage("");
@@ -93,6 +95,7 @@ const RoomManagement = () => {
       setType("Phòng đơn");
       handleClose();
     }
+    if (isSuccessUpdateRoom) dispatch({ type: "UPDATE_ROOM_RESET" });
   }, [
     dispatch,
     isSuccess,
@@ -110,7 +113,9 @@ const RoomManagement = () => {
     else if (!description) setMessage("Vui lòng nhập mô tả");
     else if (!image && isChangeImg) setMessage("Vui lòng upload hình ảnh");
     else {
-      dispatch(updateRoom(id, { number, type, price, image, description }));
+      dispatch(
+        updateRoom(id, { currentRoom, number, type, price, image, description })
+      );
     }
   };
 
@@ -197,6 +202,7 @@ const RoomManagement = () => {
               setPrice(record.price);
               setImage(record.image);
               setDesciption(record.description);
+              setCurrentRoom(record.number);
             }}
           >
             <EditOutlined />
